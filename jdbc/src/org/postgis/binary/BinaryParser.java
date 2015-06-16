@@ -45,7 +45,7 @@ import org.postgis.binary.ByteGetter.StringByteGetter;
  * (bytes), so we cannot even get or build Geometries with more than approx.
  * 2^28 coordinates (8 bytes each).
  * 
- * @author Markus Schaber <markus.schaber@logix-tt.com>
+ * @author {@literal Markus Schaber <markus.schaber@logix-tt.com>}
  *  
  */
 public class BinaryParser {

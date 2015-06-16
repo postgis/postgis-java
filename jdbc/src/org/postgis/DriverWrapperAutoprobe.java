@@ -47,7 +47,7 @@ import java.util.logging.Level;
  * For usage notes, see DriverWrapper class, but use "jdbc:postgresql_autogis:"
  * as JDBC url prefix and org.postgis.DriverWrapperAutoprobe as driver class.
  * 
- * @author Markus Schaber <markus.schaber@logix-tt.com>
+ * @author {@literal Markus Schaber <markus.schaber@logix-tt.com>}
  * @see DriverWrapper
  */
 public class DriverWrapperAutoprobe extends DriverWrapper {

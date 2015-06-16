@@ -65,7 +65,7 @@ import org.postgresql.PGConnection;
  * works against PostGIS 1.x servers as well as 0.x (tested with 0.8, 0.9 and
  * 1.0).
  * 
- * @author Markus Schaber <markus.schaber@logix-tt.com>
+ * @author {@literal Markus Schaber <markus.schaber@logix-tt.com>}
  * @see DriverWrapperLW
  * @see DriverWrapperAutoprobe
  */

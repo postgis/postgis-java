@@ -118,7 +118,7 @@ public abstract class Geometry implements Serializable {
 	public int srid = UNKNOWN_SRID;
 
 	/**
-	 * Parse a SRID value, anything <= 0 is unknown
+	 * Parse a SRID value, anything {@code <= 0} is unknown
 	 */
 	public static int parseSRID(int srid) {
 		if (srid < 0) {
