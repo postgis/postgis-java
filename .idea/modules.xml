@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/postgis-java-aggregator.iml" filepath="$PROJECT_DIR$/postgis-java-aggregator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdbc/postgis-jdbc.iml" filepath="$PROJECT_DIR$/jdbc/postgis-jdbc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" filepath="$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" />
+    </modules>
+  </component>
+</project>
