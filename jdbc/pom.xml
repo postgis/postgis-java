@@ -26,20 +26,6 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>${basedir}/src</sourceDirectory>
-        <!-- For the driverconfig property file -->
-        <resources>
-            <resource>
-                <directory>src</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -56,9 +42,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <overview>${basedir}/src/java/org/postgis/overview.html</overview>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>

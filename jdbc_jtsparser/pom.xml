@@ -47,9 +47,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <overview>${basedir}/src/java/org/postgis/overview.html</overview>
-                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
