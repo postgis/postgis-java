@@ -10,11 +10,86 @@
     <packaging>pom</packaging>
 
     <name>Postgis Java Project</name>
+    <description>Aggregates java projects associated with the Postgis project.</description>
+    <url>http://postgis.net</url>
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Postgis Development Team</name>
+        </developer>
+        <developer>
+            <name>María Arias de Reyna</name>
+            <email>delawen en gmail.com</email>
+        </developer>
+        <developer>
+            <name>Baris ERGUN</name>
+            <email>barisergun75@gmail.com</email>
+        </developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Hakan Tandogan</name>
+            <email>hakan@gurkensalat.com</email>
+            <url>http://www.gurkensalat.com/</url>
+            <roles>
+                <role>Maven Packager</role>
+            </roles>
+        </contributor>
+        <contributor>
+            <name>Baris Ergun</name>
+            <email>barisergun75@gmail.com</email>
+            <url>http://www.barisergun.com/</url>
+            <roles>
+                <role>Maven Packager</role>
+            </roles>
+        </contributor>
+    </contributors>
+
+    <mailingLists>
+        <mailingList>
+            <name>User List</name>
+            <subscribe>postgis-users-subscribe@lists.osgeo.org</subscribe>
+            <unsubscribe>postgis-users-unsubscribe@lists.osgeo.org</unsubscribe>
+            <post>postgis-users@lists.osgeo.org</post>
+            <archive>http://lists.osgeo.org/pipermail/postgis-users/</archive>
+        </mailingList>
+        <mailingList>
+            <name>Developer List</name>
+            <subscribe>postgis-devel-subscribe@lists.osgeo.org</subscribe>
+            <unsubscribe>postgis-devel-unsubscribe@lists.osgeo.org</unsubscribe>
+            <post>postgis-devel@lists.osgeo.org</post>
+            <archive>http://lists.osgeo.org/pipermail/postgis-devel/</archive>
+        </mailingList>
+    </mailingLists>
 
     <modules>
         <module>jdbc</module>
         <module>jdbc_jtsparser</module>
     </modules>
+
+    <scm>
+        <url>http://trac.osgeo.org/postgis/browser/trunk</url>
+        <connection>scm:svn:http://svn.osgeo.org/postgis/trunk</connection>
+        <developerConnection>scm:svn:http://svn.osgeo.org/postgis/trunk</developerConnection>
+    </scm>
+    <issueManagement>
+        <system>Trac</system>
+        <url>http://trac.osgeo.org/postgis/</url>
+    </issueManagement>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-postgis-releases</id>
+            <name>Sonatype Postgis Releases Repo</name>
+            <url>http://oss.sonatype.org/content/repositories/postgis-releases</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
