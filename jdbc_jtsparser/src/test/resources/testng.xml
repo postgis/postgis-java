@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="JTS Parser Test Suite" verbose="1">
+
+    <test name="JTS Parser Tests">
+        <classes>
+            <class name="org.postgis.jts.JtsParserTest"/>
+        </classes>
+    </test>
+
+</suite>
