@@ -368,6 +368,8 @@ public class ParserTest {
 
     /** Pass a geometry representation through the SQL server */
     private Geometry viaSQL(String rep) throws SQLException {
+        logger.trace("Geometry viaSQL(String rep)");
+        logger.trace("[P] rep => {}", rep);
         ResultSet resultSet = statement.executeQuery("SELECT geometry_in('" + rep + "')");
         resultSet.next();
         return ((PGgeometry) resultSet.getObject(1)).getGeometry();
@@ -391,7 +393,7 @@ public class ParserTest {
 
     /** Pass a geometry representation through the SQL server via EWKT */
     private static Geometry ewktViaSQL(String rep, Statement stat) throws SQLException {
-        ResultSet resultSet = stat.executeQuery("SELECT asEWKT(geometry_in('" + rep + "'))");
+        ResultSet resultSet = stat.executeQuery("SELECT ST_AsEWKT(geometry_in('" + rep + "'))");
         resultSet.next();
         String resrep = resultSet.getString(1);
         return PGgeometry.geomFromString(resrep);
@@ -400,7 +402,7 @@ public class ParserTest {
 
     /** Pass a geometry representation through the SQL server via EWKB */
     private static Geometry ewkbViaSQL(String rep, Statement stat) throws SQLException {
-        ResultSet resultSet = stat.executeQuery("SELECT asEWKB(geometry_in('" + rep + "'))");
+        ResultSet resultSet = stat.executeQuery("SELECT ST_AsEWKB(geometry_in('" + rep + "'))");
         resultSet.next();
         byte[] resrep = resultSet.getBytes(1);
         return binaryParser.parse(resrep);
