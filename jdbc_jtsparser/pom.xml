@@ -17,6 +17,14 @@
     <name>Postgis JDBC Driver JTS Parser</name>
     <description>Parser between JTS and PostGIS geometry formats.</description>
 
+    <properties>
+        <testWithDatabase>false</testWithDatabase>
+        <jdbcDriverClassName>org.postgresql.Driver</jdbcDriverClassName>
+        <jdbcUrl>jdbc:postgres_jts://localhost:5432/postgis1</jdbcUrl>
+        <jdbcUsername>postgis1</jdbcUsername>
+        <jdbcPassword>postgis1</jdbcPassword>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.postgis</groupId>
@@ -39,6 +47,13 @@
                     <suiteXmlFiles>
                         <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
+                    <systemPropertyVariables>
+                        <testWithDatabase>${testWithDatabase}</testWithDatabase>
+                        <jdbcDriverClassName>${jdbcDriverClassName}</jdbcDriverClassName>
+                        <jdbcUrl>${jdbcUrl}</jdbcUrl>
+                        <jdbcUsername>${jdbcUsername}</jdbcUsername>
+                        <jdbcPassword>${jdbcPassword}</jdbcPassword>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
