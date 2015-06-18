@@ -4,11 +4,12 @@ package org.postgis.jts;
 import org.postgis.binary.ValueSetter;
 
 import com.vividsolutions.jts.geom.*;
-import examples.TestAutoregister;
-import org.postgresql.util.PGtokenizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.sql.*;
@@ -18,8 +19,8 @@ import java.sql.*;
  * JtsParseTest
  *
  * This test class was adapted from the {@code JtsTestParsr} example standalone class.
- * It is meant to be run in standalone mode or run against a postgis database, but it will need to be
- * fixed to run against a postgis database as it currently fails in some places with an error:
+ * It is meant to be run in standalone mode or run against a PostGIS database, but it will need to be
+ * fixed to run against a PostGIS database as it currently fails in some places with an error:
  * {@literal function asewkb(geometry) does not exist}
  */
 public class JtsParserTest {
@@ -93,319 +94,141 @@ public class JtsParserTest {
 
     private static final JtsBinaryWriter jtsBinaryWriter = new JtsBinaryWriter();
 
-    /** How many tests failed? */
-    public static int failcount = 0;
+    private boolean testWithDatabase = false;
+
+    private Connection connection = null;
+
+    private Statement statement = null;
 
 
     @Test
     public void test() throws Exception {
-        logger.trace("test()");
-        loadDrivers();
-
-        // hardcoding this to only do offline testing for now.
-        String[] args = new String[] { "offline" };
-        //String[] args = new String[] { "jdbc:postgres_jts://<hostname>:<port>/<dbName>", "<dbUsername>", "<dbPassword>" };
-
-        PGtokenizer dburls = null;
-        String dbuser = null;
-        String dbpass = null;
-
-        if (args.length == 1 && args[0].equalsIgnoreCase("offline")) {
-            logger.debug("Performing only offline tests");
-            dburls = new PGtokenizer("", ';');
-        } else if (args.length == 3) {
-            logger.debug("Performing offline and online tests");
-            dburls = new PGtokenizer(args[0], ';');
-            dbuser = args[1];
-            dbpass = args[2];
-        }
-
-        if (dburls != null) {
-            Connection[] conns;
-            conns = new Connection[dburls.getSize()];
-            for (int i = 0; i < dburls.getSize(); i++) {
-                logger.debug("Creating JDBC connection to {}", dburls.getToken(i));
-                conns[i] = connect(dburls.getToken(i), dbuser, dbpass);
-            }
-
-            logger.debug("Performing tests...");
-            for (String[] aTestset : testset) {
-                test(aTestset[1], conns, aTestset[0]);
-                test(SRIDPREFIX + aTestset[1], conns, aTestset[0]);
-            }
-
-            logger.debug("cleaning up...");
-            for (Connection conn : conns) {
-                conn.close();
-            }
-
-            Assert.assertEquals(failcount, 0);
-        } else {
-            logger.error("args array should be populated with 1 or 3 elements");
-            logger.info("1 element variant: [0] = \"offline\"");
-            logger.info("3 element variant: [0] = \"dburls\" \"username\" \"password\"");
-            logger.info("dburls has one or more jdbc urls separated by ; in the following format");
-            logger.info("jdbc:postgresql://HOST:PORT/DATABASENAME");
+        for (String[] aTestset : testset) {
+            test(aTestset[1], aTestset[0]);
+            test(SRIDPREFIX + aTestset[1], aTestset[0]);
         }
     }
 
 
-    /** The actual test method */
-    public static void test(String WKT, Connection[] conns, String flags) throws SQLException {
-        logger.debug("Original:  " + WKT);
+    public void test(String WKT, String flags) throws SQLException {
+        logger.debug("Original: {}", WKT);
         Geometry geom = JtsGeometry.geomFromString(WKT);
         String parsed = geom.toString();
         if (WKT.startsWith("SRID=")) {
-            parsed = "SRID="+geom.getSRID()+";"+parsed;
+            parsed = "SRID=" + geom.getSRID() + ";" + parsed;
         }
-        logger.debug("Parsed:    " + parsed);
+        logger.debug("Parsed: {}", parsed);
         Geometry regeom = JtsGeometry.geomFromString(parsed);
         String reparsed = regeom.toString();
         if (WKT.startsWith("SRID=")) {
-            reparsed = "SRID="+geom.getSRID()+";"+reparsed;
+            reparsed = "SRID=" + geom.getSRID() + ";" + reparsed;
         }
-        logger.debug("Re-Parsed: " + reparsed);
-        if (!geom.equalsExact(regeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else if (geom.getSRID() != regeom.getSRID()) {
-            logger.error("--- Geometriy SRIDs are not equal!");
-            failcount++;
-        } else if (!reparsed.equals(parsed)) {
-            logger.error("--- Text Reps are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("Re-Parsed: {}", reparsed);
+        Assert.assertEquals(geom, regeom, "Geometries are not equal");
+        Assert.assertEquals(geom.getSRID(), regeom.getSRID(), "Geometry SRIDs are not equal");
+        Assert.assertEquals(reparsed, parsed, "Text Reps are not equal");
 
         String hexNWKT = jtsBinaryWriter.writeHexed(geom, ValueSetter.NDR.NUMBER);
-        logger.debug("NDRHex:    " + hexNWKT);
+        logger.debug("NDRHex: {}", hexNWKT);
         regeom = JtsGeometry.geomFromString(hexNWKT);
-        logger.debug("ReNDRHex:  " + regeom.toString());
-        if (!geom.equalsExact(regeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("ReNDRHex: {}", regeom);
+        Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
         String hexXWKT = jtsBinaryWriter.writeHexed(geom, ValueSetter.XDR.NUMBER);
-        logger.debug("XDRHex:    " + hexXWKT);
+        logger.debug("XDRHex: {}", hexXWKT);
         regeom = JtsGeometry.geomFromString(hexXWKT);
-        logger.debug("ReXDRHex:  " + regeom.toString());
-        if (!geom.equalsExact(regeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("ReXDRHex: {}", regeom);
+        Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
         byte[] NWKT = jtsBinaryWriter.writeBinary(geom, ValueSetter.NDR.NUMBER);
         regeom = jtsBinaryParser.parse(NWKT);
-        logger.debug("NDR:       " + regeom.toString());
-        if (!geom.equalsExact(regeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("NDR: {}", regeom);
+        Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
         byte[] XWKT = jtsBinaryWriter.writeBinary(geom, ValueSetter.XDR.NUMBER);
         regeom = jtsBinaryParser.parse(XWKT);
-        logger.debug("XDR:       " + regeom.toString());
-        if (!geom.equalsExact(regeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("XDR: {}", regeom);
+        Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
         Geometry coordArrayGeom = rebuildCS(geom);
-        logger.debug("CoordArray:" + regeom.toString());
-        if (!geom.equalsExact(coordArrayGeom)) {
-            logger.error("--- Geometries are not equal!");
-            failcount++;
-        } else {
-            logger.debug("Equals:    yes");
-        }
+        logger.debug("CoordArray: {}", regeom);
+        Assert.assertEquals(geom, coordArrayGeom, "Geometries are not equal");
 
         String coordArrayWKT = jtsBinaryWriter.writeHexed(coordArrayGeom, ValueSetter.NDR.NUMBER);
-        logger.debug("HexCArray: " + coordArrayWKT);
-        if (!coordArrayWKT.equals(hexNWKT)) {
-            logger.error("--- CoordArray HexWKT is not equal: " + jtsBinaryParser.parse(coordArrayWKT));
-            failcount++;
-        } else {
-            logger.debug("HexEquals: yes");
-        }
+        logger.debug("HexCArray: {}", coordArrayWKT);
+        Assert.assertEquals(coordArrayWKT, hexNWKT, "CoordArray HexWKT is not equal");
 
-        for (int i = 0; i < conns.length; i++) {
-            Connection connection = conns[i];
-            Statement statement = connection.createStatement();
-            int serverPostgisMajor = TestAutoregister.getPostgisMajor(statement);
+        if (testWithDatabase) {
+            int serverPostgisMajor = getPostgisMajor();
 
             if ((flags.equals(ONLY10)) && serverPostgisMajor < 1) {
-                logger.info("PostGIS server too old, skipping test on connection " + i + ": "
-                        + connection.getCatalog());
+                logger.info("PostGIS server too old, skipping test on connection {}", connection.getCatalog());
             } else {
-                logger.debug("Testing on connection " + i + ": " + connection.getCatalog());
-                try {
-                    Geometry sqlGeom = viaSQL(WKT, statement);
-                    logger.debug("SQLin    : " + sqlGeom.toString());
-                    if (!geom.equalsExact(sqlGeom)) {
-                        logger.debug("--- Geometries after SQL are not equal!");
-                        if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                            logger.debug("--- This is expected with PostGIS " + serverPostgisMajor + ".X");
-                        } else {
-                            failcount++;
-                        }
+                logger.debug("Testing on connection {}", connection.getCatalog());
+
+                Geometry sqlGeom = viaSQL(WKT, statement);
+                logger.debug("SQLin: {}", sqlGeom.toString());
+                if (!geom.equalsExact(sqlGeom)) {
+                    logger.warn("Geometries after SQL are not equal");
+                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
                     } else {
-                        logger.debug("Eq SQL in: yes");
+                        Assert.fail();
                     }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
                 }
 
-                try {
-                    Geometry sqlreGeom = viaSQL(parsed, statement);
-                    logger.debug("SQLout  :  " + sqlreGeom.toString());
-                    if (!geom.equalsExact(sqlreGeom)) {
-                        logger.debug("--- reparsed Geometries after SQL are not equal!");
-                        if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                            logger.debug("--- This is expected with PostGIS " + serverPostgisMajor + ".X");
-                        } else {
-                            failcount++;
-                        }
+                Geometry sqlreGeom = viaSQL(parsed, statement);
+                logger.debug("SQLout: {}", sqlreGeom);
+                if (!geom.equalsExact(sqlreGeom)) {
+                    logger.warn("Reparsed Geometries after SQL are not equal");
+                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
                     } else {
-                        logger.debug("Eq SQLout: yes");
+                        Assert.fail();
                     }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
                 }
 
-                try {
-                    Geometry sqlreGeom = viaPrepSQL(geom, connection);
-                    logger.debug("Prepared:  " + sqlreGeom.toString());
-                    if (!geom.equalsExact(sqlreGeom)) {
-                        logger.debug("--- reparsed Geometries after prepared StatementSQL are not equal!");
-                        if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                            logger.debug("--- This is expected with PostGIS " + serverPostgisMajor + ".X");
-                        } else {
-                            failcount++;
-                        }
+                sqlreGeom = viaPrepSQL(geom, connection);
+                logger.debug("Prepared: {}", sqlreGeom);
+                if (!geom.equalsExact(sqlreGeom)) {
+                    logger.debug("Reparsed Geometries after prepared StatementSQL are not equal");
+                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
                     } else {
-                        logger.debug("Eq Prep: yes");
+                        Assert.fail();
                     }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
                 }
 
                 // asEWKT() function is not present on PostGIS 0.X, and the test
                 // is pointless as 0.X uses EWKT as canonical rep so the same
                 // functionality was already tested above.
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = ewktViaSQL(WKT, statement);
-                        logger.debug("asEWKT   : " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKT SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal   : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
+                if (serverPostgisMajor >= 1) {
+                    sqlGeom = ewktViaSQL(WKT, statement);
+                    logger.debug("asEWKT: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
 
-                // asEWKB() function is not present on PostGIS 0.X.
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = ewkbViaSQL(WKT, statement);
-                        logger.debug("asEWKB   : " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKB SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal    : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
+                    sqlGeom = ewkbViaSQL(WKT, statement);
+                    logger.debug("asEWKB: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
 
-                // HexEWKB parsing is not present on PostGIS 0.X.
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = viaSQL(hexNWKT, statement);
-                        logger.debug("hexNWKT:   " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKB SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal    : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = viaSQL(hexXWKT, statement);
-                        logger.debug("hexXWKT:   " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKB SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal    : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
+                    sqlGeom = viaSQL(hexNWKT, statement);
+                    logger.debug("hexNWKT: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
 
-                // Canonical binary input is not present before 1.0
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = binaryViaSQL(NWKT, connection);
-                        logger.debug("NWKT:      " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKB SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal    : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
-                try {
-                    if (serverPostgisMajor >= 1) {
-                        Geometry sqlGeom = binaryViaSQL(XWKT, connection);
-                        logger.debug("XWKT:      " + sqlGeom.toString());
-                        if (!geom.equalsExact(sqlGeom)) {
-                            logger.error("--- Geometries after EWKB SQL are not equal!");
-                            failcount++;
-                        } else {
-                            logger.debug("equal    : yes");
-                        }
-                    }
-                } catch (SQLException e) {
-                    logger.error("--- Server side error: " + e.toString());
-                    failcount++;
-                }
+                    sqlGeom = viaSQL(hexXWKT, statement);
+                    logger.debug("hexXWKT: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
 
+                    sqlGeom = binaryViaSQL(NWKT, connection);
+                    logger.debug("NWKT: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
+
+                    sqlGeom = binaryViaSQL(XWKT, connection);
+                    logger.debug("XWKT: {}", sqlGeom);
+                    Assert.assertEquals(geom, sqlGeom);
+                }
             }
-            statement.close();
         }
-        logger.debug("***");
     }
 
 
@@ -561,32 +384,58 @@ public class JtsParserTest {
     }
 
 
-    /**
-     * Connect to the databases
-     *
-     * We use DriverWrapper here. For alternatives, see the DriverWrapper Javadoc
-     *
-     * @param url JDBC URL to use for the jdbc connection
-     * @param dbuser username to use for the jdbc connection
-     * @param dbpass password to use for the jdbc conection
-     *
-     * @see org.postgis.DriverWrapper
-     *
-     */
-    public static Connection connect(String url, String dbuser, String dbpass) throws SQLException {
-        logger.trace("Connection connect(String url, String dbuser, String dbpass)");
-        logger.trace("   [P] url => [{}]", url);
-        logger.trace("   [P] dbuser => [{}]", dbuser);
-        logger.trace("   [P] dbpass => [{}]", dbpass);
-        Connection conn;
-        conn = DriverManager.getConnection(url, dbuser, dbpass);
-        return conn;
+    public int getPostgisMajor() throws SQLException {
+        ResultSet resultSet = statement.executeQuery("SELECT postgis_version()");
+        resultSet.next();
+        String version = resultSet.getString(1);
+        if (version == null) {
+            throw new SQLException("postgis_version returned NULL!");
+        }
+        version = version.trim();
+        int idx = version.indexOf('.');
+        return Integer.parseInt(version.substring(0, idx));
     }
 
 
-    public void loadDrivers() throws ClassNotFoundException {
-        logger.debug("void loadDrivers()");
-        Class.forName(JTS_WRAPPER_CLASS_NAME);
+    @BeforeClass
+    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
+    public void initJdbcConnection(String testWithDatabaseSystemProperty,
+                                   String jdbcUrlSystemProperty,
+                                   String jdbcUsernameSystemProperty,
+                                   String jdbcPasswordSystemProperty) throws Exception {
+        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
+        logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
+        logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
+        logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
+
+        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
+        String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
+        String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
+        String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
+
+        logger.debug("testWithDatabase: {}", testWithDatabase);
+        logger.debug("jdbcUrl: {}", jdbcUrl);
+        logger.debug("jdbcUsername: {}", jdbcUsername);
+        logger.debug("jdbcPassword: {}", jdbcPassword);
+
+        if (testWithDatabase) {
+            Class.forName(JTS_WRAPPER_CLASS_NAME);
+            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+            statement = connection.createStatement();
+        } else {
+            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
+        }
+    }
+
+
+    @AfterClass
+    public void unallocateDatabaseResources() throws Exception {
+        if ((statement != null) && (!statement.isClosed())) {
+            statement.close();
+        }
+        if ((connection != null) && (!connection.isClosed())) {
+            connection.close();
+        }
     }
 
 
