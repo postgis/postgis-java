@@ -257,7 +257,7 @@ public class JtsParserTest {
 
     /** Pass a geometry representation through the SQL server via EWKT */
     private static Geometry ewktViaSQL(String rep, Statement stat) throws SQLException {
-        ResultSet rs = stat.executeQuery("SELECT asEWKT(geometry_in('" + rep + "'))");
+        ResultSet rs = stat.executeQuery("SELECT ST_AsEWKT(geometry_in('" + rep + "'))");
         rs.next();
         String resrep = rs.getString(1);
         return JtsGeometry.geomFromString(resrep);
@@ -266,7 +266,7 @@ public class JtsParserTest {
 
     /** Pass a geometry representation through the SQL server via EWKB */
     private static Geometry ewkbViaSQL(String rep, Statement stat) throws SQLException {
-        ResultSet rs = stat.executeQuery("SELECT asEWKB(geometry_in('" + rep + "'))");
+        ResultSet rs = stat.executeQuery("SELECT ST_AsEWKB(geometry_in('" + rep + "'))");
         rs.next();
         byte[] resrep = rs.getBytes(1);
         return jtsBinaryParser.parse(resrep);
