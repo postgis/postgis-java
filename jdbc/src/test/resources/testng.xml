@@ -10,6 +10,7 @@
     <test name="Postgis JDBC Tests">
         <classes>
             <class name="org.postgis.AutoRegistrationTest"/>
+            <class name="org.postgis.BoxesTest"/>
             <class name="org.postgis.DatatypesTest"/>
             <class name="org.postgis.VersionPrinter"/>
         </classes>
