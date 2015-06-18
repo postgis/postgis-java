@@ -34,9 +34,9 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="postgis-aggregator" target="1.8" />
-      <module name="postgis-java-aggregator" target="1.8" />
-      <module name="postgis-jdbc" target="1.8" />
-      <module name="postgis-jdbc-jtsparser" target="1.8" />
+      <module name="postgis-java-aggregator" target="1.7" />
+      <module name="postgis-jdbc" target="1.7" />
+      <module name="postgis-jdbc-jtsparser" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
