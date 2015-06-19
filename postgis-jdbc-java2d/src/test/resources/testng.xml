@@ -1,0 +1,16 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="PostGIS JDBC Extensions Java2D Test Suite" verbose="1">
+
+    <parameter name="testWithDatabaseSystemProperty" value="testWithDatabase"/>
+    <parameter name="jdbcDriverClassNameSystemProperty" value="jdbcDriverClassName"/>
+    <parameter name="jdbcUrlSystemProperty" value="jdbcUrl"/>
+    <parameter name="jdbcUsernameSystemProperty" value="jdbcUsername"/>
+    <parameter name="jdbcPasswordSystemProperty" value="jdbcPassword"/>
+
+    <test name="PostGIS JDBC Java2D Tests">
+        <classes>
+            <class name="org.postgis.java2d.SimpleJava2DWrapperTest"/>
+        </classes>
+    </test>
+
+</suite>

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/postgis-java-aggregator.iml" filepath="$PROJECT_DIR$/postgis-java-aggregator.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc/postgis-jdbc.iml" filepath="$PROJECT_DIR$/jdbc/postgis-jdbc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/postgis-jdbc-java2d/postgis-jdbc-java2d.iml" filepath="$PROJECT_DIR$/postgis-jdbc-java2d/postgis-jdbc-java2d.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" filepath="$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" />
     </modules>
   </component>
