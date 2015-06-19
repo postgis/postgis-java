@@ -88,7 +88,7 @@ public class ServerTest {
             statement.execute(insertPolygonSQL);
 
             logger.debug("Querying table...");
-            ResultSet resultSet = statement.executeQuery("select asText(geom),id from " + dbtable);
+            ResultSet resultSet = statement.executeQuery("select ST_AsText(geom),id from " + dbtable);
             while (resultSet.next()) {
                 Object obj = resultSet.getObject(1);
                 int id = resultSet.getInt(2);

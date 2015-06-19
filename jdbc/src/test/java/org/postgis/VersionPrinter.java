@@ -4,6 +4,8 @@
  * PostGIS extension for PostgreSQL JDBC driver - example and test classes
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
@@ -28,15 +30,12 @@ import org.postgresql.Driver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 /**
@@ -46,22 +45,29 @@ public class VersionPrinter {
 
     private static final Logger logger = LoggerFactory.getLogger(VersionPrinter.class);
 
-    public static String[] GISVERSIONS = {
-        "postgis_version",
-        "postgis_proj_version",
-        "postgis_scripts_installed",
-        "postgis_lib_version",
-        "postgis_scripts_released",
-        "postgis_uses_stats",
-        "postgis_geos_version",
-        "postgis_scripts_build_date",
-        "postgis_lib_build_date",
-        "postgis_full_version"
+    public static String[] POSTGIS_FUNCTIONS = {
+            "postgis_version",
+            "postgis_proj_version",
+            "postgis_scripts_installed",
+            "postgis_lib_version",
+            "postgis_scripts_released",
+            "postgis_uses_stats",
+            "postgis_geos_version",
+            "postgis_scripts_build_date",
+            "postgis_lib_build_date",
+            "postgis_full_version",
+            "postgis_gdal_version",
+            "postgis_libjson_version",
+            "postgis_libxml_version",
+            "postgis_raster_lib_version",
+            "postgis_svn_version"
     };
 
     private boolean testWithDatabase = false;
 
     private Connection connection = null;
+
+    private Statement statement = null;
 
 
     @Test
@@ -99,13 +105,13 @@ public class VersionPrinter {
                 logger.info("No online version available.");
             } else {
                 logger.info("*** PostgreSQL Server ***");
-                String versionString = getVersionString("version", statement);
+                String versionString = getVersionString("version");
                 logger.debug("\t version: {}", versionString);
 
                 // Print PostGIS versions
                 logger.info("*** PostGIS Server ***");
-                for (String GISVERSION : GISVERSIONS) {
-                    versionString = getVersionString(GISVERSION, statement);
+                for (String GISVERSION : POSTGIS_FUNCTIONS) {
+                    versionString = getVersionString(GISVERSION);
                     logger.debug("\t {} version: {}", GISVERSION, versionString);
                 }
             }
@@ -113,10 +119,10 @@ public class VersionPrinter {
     }
 
 
-    public static String getVersionString(String function, Statement stat) {
+    public String getVersionString(String function) throws SQLException {
         String result = "-- unavailable -- ";
         try {
-            ResultSet resultSet = stat.executeQuery("SELECT " + function + "()");
+            ResultSet resultSet = statement.executeQuery("SELECT " + function + "()");
             if (resultSet.next()) {
                 String version = resultSet.getString(1);
                 if (version != null) {
@@ -128,7 +134,12 @@ public class VersionPrinter {
                 result = "-- no result --";
             }
         } catch (SQLException sqle) {
-            logger.error("Caught SQLException while attempting query: {} {}", sqle.getClass().getName(), sqle.getMessage());
+            // If the function does not exist, a SQLException will be thrown, but it should be caught an swallowed if
+            // the "does not exist" string is in the error message.  The SQLException might be thrown for some other
+            // problem not related to the missing function, so rethrow it if it doesn't contain the string.
+            if (!sqle.getMessage().contains("does not exist")) {
+                throw sqle;
+            }
         }
         return result;
     }
@@ -162,10 +173,22 @@ public class VersionPrinter {
         if (testWithDatabase) {
             Class.forName(jdbcDriverClassName);
             connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+            statement = connection.createStatement();
         } else {
             logger.info("testWithDatabase value was false.  Database tests will be skipped.");
         }
 
+    }
+
+
+    @AfterClass
+    public void unallocateDatabaseResources() throws Exception {
+        if ((statement != null) && (!statement.isClosed())) {
+            statement.close();
+        }
+        if ((connection != null) && (!connection.isClosed())) {
+            connection.close();
+        }
     }
 
 
