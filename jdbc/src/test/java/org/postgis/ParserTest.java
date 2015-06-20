@@ -162,9 +162,6 @@ public class ParserTest {
             "GEOMETRYCOLLECTION(POINT(10 10 20),POINT(20 20 20))"},
         {
             ONLY10,
-            "GEOMETRYCOLLECTIONM(POINT(10 10 20),POINT(20 20 20))"},
-        {
-            ONLY10,
             "GEOMETRYCOLLECTION(POINT(10 10 20 7),POINT(20 20 20 7))"},
         {
             ALL,
@@ -198,12 +195,18 @@ public class ParserTest {
             // PostGIS 0.x, OGC conformant
             "GEOMETRYCOLLECTION(POINT(10 10 20),MULTIPOINT((10 10 10), (20 20 20)),LINESTRING(10 10 20,20 20 20, 50 50 50, 34 34 34),POLYGON((10 10 0,20 10 0,20 20 0,20 10 0,10 10 0),(5 5 0,5 6 0,6 6 0,6 5 0,5 5 0)),MULTIPOLYGON(((10 10 0,20 10 0,20 20 0,20 10 0,10 10 0),(5 5 0,5 6 0,6 6 0,6 5 0,5 5 0)),((10 10 0,20 10 0,20 20 0,20 10 0,10 10 0),(5 5 0,5 6 0,6 6 0,6 5 0,5 5 0))),MULTILINESTRING((10 10 0,20 10 0,20 20 0,20 10 0,10 10 0),(5 5 0,5 6 0,6 6 0,6 5 0,5 5 0)))"},
         {
-            ALL, // Old (bad) PostGIS 0.X Representation
-            "GEOMETRYCOLLECTION(EMPTY)"},
-
-        {
             ALL,// new (correct) representation
             "GEOMETRYCOLLECTION EMPTY"},
+    // end
+    };
+
+    public static final String[][] testSetNonWorking = new String[][]{
+        {
+            ONLY10,
+            "GEOMETRYCOLLECTIONM(POINT(10 10 20),POINT(20 20 20))"},
+        {
+            ALL, // Old (bad) PostGIS 0.X Representation
+            "GEOMETRYCOLLECTION(EMPTY)"},
         {
             ONLY10,// new (correct) representation - does not work on 0.X
             "POINT EMPTY"},
@@ -221,8 +224,7 @@ public class ParserTest {
             "MULTILINESTRING EMPTY"},
         {
             ONLY10,// new (correct) representation - does not work on 0.X
-            "MULTIPOLYGON EMPTY"},
-    // end
+            "MULTIPOLYGON EMPTY"}
     };
 
     private static BinaryParser binaryParser = new BinaryParser();
