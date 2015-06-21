@@ -197,13 +197,13 @@ public class ParserTest {
         {
             ALL,// new (correct) representation
             "GEOMETRYCOLLECTION EMPTY"},
+        {
+            ALL,
+            "GEOMETRYCOLLECTIONM(POINTM(10 10 20),POINTM(20 20 20))"},
     // end
     };
 
     public static final String[][] testSetNonWorking = new String[][]{
-        {
-            ONLY10,
-            "GEOMETRYCOLLECTIONM(POINT(10 10 20),POINT(20 20 20))"},
         {
             ALL, // Old (bad) PostGIS 0.X Representation
             "GEOMETRYCOLLECTION(EMPTY)"},
