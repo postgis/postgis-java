@@ -4,7 +4,7 @@
 
     <groupId>org.postgis</groupId>
     <artifactId>postgis-java-aggregator</artifactId>
-    <version>2.1.7.1</version>
+    <version>2.1.7.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Postgis Java Project</name>
@@ -77,7 +77,7 @@
         <url>https://github.com/postgis/postgis-java</url>
         <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
         <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
-      <tag>v2.1.7.1</tag>
+      <tag>HEAD</tag>
   </scm>
     <issueManagement>
         <system>GitHub Issues</system>
