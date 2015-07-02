@@ -4,6 +4,8 @@
  * Allows PostGIS data to be read directly into a java2d shape
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -79,14 +81,26 @@ public class PGShapeGeometry extends PGobject implements Shape {
         path = new GeneralPath(GeneralPath.WIND_EVEN_ODD);
     }
 
-    /** Construct directly from a General Path */
+
+    /**
+     * Construct directly from a General Path and SRID value
+     *
+     * @param path GeneralPath to be used
+     * @param srid SRID value to be used
+     */
     public PGShapeGeometry(GeneralPath path, int srid) {
         setType("geometry");
         this.path = path;
         this.srid = srid;
     }
 
-    /** Reads the HexWKB representation */
+
+    /**
+     * Construct with HexWKB representation
+     *
+     * @param value String representation of the HexWKB data
+     * @throws SQLException when a SQLException occurs
+     */
     public PGShapeGeometry(String value) throws SQLException {
         this();
         setValue(value);
@@ -117,7 +131,11 @@ public class PGShapeGeometry extends PGobject implements Shape {
         return false;
     }
 
-    /** Return the SRID or Geometry.UNKNOWN_SRID if none was available */
+
+    /**
+     * Return the SRID or Geometry.UNKNOWN_SRID if none was available
+     * @return the SRID value to be used
+     */
     public int getSRID() {
         return srid;
     }

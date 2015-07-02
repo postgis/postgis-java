@@ -5,6 +5,8 @@
  * connected to a PostGIS enabled PostgreSQL server.
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -86,9 +88,13 @@ public class Java2DWrapper extends Driver {
         return result;
     }
 
+
     /**
-     * adds the JTS/PostGIS Data types to a PG Connection.
-     * @throws SQLException 
+     * Adds the JTS/PostGIS Data types to a PG Connection.
+     *
+     * @throws SQLException when a SQLException occurs
+     * @param pgconn The PGConnection object to add the types to
+     * @throws SQLException when an SQLException occurs
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
         pgconn.addDataType("geometry", PGShapeGeometry.class);
@@ -96,8 +102,13 @@ public class Java2DWrapper extends Driver {
         pgconn.addDataType("box2d", org.postgis.PGbox2d.class);
     }
 
+
     /**
      * Mangles the PostGIS URL to return the original PostGreSQL URL
+     *
+     * @param url String containing the url to be "mangled"
+     * @return "mangled" string
+     * @throws SQLException when a SQLException occurs
      */
     public static String mangleURL(String url) throws SQLException {
         if (url.startsWith(POSTGIS_PROTOCOL)) {
@@ -146,8 +157,11 @@ public class Java2DWrapper extends Driver {
         return super.getMinorVersion();
     }
 
+
     /**
      * Returns our own CVS version plus postgres Version
+     *
+     * @return String identifier for the version
      */
     public static String getVersion() {
         return "Java2DWrapper " + REVISION + ", wrapping " + Driver.getVersion();
