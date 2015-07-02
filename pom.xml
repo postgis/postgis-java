@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.postgis</groupId>
     <artifactId>postgis-java-aggregator</artifactId>
-    <version>2.1.7.1-SNAPSHOT</version>
+    <version>2.1.7.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Postgis Java Project</name>
@@ -76,13 +74,14 @@
     </modules>
 
     <scm>
-        <url>http://trac.osgeo.org/postgis/browser/trunk</url>
-        <connection>scm:svn:http://svn.osgeo.org/postgis/trunk</connection>
-        <developerConnection>scm:svn:http://svn.osgeo.org/postgis/trunk</developerConnection>
-    </scm>
+        <url>https://github.com/postgis/postgis-java</url>
+        <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
+        <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
+      <tag>HEAD</tag>
+  </scm>
     <issueManagement>
-        <system>Trac</system>
-        <url>http://trac.osgeo.org/postgis/</url>
+        <system>GitHub Issues</system>
+        <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
     <distributionManagement>
         <repository>
