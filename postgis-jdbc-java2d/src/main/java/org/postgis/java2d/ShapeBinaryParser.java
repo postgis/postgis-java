@@ -4,6 +4,8 @@
  * Binary Parser for JTS - relies on org.postgis V1.0.0+ package.
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -69,7 +71,10 @@ public class ShapeBinaryParser {
      * 
      * Is synchronized to protect offset counter. (Unfortunately, Java does not
      * have neither call by reference nor multiple return values.)
-     * 
+     *
+     * @param value String representation of the value to be parsed
+     * @param path GeneralPath to provide the parsed value to
+     *
      * @return a potential SRID or Geometry.UNKNOWN_SRID if not present
      */
     public synchronized int parse(String value, GeneralPath path) {
@@ -82,6 +87,9 @@ public class ShapeBinaryParser {
      * 
      * Is synchronized to protect offset counter. (Unfortunately, Java does not
      * have neither call by reference nor multiple return values.)
+     *
+     * @param value byte array representation of the value to be parsed
+     * @param path GeneralPath to provide the parsed value to
      * 
      * @return a potential SRID or Geometry.UNKNOWN_SRID if not present
      */
@@ -92,8 +100,11 @@ public class ShapeBinaryParser {
 
     /**
      * Parse a geometry starting at offset.
-     * 
-     * @param path
+     *
+     * @param data ValueGetter containing the value to be parsed
+     * @param path GeneralPath to provide the parsed value to
+     *
+     * @return a potential SRID or Geometry.UNKNOWN_SRID if not present
      */
     protected int parseGeometry(ValueGetter data, GeneralPath path) {
         byte endian = data.getByte(); // skip and test endian flag
@@ -167,9 +178,11 @@ public class ShapeBinaryParser {
     /**
      * Parse an Array of "slim" Points (without endianness and type, part of
      * LinearRing and Linestring, but not MultiPoint!
-     * 
-     * @param haveZ
-     * @param haveM
+     *
+     * @param data ValueGetter containing the value to be parsed
+     * @param haveZ flag indicating if Z values exist
+     * @param haveM flag indicating if M values exist
+     * @param path GeneralPath to provide the parsed value to
      */
     private void parseCS(ValueGetter data, boolean haveZ, boolean haveM, GeneralPath path) {
         int count = data.getInt();
