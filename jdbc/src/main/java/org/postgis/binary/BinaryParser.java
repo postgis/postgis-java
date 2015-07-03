@@ -72,6 +72,9 @@ public class BinaryParser {
      * 
      * Is synchronized to protect offset counter. (Unfortunately, Java does not
      * have neither call by reference nor multiple return values.)
+     *
+     * @param value String containing the data to be parsed
+     * @return resulting geometry for the parsed data
      */
     public synchronized Geometry parse(String value) {
         StringByteGetter bytes = new ByteGetter.StringByteGetter(value);
@@ -83,13 +86,21 @@ public class BinaryParser {
      * 
      * Is synchronized to protect offset counter. (Unfortunately, Java does not
      * have neither call by reference nor multiple return values.)
+     *
+     * @param value byte array containing the data to be parsed
+     * @return resulting geometry for the parsed data
      */
     public synchronized Geometry parse(byte[] value) {
         BinaryByteGetter bytes = new ByteGetter.BinaryByteGetter(value);
         return parseGeometry(valueGetterForEndian(bytes));
     }
 
-    /** Parse a geometry starting at offset. */
+    /**
+     * Parse a geometry starting at offset.
+     *
+     * @param data ValueGetter with the data to be parsed
+     * @return the parsed geometry
+     * */
     protected Geometry parseGeometry(ValueGetter data) {
         byte endian = data.getByte(); // skip and test endian flag
         if (endian != data.endian) {

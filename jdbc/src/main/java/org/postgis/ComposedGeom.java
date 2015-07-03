@@ -54,7 +54,9 @@ public abstract class ComposedGeom extends Geometry {
     protected Geometry[] subgeoms = EMPTY;
 
     /**
-     * @param type
+     * Constructs an instance with the specified type
+     *
+     * @param type int value corresponding to the geometry type.
      */
     public ComposedGeom(int type) {
         super(type);
@@ -107,21 +109,28 @@ public abstract class ComposedGeom extends Geometry {
             subgeoms[p] = createSubGeomInstance(t.getToken(p), haveM);
         }
         dimension = subgeoms[0].dimension;
-        // fetch haveMeasure from subpoint because haveM does only work with
+        // fetch haveMeasure from sub-point because haveM does only work with
         // 2d+M, not with 3d+M geometries
         haveMeasure = subgeoms[0].haveMeasure;
     }
 
     /**
-     * Return the appropriate instance of the subgeometry - this encapsulates
+     * Return the appropriate instance of the sub-geometry - this encapsulates
      * subclass specific constructor calls
+     *
+     * @param token The token containing the value for the sub-geometry
+     * @param haveM flag to indicate the existence of a measure
+     * @return the new sub-geometry
+     * @throws SQLException if a SQLException is thrown
      */
-    protected abstract Geometry createSubGeomInstance(String token, boolean haveM)
-            throws SQLException;
+    protected abstract Geometry createSubGeomInstance(String token, boolean haveM) throws SQLException;
 
     /**
-     * Return the appropriate instance of the subgeometry array - this
+     * Return the appropriate instance of the sub-geometry array - this
      * encapsulates subclass specific array instantiation
+     *
+     * @param size number of elements in the array
+     * @return Geometry array corresponding to the sub-geometry
      */
     protected abstract Geometry[] createSubGeomArray(int size);
 

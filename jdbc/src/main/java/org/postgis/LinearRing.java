@@ -46,6 +46,7 @@ public class LinearRing extends PointComposedGeom {
      * representation of a ring.
      * 
      * @param value Definition of this ring in the PostGIS string format.
+     * @throws SQLException when a SQLException occurs
      */
     public LinearRing(String value) throws SQLException {
         this(value, false);
@@ -55,6 +56,7 @@ public class LinearRing extends PointComposedGeom {
      * @param value The text representation of this LinearRing
      * @param haveM Hint whether we have a measure. This is given to us by other
      *            "parent" Polygon, and is passed further to our parent.
+     * @throws SQLException when a SQLException occurs
      */
 
     protected LinearRing(String value, boolean haveM) throws SQLException {

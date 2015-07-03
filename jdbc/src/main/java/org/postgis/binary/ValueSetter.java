@@ -34,7 +34,9 @@ public abstract class ValueSetter {
     }
 
     /**
-     * Get a byte, should be equal for all endians
+     * Set a byte, should be equal for all endians
+     *
+     * @param value byte value to be set with.
      */
     public void setByte(byte value) {
         data.set(value, position);
@@ -51,17 +53,28 @@ public abstract class ValueSetter {
         position += 8;
     }
 
-    /** Get a 32-Bit integer */
+    /**
+     * Set a 32-Bit integer
+     *
+     * @param value int value to be set with
+     * @param index int value for the index
+     *
+     */
     protected abstract void setInt(int value, int index);
 
     /**
-     * Get a long value. This is not needed directly, but as a nice side-effect
+     * Set a long value. This is not needed directly, but as a nice side-effect
      * from GetDouble.
+     *
+     * @param data int value to be set with
+     * @param index int value for the index
      */
     protected abstract void setLong(long data, int index);
 
     /**
-     * Get a double.
+     * Set a double.
+     *
+     * @param data double value to be set with
      */
     public void setDouble(double data) {
         long bitrep = Double.doubleToLongBits(data);

@@ -87,7 +87,7 @@ public class DriverWrapper extends Driver {
      * 
      * This also loads the appropriate TypesAdder for our SQL Driver instance.
      * 
-     * @throws SQLException
+     * @throws SQLException when a SQLException occurs
      */
     public DriverWrapper() throws SQLException {
         super();
@@ -160,6 +160,9 @@ public class DriverWrapper extends Driver {
     /**
      * Do we have HexWKB as well known text representation - to be overridden by
      * subclasses.
+     *
+     * @param result Connection to check
+     * @return true if using EWKB, false otherwise
      */
     protected boolean useLW(Connection result) {
         if (result == null) {
@@ -188,6 +191,8 @@ public class DriverWrapper extends Driver {
 
     /**
      * Returns our own CVS version plus postgres Version
+     *
+     * @return String value reprenstation of the version
      */
     public static String getVersion() {
         return "PostGisWrapper " + REVISION + ", wrapping " + Driver.getVersion();
@@ -204,8 +209,9 @@ public class DriverWrapper extends Driver {
      * PostgreSQL jdbc drivers V8.0 or newer, those methods are deprecated due
      * to some class loader problems (but still work for now), and you may want
      * to use the method below instead.
-     * 
-     * @throws SQLException
+     *
+     * @param pgconn The PGConnection object to add the types to
+     * @throws SQLException when a SQLException occurs
      * 
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
@@ -214,6 +220,9 @@ public class DriverWrapper extends Driver {
 
     /**
      * adds the JTS/PostGIS Data types to a PG 8.0+ Connection.
+     *
+     * @param pgconn The PGConnection object to add the types to
+     * @throws SQLException when a SQLException occurs
      */
     public static void addGISTypes80(PGConnection pgconn) throws SQLException {
         loadTypesAdder("80").addGT((Connection) pgconn, false);
@@ -221,8 +230,9 @@ public class DriverWrapper extends Driver {
 
     /**
      * adds the JTS/PostGIS Data types to a PG 7.2 Connection.
-     * 
-     * @throws SQLException
+     *
+     * @param pgconn The PGConnection object to add the types to
+     * @throws SQLException when a SQLException occurs
      */
     public static void addGISTypes72(org.postgresql.PGConnection pgconn) throws SQLException {
         loadTypesAdder("72").addGT((Connection) pgconn, false);
@@ -230,6 +240,10 @@ public class DriverWrapper extends Driver {
 
     /**
      * Mangles the PostGIS URL to return the original PostGreSQL URL
+     *
+     * @param url String containing the url to be "mangled"
+     * @return "mangled" string
+     * @throws SQLException when a SQLException occurs
      */
     protected String mangleURL(String url) throws SQLException {
         String myProgo = getProtoString();

@@ -57,6 +57,8 @@ public class DriverWrapperAutoprobe extends DriverWrapper {
 
     /**
      * Default constructor.
+     *
+     * @throws SQLException when a SQLExceptin occurs
      */
     public DriverWrapperAutoprobe() throws SQLException {
         super();
@@ -86,6 +88,8 @@ public class DriverWrapperAutoprobe extends DriverWrapper {
 
     /**
      * Returns our own CVS version plus postgres Version
+     *
+     * @return String value reprenstation of the version
      */
     public static String getVersion() {
         return "PostGisWrapperAutoprobe " + REVISIONAUTO + ", wrapping " + Driver.getVersion();

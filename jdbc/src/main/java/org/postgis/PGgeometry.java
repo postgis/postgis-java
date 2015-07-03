@@ -67,6 +67,11 @@ public class PGgeometry extends PGobject {
 
     /**
      * Maybe we could add more error checking here?
+     *
+     * @param value String representing the geometry
+     * @param bp BinaryParser to use whe parsing
+     * @return Geometry object parsed from the specified string value
+     * @throws SQLException when a SQLException occurs
      */
     public static Geometry geomFromString(String value, BinaryParser bp) throws SQLException {
         return geomFromString(value, bp, false);
@@ -145,15 +150,17 @@ public class PGgeometry extends PGobject {
     public static final String SRIDPREFIX = "SRID=";
 
     /**
-     * Splits a String at the first occurrence of border charachter.
+     * Splits a String at the first occurrence of border character.
      * 
      * Poor man's String.split() replacement, as String.split() was invented at
      * jdk1.4, and the Debian PostGIS Maintainer had problems building the woody
      * backport of his package using DFSG-free compilers. In all the cases we
      * used split() in the org.postgis package, we only needed to split at the
      * first occurence, and thus this code could even be faster.
-     * 
-     * @throws SQLException
+     *
+     * @param whole the String to be split
+     * @return String array containing the split elements
+     * @throws SQLException when a SQLException occurrs
      */
     public static String[] splitSRID(String whole) throws SQLException {
         int index = whole.indexOf(';', 5); // sridprefix length is 5

@@ -81,6 +81,9 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * The Text representations of the geometry types
+     *
+     * @param type int value of the type to lookup
+     * @return String reprentation of the type.
 	 */
 	public static String getTypeString(int type) {
 		if (type >= 0 && type <= 7) {
@@ -119,6 +122,9 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * Parse a SRID value, anything {@code <= 0} is unknown
+     *
+     * @param srid the SRID to parse
+     * @return parsed SRID value
 	 */
 	public static int parseSRID(int srid) {
 		if (srid < 0) {
@@ -147,6 +153,9 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * java.lang.Object equals implementation
+     *
+     * @param other geometry to compare
+     * @return true if equal, false otherwise
 	 */
 	public boolean equals(Object other) {
 		return (other != null) && (other instanceof Geometry)
@@ -156,6 +165,9 @@ public abstract class Geometry implements Serializable {
 	/**
 	 * geometry specific equals implementation - only defined for non-null
 	 * values
+     *
+     * @param other geometry to compare
+     * @return true if equal, false otherwise
 	 */
 	public boolean equals(Geometry other) {
 		return (other != null) && (this.dimension == other.dimension)
@@ -170,36 +182,46 @@ public abstract class Geometry implements Serializable {
 	 * 
 	 * Implementors can assume that dimensin, type, srid and haveMeasure are
 	 * equal, other != null and other is the same subclass.
+	 *
+     * @param other geometry to compare
+	 * @return true if equal, false otherwise
 	 */
 	protected abstract boolean equalsintern(Geometry other);
 
 	/**
 	 * Return the number of Points of the geometry
+	 *
+	 * @return number of points in the geometry
 	 */
 	public abstract int numPoints();
 
 	/**
 	 * Get the nth Point of the geometry
 	 * 
-	 * @param n
-	 *            the index of the point, from 0 to numPoints()-1;
-	 * @throws ArrayIndexOutOfBoundsException
-	 *             in case of an emtpy geometry or bad index.
+	 * @param n the index of the point, from 0 to numPoints()-1;
+	 * @return nth point in the geometry
+	 * @throws ArrayIndexOutOfBoundsException in case of an emtpy geometry or bad index.
 	 */
 	public abstract Point getPoint(int n);
 
 	/**
 	 * Same as getPoint(0);
+	 *
+	 * @return the initial Point in this geometry
 	 */
 	public abstract Point getFirstPoint();
 
 	/**
 	 * Same as getPoint(numPoints()-1);
+	 *
+	 * @return the final Point in this geometry
 	 */
 	public abstract Point getLastPoint();
 
 	/**
 	 * The OGIS geometry type number of this geometry.
+	 *
+	 * @return int value representation for the type of this geometry
 	 */
 	public int getType() {
 		return this.type;
@@ -207,12 +229,18 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * Return the Type as String
+	 *
+	 * @return String representation for the type of this geometry
 	 */
 	public String getTypeString() {
 		return getTypeString(this.type);
 	}
 
-	/** Returns whether we have a measure */
+	/**
+	 * Returns whether we have a measure
+	 *
+	 * @return true if the geometry has a measure, false otherwise
+	 */
 	public boolean isMeasured() {
 		return haveMeasure;
 	}
@@ -229,6 +257,8 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * The OGIS geometry type number of this geometry.
+	 *
+	 * @return the SRID of this geometry
 	 */
 	public int getSrid() {
 		return this.srid;
@@ -237,6 +267,8 @@ public abstract class Geometry implements Serializable {
 	/**
 	 * Recursively sets the srid on this geometry and all contained
 	 * subgeometries
+	 *
+	 * @param srid the SRID for this geometry
 	 */
 	public void setSrid(int srid) {
 		this.srid = srid;
@@ -256,6 +288,9 @@ public abstract class Geometry implements Serializable {
 	/**
 	 * Render the WKT version of this Geometry (without SRID) into the given
 	 * StringBuffer.
+	 *
+	 * @param sb StringBuffer to render into
+	 * @param putM flag to indicate if the M character should be used.
 	 */
 	public void outerWKT(StringBuffer sb, boolean putM) {
 		sb.append(getTypeString());
@@ -272,6 +307,8 @@ public abstract class Geometry implements Serializable {
 	/**
 	 * Render the WKT without the type name, but including the brackets into the
 	 * StringBuffer
+	 *
+	 * @param sb StringBuffer to render into
 	 */
 	protected void mediumWKT(StringBuffer sb) {
 		sb.append('(');
@@ -282,11 +319,15 @@ public abstract class Geometry implements Serializable {
 	/**
 	 * Render the "inner" part of the WKT (inside the brackets) into the
 	 * StringBuffer.
+	 *
+	 * @param SB StringBuffer to render into
 	 */
 	protected abstract void innerWKT(StringBuffer SB);
 
 	/**
 	 * backwards compatibility method
+	 *
+	 * @return String representation of the value for the geometry.
 	 */
 	public String getValue() {
 		StringBuffer sb = new StringBuffer();
@@ -314,7 +355,8 @@ public abstract class Geometry implements Serializable {
 
 	/**
 	 * Splits the SRID=4711; part of a EWKT rep if present and sets the srid.
-	 * 
+	 *
+	 * @param value String value to extract the SRID from
 	 * @return value without the SRID=4711; part
 	 */
 	protected String initSRID(String value) {

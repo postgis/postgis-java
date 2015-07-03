@@ -35,6 +35,8 @@ public abstract class ValueGetter {
 
     /**
      * Get a byte, should be equal for all endians
+     *
+     * @return the byte value
      */
     public byte getByte() {
         return (byte) data.get(position++);
@@ -52,17 +54,27 @@ public abstract class ValueGetter {
         return res;
     }
 
-    /** Get a 32-Bit integer */
+    /**
+     * Get a 32-Bit integer
+     *
+     * @param index the index to get the value from
+     * @return the int value
+     */
     protected abstract int getInt(int index);
 
     /**
      * Get a long value. This is not needed directly, but as a nice side-effect
      * from GetDouble.
+     *
+     * @param index the index to get the value from
+     * @return the long value
      */
     protected abstract long getLong(int index);
 
     /**
      * Get a double.
+     *
+     * @return the double value
      */
     public double getDouble() {
         long bitrep = getLong();
