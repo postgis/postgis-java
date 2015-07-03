@@ -107,7 +107,12 @@ public class JtsGeometry extends PGobject {
         }
     }
 
-    /** Recursively set a srid for the geometry and all subgeometries */
+
+    /**
+     * Recursively set a srid for the geometry and all subgeometries
+     * @param geom Geometry to work on
+     * @param srid SRID to be set to
+     */
     public static void setSridRecurse(final Geometry geom, final int srid) {
         geom.setSRID(srid);
         if (geom instanceof GeometryCollection) {

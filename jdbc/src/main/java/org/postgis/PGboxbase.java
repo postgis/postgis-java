@@ -55,12 +55,15 @@ public abstract class PGboxbase extends PGobject {
      * 
      * I use an abstract method here so we do not need to replicate the String
      * object in every instance.
-     * 
+     *
+     * @return the prefix, as a string
      */
     public abstract String getPrefix();
 
     /**
      * The Postgres type we have (same construct as getPrefix())
+     *
+     * @return String containing the name of the type for this box.
      */
     public abstract String getPGtype();
 
@@ -118,17 +121,27 @@ public abstract class PGboxbase extends PGobject {
     /**
      * Unlike geometries, toString() does _not_ contain the srid, as server-side
      * PostGIS cannot parse this.
+     *
+     * @return String representation of this box
      */
     public String toString() {
         return getValue();
     }
 
-    /** Returns the lower left bottom corner of the box as a Point object */
+    /**
+     * Returns the lower left bottom corner of the box as a Point object
+     *
+     * @return lower left bottom corner of this box
+     */
     public Point getLLB() {
         return llb;
     }
 
-    /** Returns the upper right top corner of the box as a Point object */
+    /**
+     * Returns the upper right top corner of the box as a Point object
+     *
+     * @return upper right top corner of this box
+     */
     public Point getURT() {
         return urt;
     }
@@ -146,6 +159,10 @@ public abstract class PGboxbase extends PGobject {
      * 
      * As the Server always returns Box3D with three dimensions, z==0 equals
      * dimensions==2
+     *
+     * @param first First of two points to be compared
+     * @param second Second of two points to be compared
+     * @return true if the points are the same, false otherwise
      * 
      */
     protected static boolean compareLazyDim(Point first, Point second) {
@@ -163,11 +180,15 @@ public abstract class PGboxbase extends PGobject {
     }
 
     /**
+     * Obtain a new instance of a PGboxbase
+     *
      * We could have used this.getClass().newInstance() here, but this forces us
      * dealing with InstantiationException and IllegalAccessException. Due to
      * the PGObject.clone() brokennes that does not allow clone() to throw
      * CloneNotSupportedException, we cannot even pass this exceptions down to
      * callers in a sane way.
+     *
+     * @return a new instance of PGboxbase
      */
     protected abstract PGboxbase newInstance();
 }

@@ -26,7 +26,8 @@ package org.postgis.binary;
 public abstract class ByteGetter {
     /**
      * Get a byte.
-     * 
+     *
+     * @param index the index to get the value from
      * @return The result is returned as Int to eliminate sign problems when
      *         or'ing several values together.
      */

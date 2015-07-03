@@ -147,6 +147,9 @@ public class Point extends Geometry {
      * Construct a Point from EWKT.
      * 
      * (3D and measures are legal, but SRID is not allowed).
+     *
+     * @param value String representation of the geometry.
+     * @throws SQLException when a SQLException occurs
      */
     public Point(String value) throws SQLException {
         this(value, false);
@@ -163,6 +166,7 @@ public class Point extends Geometry {
      *            However, POINT does not set it to false, as they can be
      *            contained in measured collections, as in
      *            "GEOMETRYCOLLECTIONM(POINT(0 0 0))".
+     * @throws SQLException when a SQLException occurs
      */
     protected Point(String value, boolean haveM) throws SQLException {
         this();

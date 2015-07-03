@@ -52,8 +52,8 @@ public class BinaryWriter {
     /**
      * Get the appropriate ValueGetter for my endianness
      * 
-     * @param bytes The appropriate Byte Getter
-     * 
+     * @param bytes The ByteSetter to use
+     * @param endian the endian for the ValueSetter to use
      * @return the ValueGetter
      */
     public static ValueSetter valueSetterForEndian(ByteSetter bytes, byte endian) {
@@ -77,6 +77,10 @@ public class BinaryWriter {
      * return true. If not, the result may be invalid WKB.
      * 
      * @see Geometry#checkConsistency() the consistency checker
+     *
+     * @param geom the geometry to be written
+     * @param REP endianness to write the bytes with
+     * @return String containing the hex encoded geometry
      */
     public synchronized String writeHexed(Geometry geom, byte REP) {
         int length = estimateBytes(geom);
@@ -100,6 +104,10 @@ public class BinaryWriter {
      * return true. If not, the result may be invalid WKB.
      * 
      * @see Geometry#checkConsistency()
+     *
+     * @param geom the geometry to be written
+     * @param REP endianness to write the bytes with
+     * @return byte array containing the encoded geometry
      */
     public synchronized byte[] writeBinary(Geometry geom, byte REP) {
         int length = estimateBytes(geom);
@@ -112,7 +120,11 @@ public class BinaryWriter {
         return writeBinary(geom, ValueSetter.NDR.NUMBER);
     }
 
-    /** Parse a geometry starting at offset. */
+    /**
+     * Parse a geometry starting at offset.
+     * @param geom the geometry to write
+     * @param dest the value setting to be used for writing
+     */
     protected void writeGeometry(Geometry geom, ValueSetter dest) {
         // write endian flag
         dest.setByte(dest.endian);
@@ -233,7 +245,12 @@ public class BinaryWriter {
         writeGeometryArray(geom.getGeometries(), dest);
     }
 
-    /** Estimate how much bytes a geometry will need in WKB. */
+    /**
+     * Estimate how much bytes a geometry will need in WKB.
+     *
+     * @param geom Geometry to estimate.
+     * @return estimated number of bytes
+     */
     protected int estimateBytes(Geometry geom) {
         int result = 0;
 
