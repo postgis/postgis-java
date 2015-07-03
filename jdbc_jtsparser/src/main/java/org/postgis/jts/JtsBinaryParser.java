@@ -65,28 +65,46 @@ public class JtsBinaryParser {
         }
     }
 
+
     /**
      * Parse a hex encoded geometry
+     * @param value String containing the hex data to be parsed
+     * @return the resulting parsed geometry
      */
     public Geometry parse(String value) {
         StringByteGetter bytes = new ByteGetter.StringByteGetter(value);
         return parseGeometry(valueGetterForEndian(bytes));
     }
 
+
     /**
      * Parse a binary encoded geometry.
+     * @param value byte array containing the binary encoded geometru
+     * @return the resulting parsed geometry
      */
     public Geometry parse(byte[] value) {
         BinaryByteGetter bytes = new ByteGetter.BinaryByteGetter(value);
         return parseGeometry(valueGetterForEndian(bytes));
     }
 
-    /** Parse a geometry starting at offset. */
+
+    /**
+     * Parse a geometry starting at offset.
+     * @param data ValueGetter for the data to be parsed
+     * @return The resulting Geometry
+     */
     protected Geometry parseGeometry(ValueGetter data) {
         return parseGeometry(data, 0, false);
     }
 
-    /** Parse with a known geometry factory */
+
+    /**
+     * Parse with a known geometry factory
+     * @param data ValueGetter for the data to be parsed
+     * @param srid the SRID to be used for parsing
+     * @param inheritSrid flag to toggle inheriting SRIDs
+     * @return The resulting Geometry
+     */
     protected Geometry parseGeometry(ValueGetter data, int srid, boolean inheritSrid) {
         byte endian = data.getByte(); // skip and test endian flag
         if (endian != data.endian) {

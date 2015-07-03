@@ -172,7 +172,10 @@ public class JTSShape implements Shape {
             isRing = ls instanceof LinearRing;
         }
 
-        /** only to be called from PolygonPathIterator subclass */
+        /**
+         * only to be called from PolygonPathIterator subclass
+         * @param _cs A coordinate sequence to be used.
+         */
         protected void reInit(CoordinateSequence _cs) {
             cs = _cs;
             index=0;

@@ -90,13 +90,14 @@ public class JtsWrapper extends Driver {
     public java.sql.Connection connect(String url, Properties info) throws SQLException {
         url = mangleURL(url);
         Connection result = super.connect(url, info);
-        addGISTypes((PGConnection) result);
+        addGISTypes((PGConnection)result);
         return result;
     }
 
     /**
-     * adds the JTS/PostGIS Data types to a PG Connection.
-     * @throws SQLException 
+     * Adds the JTS/PostGIS Data types to a PG Connection.
+     * @param pgconn The PGConnection object to add the types to
+     * @throws SQLException when an SQLException occurs
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
         pgconn.addDataType("geometry", org.postgis.jts.JtsGeometry.class);
@@ -104,6 +105,10 @@ public class JtsWrapper extends Driver {
 
     /**
      * Mangles the PostGIS URL to return the original PostGreSQL URL
+     *
+     * @param url String containing the url to be "mangled"
+     * @return "mangled" string
+     * @throws SQLException when a SQLException occurs
      */
     public static String mangleURL(String url) throws SQLException {
         if (url.startsWith(POSTGIS_PROTOCOL)) {
@@ -152,6 +157,8 @@ public class JtsWrapper extends Driver {
 
     /**
      * Returns our own CVS version plus postgres Version
+     *
+     * @return String representation of the version
      */
     public static String getVersion() {
         return "JtsGisWrapper " + REVISION + ", wrapping " + Driver.getVersion();

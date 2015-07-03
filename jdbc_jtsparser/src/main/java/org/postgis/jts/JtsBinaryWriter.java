@@ -55,10 +55,9 @@ public class JtsBinaryWriter {
     /**
      * Get the appropriate ValueGetter for my endianness
      * 
-     * @param bytes
-     *            The appropriate Byte Getter
-     * 
-     * @return the ValueGetter
+     * @param bytes The ByteSetter
+     * @param endian The endian to be used
+     * @return the appropriate ValueSetter for the specified endian
      */
     public static ValueSetter valueSetterForEndian(ByteSetter bytes, byte endian) {
         if (endian == ValueSetter.XDR.NUMBER) { // XDR
@@ -75,6 +74,10 @@ public class JtsBinaryWriter {
      * 
      * Currently, geometries with more than 2 dimensions and measures are not
      * cleanly supported, but SRID is honored.
+     *
+     * @param geom The geometry to be written
+     * @param REP The endianness representation to use for writing
+     * @return String containing the hex-encoded geometry
      */
     public String writeHexed(Geometry geom, byte REP) {
         int length = estimateBytes(geom);
@@ -89,9 +92,13 @@ public class JtsBinaryWriter {
 
     /**
      * Write a binary encoded geometry.
-     * 
+     *
      * Currently, geometries with more than 2 dimensions and measures are not
      * cleanly supported, but SRID is honored.
+     *
+     * @param geom The geometry to be written
+     * @param REP The endianness representation to use for writing
+     * @return byte array containing the encoded geometry
      */
     public byte[] writeBinary(Geometry geom, byte REP) {
         int length = estimateBytes(geom);
@@ -104,7 +111,12 @@ public class JtsBinaryWriter {
         return writeBinary(geom, ValueSetter.NDR.NUMBER);
     }
 
-    /** Parse a geometry starting at offset. */
+
+    /**
+     * Parse a geometry starting at offset.
+     * @param geom The Geometry to be written
+     * @param dest The ValueSettr to write to
+     */
     protected void writeGeometry(Geometry geom, ValueSetter dest) {
         final int dimension;
         if (geom == null) {
@@ -252,7 +264,12 @@ public class JtsBinaryWriter {
         }
     }
 
-    /** Estimate how much bytes a geometry will need in WKB. */
+
+    /**
+     * Estimate how much bytes a geometry will need in WKB.
+     * @param geom Geometry to estimate
+     * @return number of bytes needed
+     */
     protected int estimateBytes(Geometry geom) {
         int result = 0;
 
