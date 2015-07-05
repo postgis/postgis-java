@@ -6,6 +6,8 @@
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,9 +27,9 @@
 
 package org.postgis;
 
-import org.postgresql.util.PGtokenizer;
-
 import java.sql.SQLException;
+import java.util.List;
+
 
 /**
  * This represents the LinearRing GIS datatype. This type is used to construct
@@ -61,11 +63,12 @@ public class LinearRing extends PointComposedGeom {
 
     protected LinearRing(String value, boolean haveM) throws SQLException {
         super(LINEARRING);
-        PGtokenizer t = new PGtokenizer(PGtokenizer.removePara(value.trim()), ',');
-        int npoints = t.getSize();
+        String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value.trim(), "(", ")");
+        List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ',');
+        int npoints = tokens.size();
         Point[] points = new Point[npoints];
         for (int p = 0; p < npoints; p++) {
-            points[p] = new Point(t.getToken(p), haveM);
+            points[p] = new Point(tokens.get(p), haveM);
         }
         this.dimension = points[0].dimension;
         // fetch haveMeasure from subpoint because haveM does only work with
@@ -73,4 +76,5 @@ public class LinearRing extends PointComposedGeom {
         this.haveMeasure = points[0].haveMeasure;
         this.subgeoms = points;
     }
+
 }

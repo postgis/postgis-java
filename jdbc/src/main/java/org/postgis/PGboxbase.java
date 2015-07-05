@@ -7,6 +7,8 @@
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,9 +29,9 @@
 package org.postgis;
 
 import org.postgresql.util.PGobject;
-import org.postgresql.util.PGtokenizer;
 
 import java.sql.SQLException;
+import java.util.List;
 
 /*
  * Updates Oct 2002 - data members made private - getLLB() and getURT() methods
@@ -94,9 +96,10 @@ public abstract class PGboxbase extends PGobject {
         if (value.startsWith(myPrefix)) {
             value = value.substring(myPrefix.length()).trim();
         }
-        PGtokenizer t = new PGtokenizer(PGtokenizer.removePara(value), ',');
-        llb = new Point(t.getToken(0));
-        urt = new Point(t.getToken(1));
+        String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value.trim(), "(", ")");
+        List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ',');
+        llb = new Point(tokens.get(0));
+        urt = new Point(tokens.get(1));
         if (srid != Geometry.UNKNOWN_SRID) {
             llb.setSrid(srid);
             urt.setSrid(srid);

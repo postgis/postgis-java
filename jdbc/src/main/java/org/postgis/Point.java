@@ -6,6 +6,8 @@
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,9 +27,8 @@
 
 package org.postgis;
 
-import org.postgresql.util.PGtokenizer;
-
 import java.sql.SQLException;
+import java.util.List;
 
 public class Point extends Geometry {
     /* JDK 1.5 Serialization */
@@ -178,19 +179,20 @@ public class Point extends Geometry {
         } else if (value.indexOf("POINT") == 0) {
             value = value.substring(5).trim();
         }
-        PGtokenizer t = new PGtokenizer(PGtokenizer.removePara(value), ' ');
+        String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value, "(", ")");
+        List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ' ');
         try {
-            x = Double.valueOf(t.getToken(0)).doubleValue();
-            y = Double.valueOf(t.getToken(1)).doubleValue();
-            haveM |= t.getSize() == 4;
-            if ((t.getSize() == 3 && !haveM) || (t.getSize() == 4)) {
-                z = Double.valueOf(t.getToken(2)).doubleValue();
+            x = Double.valueOf(tokens.get(0)).doubleValue();
+            y = Double.valueOf(tokens.get(1)).doubleValue();
+            haveM |= tokens.size() == 4;
+            if ((tokens.size() == 3 && !haveM) || (tokens.size() == 4)) {
+                z = Double.valueOf(tokens.get(2)).doubleValue();
                 dimension = 3;
             } else {
                 dimension = 2;
             }
             if (haveM) {
-                m = Double.valueOf(t.getToken(dimension)).doubleValue();
+                m = Double.valueOf(tokens.get(dimension)).doubleValue();
             }
         } catch (NumberFormatException e) {
             throw new SQLException("Error parsing Point: " + e.toString());

@@ -6,6 +6,8 @@
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
+ *
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  * 
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,10 +27,9 @@
 
 package org.postgis;
 
-import org.postgresql.util.PGtokenizer;
-
 import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * ComposedGeom - Abstract base class for all Geometries that are composed out
@@ -102,11 +103,14 @@ public abstract class ComposedGeom extends Geometry {
             // (which are not OpenGIS compliant)
             return;
         }
-        PGtokenizer t = new PGtokenizer(PGtokenizer.removePara(value), ',');
-        int subgeomcount = t.getSize();
+
+        String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value, "(", ")");
+        List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ',');
+
+        int subgeomcount = tokens.size();
         subgeoms = createSubGeomArray(subgeomcount);
         for (int p = 0; p < subgeomcount; p++) {
-            subgeoms[p] = createSubGeomInstance(t.getToken(p), haveM);
+            subgeoms[p] = createSubGeomInstance(tokens.get(p), haveM);
         }
         dimension = subgeoms[0].dimension;
         // fetch haveMeasure from sub-point because haveM does only work with
