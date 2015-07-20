@@ -39,16 +39,11 @@ import org.postgresql.util.PGobject;
  * 
  * As the java.awt.Shape methods currently are implemented by using a
  * java.awt.geom.GeneralPath object, they have the same semantics.
- * 
- * BUG/TODO: MultiPoints or Points in a Geometry Collection currently don't work
- * as expected, as some GeneralPath implementations throw away adjacent MoveTo
- * commands as an optimization (e. G. sun 1.5 and ibm 1.5). Points thus are
- * translated into MoveTo() followed by a closePath. This may change when we
- * implement our own path logics. We have to evaluate whether Graphics2D renders
- * a single MoveTo command as a single "brush tip", or we need the closePath()
- * command nevertheless to get any drawing. Maybe we need a LineTo() to the same
- * coordinages instead.
- * 
+ *
+ * NOTE: (Multi)Points are translated into a sequence of single MoveTo and LineTo
+ * commands, but WITHOUT a closePath command.  When rendering with a stroke that
+ * is not solid, the points may not be rendered.
+ *
  * (Multi)LineStrings are translated into a sequence of a single MoveTo and
  * multiple LineTo vertices, and Polygon rings into a sequence of a single
  * MoveTo, multiple LineTo and a closePath command. To allow correct Polygon
