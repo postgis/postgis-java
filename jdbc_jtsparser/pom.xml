@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>net.postgis</groupId>
 		<artifactId>postgis-java-aggregator</artifactId>
-        <version>2.1.7.2-SNAPSHOT</version>
+        <version>2.1.7.2</version>
 	</parent>
 
 	<artifactId>postgis-jdbc-jtsparser</artifactId>
-    <version>2.1.7.2-SNAPSHOT</version>
+    <version>2.1.7.2</version>
 	<packaging>jar</packaging>
 
     <name>Postgis JDBC Driver JTS Parser</name>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>net.postgis</groupId>
             <artifactId>postgis-jdbc</artifactId>
-            <version>2.1.7.2-SNAPSHOT</version>
+            <version>2.1.7.2</version>
         </dependency>
         <dependency>
             <groupId>com.vividsolutions</groupId>
