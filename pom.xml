@@ -2,13 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.postgis</groupId>
+    <groupId>net.postgis</groupId>
     <artifactId>postgis-java-aggregator</artifactId>
     <version>2.1.7.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Postgis Java Project</name>
-    <description>Aggregates java projects associated with the Postgis project.</description>
+    <name>PostGIS Java Project</name>
+    <description>Aggregates java projects associated with the PostGIS project.</description>
     <url>http://postgis.net</url>
     <licenses>
         <license>
@@ -20,15 +20,15 @@
 
     <developers>
         <developer>
-            <name>Postgis Development Team</name>
+            <name>PostGIS Development Team</name>
+            <url>http://postgis.net</url>
         </developer>
         <developer>
-            <name>María Arias de Reyna</name>
-            <email>delawen en gmail.com</email>
-        </developer>
-        <developer>
-            <name>Baris ERGUN</name>
-            <email>barisergun75@gmail.com</email>
+            <name>Phillip Ross</name>
+            <email>phillip.w.g.ross at gmail.com</email>
+            <roles>
+                <role>Maintainer</role>
+            </roles>
         </developer>
     </developers>
     <contributors>
@@ -102,7 +102,7 @@
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
-        <maven-ear-plugin.version>2.10</maven-ear-plugin.version>
+        <maven-ear-plugin.version>2.10.1</maven-ear-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
