@@ -77,17 +77,20 @@
         <url>https://github.com/postgis/postgis-java</url>
         <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
         <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>sonatype-postgis-releases</id>
-            <name>Sonatype Postgis Releases Repo</name>
-            <url>http://oss.sonatype.org/content/repositories/postgis-releases</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
