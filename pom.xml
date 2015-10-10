@@ -4,13 +4,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.postgis</groupId>
+    <groupId>net.postgis</groupId>
     <artifactId>postgis-java-aggregator</artifactId>
     <version>2.2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>Postgis Java Project</name>
-    <description>Aggregates java projects associated with the Postgis project.</description>
+    <name>PostGIS Java Project</name>
+    <description>Aggregates java projects associated with the PostGIS project.</description>
     <url>http://postgis.net</url>
     <licenses>
         <license>
@@ -22,15 +22,15 @@
 
     <developers>
         <developer>
-            <name>Postgis Development Team</name>
+            <name>PostGIS Development Team</name>
+            <url>http://postgis.net</url>
         </developer>
         <developer>
-            <name>María Arias de Reyna</name>
-            <email>delawen en gmail.com</email>
-        </developer>
-        <developer>
-            <name>Baris ERGUN</name>
-            <email>barisergun75@gmail.com</email>
+            <name>Phillip Ross</name>
+            <email>phillip.w.g.ross at gmail.com</email>
+            <roles>
+                <role>Maintainer</role>
+            </roles>
         </developer>
     </developers>
     <contributors>
@@ -76,19 +76,22 @@
     </modules>
 
     <scm>
-        <url>http://trac.osgeo.org/postgis/browser/trunk</url>
-        <connection>scm:svn:http://svn.osgeo.org/postgis/trunk</connection>
-        <developerConnection>scm:svn:http://svn.osgeo.org/postgis/trunk</developerConnection>
+        <url>https://github.com/postgis/postgis-java</url>
+        <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
+        <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
     </scm>
     <issueManagement>
-        <system>Trac</system>
-        <url>http://trac.osgeo.org/postgis/</url>
+        <system>GitHub Issues</system>
+        <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
     <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
         <repository>
-            <id>sonatype-postgis-releases</id>
-            <name>Sonatype Postgis Releases Repo</name>
-            <url>http://oss.sonatype.org/content/repositories/postgis-releases</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
 
@@ -103,13 +106,14 @@
         <maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
-        <maven-ear-plugin.version>2.10</maven-ear-plugin.version>
+        <maven-ear-plugin.version>2.10.1</maven-ear-plugin.version>
         <maven-enforcer-plugin.version>1.4</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
         <maven-jar-plugin.version>2.6</maven-jar-plugin.version>
         <maven-jarsigner-plugin.version>1.4</maven-jarsigner-plugin.version>
+        <maven-release-plugin.version>2.5.2</maven-release-plugin.version>
         <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
@@ -214,6 +218,11 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jarsigner-plugin</artifactId>
                 <version>${maven-jarsigner-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
