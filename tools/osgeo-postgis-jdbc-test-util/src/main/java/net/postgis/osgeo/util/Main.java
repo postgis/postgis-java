@@ -53,6 +53,7 @@ public class Main {
                 if (createTestTable(testTablePrefix)) {
                     if (testSQL()) {
                         logger.debug("All tests passed");
+                        dropTestTable();
                     }
                 }
             }
@@ -105,7 +106,6 @@ public class Main {
         boolean tableExists = false;
         try {
             DatabaseMetaData databaseMetaData = connection.getMetaData();
-
             try (ResultSet resultSet = databaseMetaData.getTables(null, null, testTableName.toLowerCase(), new String[] {"TABLE"})) {
                 while (resultSet.next()) {
                     tableExists = true;
@@ -118,12 +118,36 @@ public class Main {
             testPass = true;
         } catch (SQLException se) {
             logger.error(
-                    "Caught SQLException attempting to create a test table: {} {}",
+                    "Caught SQLException attempting to create the test table: {} {}",
                     se.getClass().getName(),
                     se.getMessage()
             );
         }
         return testPass;
+    }
+
+
+    private void dropTestTable() {
+        final String dropSQL = "drop table " + testTableName;
+        logger.debug("Dropping test table");
+        boolean tableExists = false;
+        try {
+            DatabaseMetaData databaseMetaData = connection.getMetaData();
+            try (ResultSet resultSet = databaseMetaData.getTables(null, null, testTableName.toLowerCase(), new String[] {"TABLE"})) {
+                while (resultSet.next()) {
+                    tableExists = true;
+                }
+            }
+            if (tableExists) {
+                statement.execute(dropSQL);
+            }
+        } catch (SQLException se) {
+            logger.error(
+                    "Caught SQLException attempting to drop the test table: {} {}",
+                    se.getClass().getName(),
+                    se.getMessage()
+            );
+        }
     }
 
 
