@@ -38,13 +38,22 @@
         <processorPath useClasspath="true" />
         <module name="postgis-jdbc-java2d" />
       </profile>
+      <profile default="false" name="Annotation profile for osgeo-postgis-jdbc-test-util" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="osgeo-postgis-jdbc-test-util" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="osgeo-postgis-jdbc-test-util" target="1.7" />
       <module name="postgis-aggregator" target="1.8" />
       <module name="postgis-java-aggregator" target="1.7" />
       <module name="postgis-jdbc" target="1.7" />
       <module name="postgis-jdbc-java2d" target="1.7" />
       <module name="postgis-jdbc-jtsparser" target="1.7" />
+      <module name="tools" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

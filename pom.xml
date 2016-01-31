@@ -71,6 +71,7 @@
         <module>jdbc</module>
         <module>jdbc_jtsparser</module>
         <module>postgis-jdbc-java2d</module>
+        <module>tools</module>
     </modules>
 
     <scm>
@@ -96,6 +97,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.min.version>1.7</java.min.version>
         <maven.min.version>3.3</maven.min.version>
         <maven.test.skip>false</maven.test.skip>

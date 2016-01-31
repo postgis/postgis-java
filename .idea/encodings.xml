@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/jdbc" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jdbc_jtsparser" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/postgis-jdbc-java2d" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tools" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tools/osgeo-postgis-jdbc-test-util" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
