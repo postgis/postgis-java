@@ -126,10 +126,8 @@ public class JtsWrapper extends Driver {
      * @see java.sql.Driver#acceptsURL
      * @param url the URL of the driver
      * @return true if this driver accepts the given URL
-     * @exception SQLException Passed through from the underlying PostgreSQL
-     *                driver, should not happen.
      */
-    public boolean acceptsURL(String url) throws SQLException {
+    public boolean acceptsURL(String url) {
         try {
             url = mangleURL(url);
         } catch (SQLException e) {
