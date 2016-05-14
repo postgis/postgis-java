@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/tools/osgeo-postgis-jdbc-test-util/osgeo-postgis-jdbc-test-util.iml" filepath="$PROJECT_DIR$/tools/osgeo-postgis-jdbc-test-util/osgeo-postgis-jdbc-test-util.iml" group="tools and modules" />
       <module fileurl="file://$PROJECT_DIR$/postgis-java-aggregator.iml" filepath="$PROJECT_DIR$/postgis-java-aggregator.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc/postgis-jdbc.iml" filepath="$PROJECT_DIR$/jdbc/postgis-jdbc.iml" />
       <module fileurl="file://$PROJECT_DIR$/postgis-jdbc-java2d/postgis-jdbc-java2d.iml" filepath="$PROJECT_DIR$/postgis-jdbc-java2d/postgis-jdbc-java2d.iml" />
       <module fileurl="file://$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" filepath="$PROJECT_DIR$/jdbc_jtsparser/postgis-jdbc-jtsparser.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tools/tools.iml" filepath="$PROJECT_DIR$/tools/tools.iml" group="tools and modules" />
     </modules>
   </component>
 </project>
