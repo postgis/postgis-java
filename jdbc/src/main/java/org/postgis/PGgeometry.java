@@ -1,12 +1,12 @@
 /*
  * PGgeometry.java
- * 
+ *
  * PostGIS extension for PostgreSQL JDBC driver - PGobject Geometry Wrapper
- * 
+ *
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
- * 
+ *
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
- * 
+ *
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  *
  * This library is free software; you can redistribute it and/or
@@ -22,7 +22,7 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  */
 
 package org.postgis;
@@ -37,7 +37,6 @@ public class PGgeometry extends PGobject {
     private static final long serialVersionUID = 0x100;
 
     Geometry geom;
-    BinaryParser bp = new BinaryParser();
 
     public PGgeometry() {
         this.setType("geometry");
@@ -54,7 +53,7 @@ public class PGgeometry extends PGobject {
     }
 
     public void setValue(String value) throws SQLException {
-        geom = geomFromString(value, bp);
+        geom = geomFromString(value, new BinaryParser());
     }
 
     public static Geometry geomFromString(String value) throws SQLException {
@@ -131,7 +130,7 @@ public class PGgeometry extends PGobject {
     public void setGeometry(Geometry newgeom) {
         this.geom = newgeom;
     }
-    
+
     public int getGeoType() {
         return geom.type;
     }
@@ -153,7 +152,7 @@ public class PGgeometry extends PGobject {
 
     /**
      * Splits a String at the first occurrence of border character.
-     * 
+     *
      * Poor man's String.split() replacement, as String.split() was invented at
      * jdk1.4, and the Debian PostGIS Maintainer had problems building the woody
      * backport of his package using DFSG-free compilers. In all the cases we
