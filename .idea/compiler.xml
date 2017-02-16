@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <option name="DEFAULT_COMPILER" value="Javac" />
-    <resourceExtensions />
     <wildcardResourcePatterns>
       <entry name="!?*.java" />
       <entry name="!?*.form" />
@@ -14,14 +12,10 @@
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="false">
-        <processorPath useClasspath="true" />
-      </profile>
-      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+      <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <processorPath useClasspath="true" />
         <module name="osgeo-postgis-jdbc-test-util" />
         <module name="postgis-jdbc" />
         <module name="postgis-jdbc-java2d" />
@@ -30,7 +24,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="osgeo-postgis-jdbc-test-util" target="1.7" />
-      <module name="postgis-aggregator" target="1.8" />
       <module name="postgis-java-aggregator" target="1.7" />
       <module name="postgis-jdbc" target="1.7" />
       <module name="postgis-jdbc-java2d" target="1.7" />

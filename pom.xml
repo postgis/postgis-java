@@ -111,8 +111,8 @@
         <build-helper-maven-plugin.version>1.12</build-helper-maven-plugin.version>
         <download-maven-plugin.version>1.3.0</download-maven-plugin.version>
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
-        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+        <maven-compiler-plugin.version>3.6.0</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.0.0</maven-dependency-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-ear-plugin.version>2.10.1</maven-ear-plugin.version>
         <maven-enforcer-plugin.version>1.4.1</maven-enforcer-plugin.version>
@@ -124,15 +124,15 @@
         <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>2.5</maven-jxr-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
+        <maven-resources-plugin.version>3.0.2</maven-resources-plugin.version>
         <maven-shade-plugin.version>2.4.3</maven-shade-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
-        <maven-war-plugin.version>2.6</maven-war-plugin.version>
+        <maven-war-plugin.version>3.0.0</maven-war-plugin.version>
         <!-- Dependency versions -->
-        <dependency.logback.version>1.1.7</dependency.logback.version>
-        <dependency.slfj.version>1.7.21</dependency.slfj.version>
-        <dependency.testng.version>6.9.10</dependency.testng.version>
+        <dependency.logback.version>1.1.8</dependency.logback.version>
+        <dependency.slfj.version>1.7.22</dependency.slfj.version>
+        <dependency.testng.version>6.10</dependency.testng.version>
     </properties>
 
     <dependencies>
