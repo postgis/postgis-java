@@ -15,6 +15,7 @@
             <class name="org.postgis.EmptyGeometriesTest"/>
             <class name="org.postgis.ParserTest"/>
             <class name="org.postgis.ServerTest"/>
+            <class name="org.postgis.SerializationTest"/>
             <class name="org.postgis.TokenizerTest"/>
             <class name="org.postgis.VersionPrinter"/>
         </classes>
