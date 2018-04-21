@@ -26,7 +26,7 @@ package org.postgis.jts;
 
 import org.postgis.binary.ValueSetter;
 
-import com.vividsolutions.jts.geom.*;
+import org.locationtech.jts.geom.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

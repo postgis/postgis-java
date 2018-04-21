@@ -24,15 +24,15 @@
  */
 package org.postgis.jts;
 
-import com.vividsolutions.jts.geom.CoordinateSequence;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiLineString;
-import com.vividsolutions.jts.geom.MultiPoint;
-import com.vividsolutions.jts.geom.MultiPolygon;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.CoordinateSequence;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiLineString;
+import org.locationtech.jts.geom.MultiPoint;
+import org.locationtech.jts.geom.MultiPolygon;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.Polygon;
 
 import org.postgis.binary.ByteSetter;
 import org.postgis.binary.ValueSetter;
@@ -184,23 +184,23 @@ public class JtsBinaryWriter {
     }
 
     public static int getWKBType(Geometry geom) {
-        // We always write emtpy geometries as emtpy collections - for OpenGIS
+        // We always write empty geometries as empty collections - for OpenGIS
         // conformance
         if (geom.isEmpty()) {
             return org.postgis.Geometry.GEOMETRYCOLLECTION;
         } else if (geom instanceof Point) {
             return org.postgis.Geometry.POINT;
-        } else if (geom instanceof com.vividsolutions.jts.geom.LineString) {
+        } else if (geom instanceof org.locationtech.jts.geom.LineString) {
             return org.postgis.Geometry.LINESTRING;
-        } else if (geom instanceof com.vividsolutions.jts.geom.Polygon) {
+        } else if (geom instanceof org.locationtech.jts.geom.Polygon) {
             return org.postgis.Geometry.POLYGON;
         } else if (geom instanceof MultiPoint) {
             return org.postgis.Geometry.MULTIPOINT;
         } else if (geom instanceof MultiLineString) {
             return org.postgis.Geometry.MULTILINESTRING;
-        } else if (geom instanceof com.vividsolutions.jts.geom.MultiPolygon) {
+        } else if (geom instanceof org.locationtech.jts.geom.MultiPolygon) {
             return org.postgis.Geometry.MULTIPOLYGON;
-        } if (geom instanceof com.vividsolutions.jts.geom.GeometryCollection) {
+        } if (geom instanceof org.locationtech.jts.geom.GeometryCollection) {
             return org.postgis.Geometry.GEOMETRYCOLLECTION;
         } else {
             throw new IllegalArgumentException("Unknown Geometry Type: " + geom.getClass().getName());
@@ -216,7 +216,7 @@ public class JtsBinaryWriter {
     }
 
     /**
-     * Write a Coordinatesequence, part of LinearRing and Linestring, but not
+     * Write a CoordinateSequence, part of LinearRing and Linestring, but not
      * MultiPoint!
      */
     private void writeCoordinates(CoordinateSequence seq, int dims, ValueSetter dest) {

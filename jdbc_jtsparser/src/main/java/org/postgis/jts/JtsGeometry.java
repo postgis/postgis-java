@@ -30,14 +30,14 @@ import java.sql.SQLException;
 
 import org.postgresql.util.PGobject;
 
-import com.vividsolutions.jts.geom.CoordinateSequenceFactory;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryCollection;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.geom.PrecisionModel;
-import com.vividsolutions.jts.geom.impl.PackedCoordinateSequenceFactory;
-import com.vividsolutions.jts.io.WKTReader;
+import org.locationtech.jts.geom.CoordinateSequenceFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.PrecisionModel;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequenceFactory;
+import org.locationtech.jts.io.WKTReader;
 
 /**
  * JTS Geometry SQL wrapper. Supports PostGIS 1.x (lwgeom hexwkb) for writing

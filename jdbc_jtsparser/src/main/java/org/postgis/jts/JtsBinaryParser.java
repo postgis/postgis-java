@@ -24,13 +24,12 @@
  */
 package org.postgis.jts;
 
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
 import org.postgis.binary.ByteGetter;
-import org.postgis.binary.ValueGetter;
 import org.postgis.binary.ByteGetter.BinaryByteGetter;
 import org.postgis.binary.ByteGetter.StringByteGetter;
-
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.geom.impl.PackedCoordinateSequence;
+import org.postgis.binary.ValueGetter;
 
 /**
  * Parse binary representation of geometries. Currently, only text rep (hexed)
