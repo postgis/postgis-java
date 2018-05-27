@@ -24,13 +24,13 @@
  */
 package org.postgis.jts;
 
+import org.locationtech.jts.geom.*;
+import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
+import org.locationtech.spatial4j.context.jts.JtsSpatialContextFactory;
 import org.postgis.binary.ByteGetter;
-import org.postgis.binary.ValueGetter;
 import org.postgis.binary.ByteGetter.BinaryByteGetter;
 import org.postgis.binary.ByteGetter.StringByteGetter;
-
-import com.vividsolutions.jts.geom.*;
-import com.vividsolutions.jts.geom.impl.PackedCoordinateSequence;
+import org.postgis.binary.ValueGetter;
 
 /**
  * Parse binary representation of geometries. Currently, only text rep (hexed)
@@ -48,6 +48,8 @@ import com.vividsolutions.jts.geom.impl.PackedCoordinateSequence;
  * 
  */
 public class JtsBinaryParser {
+    
+    private JtsSpatialContextFactory jtsFactory = new JtsSpatialContextFactory();
 
     /**
      * Get the appropriate ValueGetter for my endianness
@@ -169,9 +171,9 @@ public class JtsBinaryParser {
         Point result;
         if (haveZ) {
             double Z = data.getDouble();
-            result = JtsGeometry.geofac.createPoint(new Coordinate(X, Y, Z));
+            result = jtsFactory.getGeometryFactory().createPoint(new Coordinate(X, Y, Z));
         } else {
-            result = JtsGeometry.geofac.createPoint(new Coordinate(X, Y));
+            result = jtsFactory.getGeometryFactory().createPoint(new Coordinate(X, Y));
         }
 
         if (haveM) { // skip M value
@@ -214,15 +216,15 @@ public class JtsBinaryParser {
     private MultiPoint parseMultiPoint(ValueGetter data, int srid) {
         Point[] points = new Point[data.getInt()];
         parseGeometryArray(data, points, srid);
-        return JtsGeometry.geofac.createMultiPoint(points);
+        return jtsFactory.getGeometryFactory().createMultiPoint(points);
     }
 
     private LineString parseLineString(ValueGetter data, boolean haveZ, boolean haveM) {
-        return JtsGeometry.geofac.createLineString(parseCS(data, haveZ, haveM));
+        return jtsFactory.getGeometryFactory().createLineString(parseCS(data, haveZ, haveM));
     }
 
     private LinearRing parseLinearRing(ValueGetter data, boolean haveZ, boolean haveM) {
-        return JtsGeometry.geofac.createLinearRing(parseCS(data, haveZ, haveM));
+        return jtsFactory.getGeometryFactory().createLinearRing(parseCS(data, haveZ, haveM));
     }
 
     private Polygon parsePolygon(ValueGetter data, boolean haveZ, boolean haveM, int srid) {
@@ -234,27 +236,27 @@ public class JtsBinaryParser {
             rings[i] = parseLinearRing(data, haveZ, haveM);
             rings[i].setSRID(srid);
         }
-        return JtsGeometry.geofac.createPolygon(shell, rings);
+        return jtsFactory.getGeometryFactory().createPolygon(shell, rings);
     }
 
     private MultiLineString parseMultiLineString(ValueGetter data, int srid) {
         int count = data.getInt();
         LineString[] strings = new LineString[count];
         parseGeometryArray(data, strings, srid);
-        return JtsGeometry.geofac.createMultiLineString(strings);
+        return jtsFactory.getGeometryFactory().createMultiLineString(strings);
     }
 
     private MultiPolygon parseMultiPolygon(ValueGetter data, int srid) {
         int count = data.getInt();
         Polygon[] polys = new Polygon[count];
         parseGeometryArray(data, polys, srid);
-        return JtsGeometry.geofac.createMultiPolygon(polys);
+        return jtsFactory.getGeometryFactory().createMultiPolygon(polys);
     }
 
     private GeometryCollection parseCollection(ValueGetter data, int srid) {
         int count = data.getInt();
         Geometry[] geoms = new Geometry[count];
         parseGeometryArray(data, geoms, srid);
-        return JtsGeometry.geofac.createGeometryCollection(geoms);
+        return jtsFactory.getGeometryFactory().createGeometryCollection(geoms);
     }
 }
