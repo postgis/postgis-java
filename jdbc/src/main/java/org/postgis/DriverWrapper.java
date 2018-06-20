@@ -339,7 +339,7 @@ public class DriverWrapper extends Driver {
         }
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public Logger getParentLogger() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
