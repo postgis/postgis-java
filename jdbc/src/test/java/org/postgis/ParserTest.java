@@ -322,6 +322,13 @@ public class ParserTest {
                     }
                 }
 
+                /*
+                // Temporarily removing this check since it breaks between PostGIS v2.4.4 and PostGIS v2.5.0
+                // Tests performed via psql between mdillon/postgis:9.3 and mdillon/postgis:9.4 shows the breakage
+                // Test is also broken in mdillon/postgis:11-alpine
+                // In psql, the sql statement "SELECT ST_AsEWKT(geometry_in('POINT(1e100 1.2345e-100 -2e-5)'));" returns
+                // "POINT(1e+100 1.2345e-100 -2e-05)" with 9.3 and "POINT(1e+100 0 -0.00002)" with 9.4 and later
+
                 // asEWKT() function is not present on PostGIS 0.X, and the test
                 // is pointless as 0.X uses EWKT as canonical rep so the same
                 // functionality was already tested above.
@@ -330,6 +337,7 @@ public class ParserTest {
                     logger.debug("asEWKT: {}", sqlGeom);
                     Assert.assertEquals(geom, sqlGeom);
                 }
+                */
 
                 // asEWKB() function is not present on PostGIS 0.X.
                 if (serverPostgisMajor >= 1) {
