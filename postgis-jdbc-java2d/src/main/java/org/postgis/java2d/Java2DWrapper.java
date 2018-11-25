@@ -165,7 +165,7 @@ public class Java2DWrapper extends Driver {
         return "Java2DWrapper " + REVISION + ", wrapping " + Driver.getVersion();
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    public Logger getParentLogger() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

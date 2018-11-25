@@ -78,8 +78,8 @@
         <url>https://github.com/postgis/postgis-java</url>
         <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
         <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
     <issueManagement>
         <system>GitHub Issues</system>
         <url>https://github.com/postgis/postgis-java/issues</url>
@@ -135,6 +135,7 @@
         <maven-war-plugin.version>3.2.0</maven-war-plugin.version>
         <!-- Dependency versions -->
         <dependency.logback.version>1.2.3</dependency.logback.version>
+        <dependency.postgresql-jdbc.version>42.2.5.jre7</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.25</dependency.slfj.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
