@@ -10,6 +10,7 @@
     <test name="Postgis JDBC Integration Tests">
         <classes>
             <class name="net.postgis.tools.testutils.TestContainerController"/>
+            <class name="org.postgis.util.VersionUtilIT"/>
             <class name="org.postgis.AutoRegistrationTest"/>
             <class name="org.postgis.BoxesTest"/>
             <class name="org.postgis.EmptyGeometriesTest"/>

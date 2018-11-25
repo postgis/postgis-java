@@ -32,6 +32,7 @@ import org.postgis.binary.BinaryParser;
 import org.postgis.binary.BinaryWriter;
 import org.postgis.binary.ValueSetter;
 import net.postgis.tools.testutils.TestContainerController;
+import org.postgis.util.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -279,7 +280,19 @@ public class ParserTest {
         logger.debug("XDR: {}", regeom);
         Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
-        int serverPostgisMajor = AutoRegistrationTest.getPostgisMajor(statement);
+        final String postGISVersionString = VersionUtil.retrievePostGISServerVersionString(connection);
+        logger.debug("postGISVersionString: {}", postGISVersionString);
+        final String postGISMajorVersion = VersionUtil.retrievePostGISServerMajorVersion(connection);
+        logger.debug("postGISMajorVersion: {}", postGISMajorVersion);
+        final String postGISMinorVersion = VersionUtil.retrievePostGISServerMinorVersion(connection);
+        logger.debug("postGISMinorVersion: {}", postGISMinorVersion);
+
+        int serverPostgisMajor = 0;
+        try {
+            serverPostgisMajor = Integer.parseInt(postGISMajorVersion);
+        } catch (NumberFormatException nfe) {
+            logger.error("Caught a number format exception attempting to parse PostGIS Server Major Version");
+        }
 
         if ((Objects.equals(flags, ONLY10)) && serverPostgisMajor < 1) {
             logger.info("PostGIS server too old, skipping test on database connection {}", connection.getCatalog());
