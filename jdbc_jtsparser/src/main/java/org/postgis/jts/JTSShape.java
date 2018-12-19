@@ -71,8 +71,8 @@ public class JTSShape implements Shape {
     }
 
     protected Polygon createRect(double x, double y, double w, double h) {
-        double[] arr = { x, y, x + w, y, x + w, y + h, x, y + h, x, y };
-        PackedCoordinateSequence shell = new PackedCoordinateSequence.Double(arr, 2);
+        Coordinate[] coords = { new Coordinate(x, y), new Coordinate(x + w, y), new Coordinate(x + w, y + h) ,new Coordinate(x, y + h) ,new Coordinate(x, y) };
+        PackedCoordinateSequence shell = new PackedCoordinateSequence.Double(coords, 2);
         Polygon p = fac.createPolygon(fac.createLinearRing(shell), NOSHELLS);
         return p;
     }
