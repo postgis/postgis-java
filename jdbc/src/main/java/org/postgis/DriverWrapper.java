@@ -283,6 +283,10 @@ public class DriverWrapper extends Driver {
             pgconn.addDataType("geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("public.geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("\"public\".\"geometry\"", org.postgis.PGgeometry.class);
+
+            pgconn.addDataType("geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("public.geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geography\"", org.postgis.PGgeometry.class);
         }
 
         public void addBoxen(Connection conn) throws SQLException {
@@ -294,6 +298,7 @@ public class DriverWrapper extends Driver {
         public void addBinaryGeometries(Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
             pgconn.addDataType("geometry", org.postgis.PGgeometryLW.class);
+            pgconn.addDataType("geography", org.postgis.PGgeometryLW.class);
         }
     }
 
@@ -304,6 +309,10 @@ public class DriverWrapper extends Driver {
             pgconn.addDataType("geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("public.geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("\"public\".\"geometry\"", org.postgis.PGgeometry.class);
+
+            pgconn.addDataType("geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("public.geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geography\"", org.postgis.PGgeometry.class);
         }
 
 		public void addBoxen(Connection conn) throws SQLException {
@@ -315,6 +324,7 @@ public class DriverWrapper extends Driver {
         public void addBinaryGeometries(Connection conn) throws SQLException {
             org.postgresql.PGConnection pgconn = (org.postgresql.PGConnection) conn;
             pgconn.addDataType("geometry", org.postgis.PGgeometryLW.class);
+            pgconn.addDataType("geography", org.postgis.PGgeometryLW.class);
         }
     }
 
@@ -325,6 +335,10 @@ public class DriverWrapper extends Driver {
             pgconn.addDataType("geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("public.geometry", org.postgis.PGgeometry.class);
             pgconn.addDataType("\"public\".\"geometry\"", org.postgis.PGgeometry.class);
+
+            pgconn.addDataType("geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("public.geography", org.postgis.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geography\"", org.postgis.PGgeometry.class);
         }
 
         public void addBoxen(Connection conn) throws SQLException {
@@ -336,6 +350,7 @@ public class DriverWrapper extends Driver {
         public void addBinaryGeometries(Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
             pgconn.addDataType("geometry", org.postgis.PGgeometryLW.class);
+            pgconn.addDataType("geography", org.postgis.PGgeometryLW.class);
         }
     }
 
