@@ -16,9 +16,6 @@
     <description>Parser between JTS and PostGIS geometry formats.</description>
 
     <properties>
-        <!-- Dependency versions -->
-        <dependency.jts-version.version>1.16.1</dependency.jts-version.version>
-
         <testWithDatabase>false</testWithDatabase>
         <jdbcDriverClassName>org.postgresql.Driver</jdbcDriverClassName>
         <jdbcUrl>jdbc:postgres_jts://localhost:5432/postgis1</jdbcUrl>
@@ -46,7 +43,7 @@
         <dependency>
             <groupId>org.locationtech.spatial4j</groupId>
             <artifactId>spatial4j</artifactId>
-            <version>0.7</version>
+            <version>${dependency.spatial4j.version}</version>
         </dependency>
     </dependencies>
 

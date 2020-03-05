@@ -96,6 +96,7 @@
     </distributionManagement>
 
     <properties>
+        <checkstyle.skip>true</checkstyle.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.min.version>1.8</java.min.version>
@@ -109,8 +110,11 @@
 
         <!-- Plugin versioning -->
         <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
+        <directory-maven-plugin.version>0.3.1</directory-maven-plugin.version>
         <download-maven-plugin.version>1.5.0</download-maven-plugin.version>
         <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+        <git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
+        <maven-archetype-plugin.version>3.1.2</maven-archetype-plugin.version>
         <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -128,15 +132,19 @@
         <maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <maven-site-plugin.version>3.8.2</maven-site-plugin.version>
         <maven-shade-plugin.version>3.2.2</maven-shade-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-versions-plugin.version>2.7</maven-versions-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <!-- Dependency versions -->
+        <dependency.checkstyle.version>8.30</dependency.checkstyle.version>
+        <dependency.jts-version.version>1.16.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.3</dependency.logback.version>
         <dependency.postgresql-jdbc.version>42.2.10</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.30</dependency.slfj.version>
+        <dependency.spatial4j.version>0.7</dependency.spatial4j.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
 
@@ -168,11 +176,52 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>${versions-maven-plugin.version}</version>
+                    <configuration>
+                        <rulesUri>file:///${pom.basedir}/maven-version-rules.xml</rulesUri>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.commonjava.maven.plugins</groupId>
+                    <artifactId>directory-maven-plugin</artifactId>
+                    <version>${directory-maven-plugin.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>com.googlecode.maven-download-plugin</groupId>
                 <artifactId>download-maven-plugin</artifactId>
                 <version>${download-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <version>${maven-archetype-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${dependency.checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <skip>${checkstyle.skip}</skip>
+                    <!--<suppressionsLocation>suppressions.xml</suppressionsLocation>-->
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -289,6 +338,11 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${maven-site-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>${maven-shade-plugin.version}</version>
             </plugin>
@@ -322,11 +376,66 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>${build-helper-maven-plugin.version}</version>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git-commit-id-plugin.version}</version>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
-
+        <profile>
+            <id>check-versions</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.commonjava.maven.plugins</groupId>
+                        <artifactId>directory-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>directory-of-property</id>
+                                <goals>
+                                    <goal>directory-of</goal>
+                                </goals>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <property>multi.module.root</property>
+                                    <project>
+                                        <groupId>net.postgis</groupId>
+                                        <artifactId>postgis-java-aggregator</artifactId>
+                                    </project>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>versions-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>check-versions</id>
+                                <goals>
+                                    <goal>display-parent-updates</goal>
+                                    <goal>display-plugin-updates</goal>
+                                    <goal>display-dependency-updates</goal>
+                                    <goal>display-property-updates</goal>
+                                </goals>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <rulesUri>file:///${multi.module.root}/maven-version-rules.xml</rulesUri>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!--
         The release-sign-artifacts profile only needs activated when cutting a release for maven central.
         It will generate additional artifacts for javadoc and source as well as GPG signatures for each artifact.

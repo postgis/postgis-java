@@ -1,0 +1,19 @@
+<ruleset comparisonMethod="maven"
+         xmlns="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0 http://mojo.codehaus.org/versions-maven-plugin/xsd/rule-2.0.0.xsd">
+    <ignoreVersions>
+        <!-- Exclude milestones, release candidates, alphas, and betas-->
+        <ignoreVersion type="regex">.*-[M|RC|alpha|beta|rc].*</ignoreVersion>
+        <!-- Exclude milestones, release candidates, alphas, and betas, and Java7 qualifiers -->
+        <ignoreVersion type="regex">.*\.jre[6-7]</ignoreVersion>
+    </ignoreVersions>
+    <rules>
+        <!-- Pin testng version to pre-V7 -->
+        <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">7\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+    </rules>
+</ruleset>
