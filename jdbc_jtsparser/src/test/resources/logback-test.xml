@@ -10,6 +10,10 @@
         <appender-ref ref="STDOUT" />
     </root>
 
+    <logger name="com.github.dockerjava" level="ERROR"/>
+    <logger name="org.testcontainers" level="ERROR"/>
+    <logger name="net.postgis" level="ERROR"/>
+
     <logger name="org.postgis.jts" level="ERROR"/>
 
 </configuration>

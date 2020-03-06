@@ -20,9 +20,6 @@
 
     <properties>
         <testTablePrefix>SMOKE_TEST</testTablePrefix>
-        <jdbcUrl>jdbc:postgresql://localhost:5432/postgis1</jdbcUrl>
-        <jdbcUsername>postgis1</jdbcUsername>
-        <jdbcPassword>postgis1</jdbcPassword>
     </properties>
 
     <dependencies>
@@ -31,7 +28,6 @@
             <artifactId>postgis-jdbc</artifactId>
             <version>2.4.1-SNAPSHOT</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -47,9 +43,24 @@
             <artifactId>slf4j-api</artifactId>
             <version>${dependency.slfj.version}</version>
         </dependency>
+        <dependency>
+            <groupId>net.postgis.tools</groupId>
+            <artifactId>test-utils</artifactId>
+            <version>2.4.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources-filtered</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,14 +75,8 @@
                         <configuration>
                             <skip>${maven.integration.test.skip}</skip>
                             <suiteXmlFiles>
-                                <suiteXmlFile>src/test/resources/testng-it.xml</suiteXmlFile>
+                                <suiteXmlFile>${project.build.testOutputDirectory}/testng-it.xml</suiteXmlFile>
                             </suiteXmlFiles>
-                            <systemPropertyVariables>
-                                <testTablePrefix>${testTablePrefix}</testTablePrefix>
-                                <jdbcUrl>${jdbcUrl}</jdbcUrl>
-                                <jdbcUsername>${jdbcUsername}</jdbcUsername>
-                                <jdbcPassword>${jdbcPassword}</jdbcPassword>
-                            </systemPropertyVariables>
                         </configuration>
                     </execution>
                 </executions>

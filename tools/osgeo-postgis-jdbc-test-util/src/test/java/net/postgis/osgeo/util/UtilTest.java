@@ -1,8 +1,10 @@
 package net.postgis.osgeo.util;
 
+import net.postgis.tools.testutils.TestContainerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.annotations.Parameters;
+import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 
@@ -17,22 +19,13 @@ public class UtilTest {
 
 
     @Test
-    @Parameters({"jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void test(String jdbcUrlSystemProperty,
-                     String jdbcUsernameSystemProperty,
-                     String jdbcPasswordSystemProperty) {
-        logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
-        logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
-        logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
-
-        String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
-        String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
-        String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
-
-        logger.debug("jdbcUrl: {}", jdbcUrl);
-        logger.debug("jdbcUsername: {}", jdbcUsername);
-        logger.debug("jdbcPassword: {}", jdbcPassword);
-
+    public void test(ITestContext ctx) {
+        final String jdbcUrlSuffix = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_JDBC_URL_SUFFIX);
+        Assert.assertNotNull(jdbcUrlSuffix);
+        final String jdbcUrl = "jdbc:postgresql" + jdbcUrlSuffix;
+        final String jdbcUsername = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_USER_PARAM_NAME);
+        Assert.assertNotNull(jdbcUsername);
+        final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
         Main.main(new String[] {jdbcUrl, jdbcUsername, jdbcPassword});
     }
 

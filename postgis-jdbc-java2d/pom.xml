@@ -21,6 +21,12 @@
             <artifactId>postgis-jdbc</artifactId>
             <version>2.4.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>net.postgis.tools</groupId>
+            <artifactId>test-utils</artifactId>
+            <version>2.4.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -30,7 +36,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                        <suiteXmlFile>${project.build.testOutputDirectory}/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                 </configuration>
             </plugin>
