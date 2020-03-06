@@ -384,6 +384,36 @@
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <version>${git-commit-id-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>git-describe</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <configuration>
+                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                            <generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/git.properties</generateGitPropertiesFilename>
+                            <includeOnlyProperties>
+                                <property>git.branch$</property>
+                                <!--<property>git.build.host$</property>-->
+                                <property>git.build.number$</property>
+                                <property>git.build.number.unique$</property>
+                                <property>git.build.time$</property>
+                                <property>git.build.user.email$</property>
+                                <property>git.build.user.name$</property>
+                                <property>git.build.version$</property>
+                                <property>git.closest.tag.commit.count$</property>
+                                <property>git.closest.tag.name$</property>
+                                <property>git.commit.id$</property>
+                                <property>git.commit.id.abbrev$</property>
+                                <property>git.commit.user.email$</property>
+                                <property>git.commit.user.name$</property>
+                                <property>git.commit.time$</property>
+                                <property>git.tags$</property>
+                            </includeOnlyProperties>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
