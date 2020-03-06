@@ -51,8 +51,6 @@ public class BoxesTest {
 
     public static final String[] BOXEN2D = new String[]{"BOX(1 2,3 4)"};
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
 
@@ -60,15 +58,11 @@ public class BoxesTest {
     public void testBoxes() throws Exception {
         for (String aBOXEN3D : BOXEN3D) {
             PGbox3d candidate = new PGbox3d(aBOXEN3D);
-            if (testWithDatabase) {
-                test(aBOXEN3D, candidate, false);
-            }
+            test(aBOXEN3D, candidate, false);
         }
         for (String aBOXEN2D : BOXEN2D) {
             PGbox2d candidate = new PGbox2d(aBOXEN2D);
-            if (testWithDatabase) {
-                test(aBOXEN2D, candidate, true);
-            }
+            test(aBOXEN2D, candidate, true);
         }
     }
 
@@ -113,32 +107,24 @@ public class BoxesTest {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
+    @Parameters({"jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
+    public void initJdbcConnection(String jdbcUrlSystemProperty,
                                    String jdbcUsernameSystemProperty,
                                    String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
         logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
         logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
         logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
         String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
         String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
         String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
         logger.debug("jdbcUrl: {}", jdbcUrl);
         logger.debug("jdbcUsername: {}", jdbcUsername);
         logger.debug("jdbcPassword: {}", jdbcPassword);
 
-        if (testWithDatabase) {
-            Class.forName("org.postgis.DriverWrapper");
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
-        }
+        Class.forName("org.postgis.DriverWrapper");
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
     }
 
 

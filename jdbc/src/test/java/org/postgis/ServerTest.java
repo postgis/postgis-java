@@ -47,8 +47,6 @@ public class ServerTest {
 
     private static final String DATABASE_TABLE_NAME_PREFIX = "jdbc_test";
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
     private Statement statement = null;
@@ -63,70 +61,60 @@ public class ServerTest {
 		String insertPointSQL = "insert into " + dbtable + " values ('POINT (10 10 10)',1)";
 		String insertPolygonSQL = "insert into " + dbtable + " values ('POLYGON ((0 0 0,0 10 0,10 10 0,10 0 0,0 0 0))',2)";
 
-        if (testWithDatabase) {
-            logger.debug("Adding geometric type entries...");
-            ((org.postgresql.PGConnection)connection).addDataType("geometry", PGgeometry.class);
-            ((org.postgresql.PGConnection)connection).addDataType("box3d", PGbox3d.class);
+        logger.debug("Adding geometric type entries...");
+        ((org.postgresql.PGConnection)connection).addDataType("geometry", PGgeometry.class);
+        ((org.postgresql.PGConnection)connection).addDataType("box3d", PGbox3d.class);
 
-            logger.debug("Creating table with geometric types...");
-            boolean tableExists = false;
-            DatabaseMetaData databaseMetaData = connection.getMetaData();
-            try (ResultSet resultSet = databaseMetaData.getTables(null, null, dbtable.toLowerCase(), new String[] {"TABLE"})) {
-                while (resultSet.next()) {
-                    tableExists = true;
-                }
-            }
-            if (tableExists) {
-                statement.execute(dropSQL);
-            }
-            statement.execute(createSQL);
-
-            logger.debug("Inserting point...");
-            statement.execute(insertPointSQL);
-
-            logger.debug("Inserting polygon...");
-            statement.execute(insertPolygonSQL);
-
-            logger.debug("Querying table...");
-            ResultSet resultSet = statement.executeQuery("select ST_AsText(geom),id from " + dbtable);
+        logger.debug("Creating table with geometric types...");
+        boolean tableExists = false;
+        DatabaseMetaData databaseMetaData = connection.getMetaData();
+        try (ResultSet resultSet = databaseMetaData.getTables(null, null, dbtable.toLowerCase(), new String[] {"TABLE"})) {
             while (resultSet.next()) {
-                Object obj = resultSet.getObject(1);
-                int id = resultSet.getInt(2);
-                logger.debug("Row {}: {}", id, obj.toString());
+                tableExists = true;
             }
+        }
+        if (tableExists) {
+            statement.execute(dropSQL);
+        }
+        statement.execute(createSQL);
+
+        logger.debug("Inserting point...");
+        statement.execute(insertPointSQL);
+
+        logger.debug("Inserting polygon...");
+        statement.execute(insertPolygonSQL);
+
+        logger.debug("Querying table...");
+        ResultSet resultSet = statement.executeQuery("select ST_AsText(geom),id from " + dbtable);
+        while (resultSet.next()) {
+            Object obj = resultSet.getObject(1);
+            int id = resultSet.getInt(2);
+            logger.debug("Row {}: {}", id, obj.toString());
         }
 
     }
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
+    @Parameters({"jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
+    public void initJdbcConnection(String jdbcUrlSystemProperty,
                                    String jdbcUsernameSystemProperty,
                                    String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
         logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
         logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
         logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
         String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
         String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
         String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
         logger.debug("jdbcUrl: {}", jdbcUrl);
         logger.debug("jdbcUsername: {}", jdbcUsername);
         logger.debug("jdbcPassword: {}", jdbcPassword);
 
-        if (testWithDatabase) {
-            Class.forName(JDBC_DRIVER_CLASS_NAME);
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-            statement = connection.createStatement();
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
-        }
+        Class.forName(JDBC_DRIVER_CLASS_NAME);
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        statement = connection.createStatement();
     }
 
 

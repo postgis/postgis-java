@@ -107,7 +107,6 @@
         <maven.integration.test.skip>false</maven.integration.test.skip>
         <failsafe.forkCount>1</failsafe.forkCount>
         <failsafe.useSystemClassLoader>true</failsafe.useSystemClassLoader>
-
         <!-- Plugin versioning -->
         <build-helper-maven-plugin.version>3.0.0</build-helper-maven-plugin.version>
         <directory-maven-plugin.version>0.3.1</directory-maven-plugin.version>
@@ -485,6 +484,20 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>SkipUnitTests</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <maven.integration.test.skip>true</maven.integration.test.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>SkipIntegrationTests</id>
+            <properties>
+                <maven.integration.test.skip>true</maven.integration.test.skip>
+            </properties>
         </profile>
     </profiles>
 

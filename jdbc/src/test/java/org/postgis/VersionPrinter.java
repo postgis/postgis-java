@@ -63,8 +63,6 @@ public class VersionPrinter {
             "postgis_svn_version"
     };
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
     private Statement statement = null;
@@ -98,22 +96,20 @@ public class VersionPrinter {
         }
 
         // Print PostgreSQL server versions
-        if (testWithDatabase) {
-            Assert.assertNotNull(connection);
-            Statement statement = connection.createStatement();
-            if (statement == null) {
-                logger.info("No online version available.");
-            } else {
-                logger.info("*** PostgreSQL Server ***");
-                String versionString = getVersionString("version");
-                logger.debug("\t version: {}", versionString);
+        Assert.assertNotNull(connection);
+        Statement statement = connection.createStatement();
+        if (statement == null) {
+            logger.info("No online version available.");
+        } else {
+            logger.info("*** PostgreSQL Server ***");
+            String versionString = getVersionString("version");
+            logger.debug("\t version: {}", versionString);
 
-                // Print PostGIS versions
-                logger.info("*** PostGIS Server ***");
-                for (String GISVERSION : POSTGIS_FUNCTIONS) {
-                    versionString = getVersionString(GISVERSION);
-                    logger.debug("\t {} version: {}", GISVERSION, versionString);
-                }
+            // Print PostGIS versions
+            logger.info("*** PostGIS Server ***");
+            for (String GISVERSION : POSTGIS_FUNCTIONS) {
+                versionString = getVersionString(GISVERSION);
+                logger.debug("\t {} version: {}", GISVERSION, versionString);
             }
         }
     }
@@ -146,37 +142,29 @@ public class VersionPrinter {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcDriverClassNameSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcDriverClassNameSystemProperty,
+    @Parameters({"jdbcDriverClassNameSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
+    public void initJdbcConnection(String jdbcDriverClassNameSystemProperty,
                                    String jdbcUrlSystemProperty,
                                    String jdbcUsernameSystemProperty,
                                    String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
         logger.debug("jdbcDriverClassNameSystemProperty: {}", jdbcDriverClassNameSystemProperty);
         logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
         logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
         logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
         String jdbcDriverClassName = System.getProperty(jdbcDriverClassNameSystemProperty);
         String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
         String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
         String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
         logger.debug("jdbcDriverClassName: {}", jdbcDriverClassName);
         logger.debug("jdbcUrl: {}", jdbcUrl);
         logger.debug("jdbcUsername: {}", jdbcUsername);
         logger.debug("jdbcPassword: {}", jdbcPassword);
 
-        if (testWithDatabase) {
-            Class.forName(jdbcDriverClassName);
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-            statement = connection.createStatement();
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
-        }
+        Class.forName(jdbcDriverClassName);
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        statement = connection.createStatement();
 
     }
 

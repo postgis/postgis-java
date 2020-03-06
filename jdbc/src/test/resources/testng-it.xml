@@ -1,0 +1,20 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Postgis JDBC Extensions Integration Test Suite" verbose="1">
+
+    <parameter name="jdbcDriverClassNameSystemProperty" value="jdbcDriverClassName"/>
+    <parameter name="jdbcUrlSystemProperty" value="jdbcUrl"/>
+    <parameter name="jdbcUsernameSystemProperty" value="jdbcUsername"/>
+    <parameter name="jdbcPasswordSystemProperty" value="jdbcPassword"/>
+
+    <test name="Postgis JDBC Integration Tests">
+        <classes>
+            <class name="org.postgis.AutoRegistrationTest"/>
+            <class name="org.postgis.BoxesTest"/>
+            <class name="org.postgis.EmptyGeometriesTest"/>
+            <class name="org.postgis.ParserTest"/>
+            <class name="org.postgis.ServerTest"/>
+            <class name="org.postgis.VersionPrinter"/>
+        </classes>
+    </test>
+
+</suite>

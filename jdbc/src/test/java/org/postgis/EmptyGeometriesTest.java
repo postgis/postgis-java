@@ -66,8 +66,6 @@ public class EmptyGeometriesTest {
             "geometry"
     };
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
     private Statement statement = null;
@@ -75,21 +73,19 @@ public class EmptyGeometriesTest {
 
     @Test
     public void testSqlStatements() throws SQLException {
-        if (testWithDatabase) {
-            for (String sqlStatement : generateSqlStatements()) {
-                logger.debug("**********");
-                logger.debug("* Executing sql statemnent => [{}]", sqlStatement);
-                logger.debug("**********");
-                try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
-                     ResultSet resultSet = preparedStatement.executeQuery()
-                ) {
-                    resultSet.next();
-                    for (int i = 1; i <= 3; i++) {
-                        Object resultSetObject = resultSet.getObject(i);
-                        logger.debug("returned resultSetObject {} => (class=[{}]) {}", i, resultSetObject.getClass().getName(), resultSetObject);
-                    }
-                    resultSet.close();
+        for (String sqlStatement : generateSqlStatements()) {
+            logger.debug("**********");
+            logger.debug("* Executing sql statemnent => [{}]", sqlStatement);
+            logger.debug("**********");
+            try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement);
+                 ResultSet resultSet = preparedStatement.executeQuery()
+            ) {
+                resultSet.next();
+                for (int i = 1; i <= 3; i++) {
+                    Object resultSetObject = resultSet.getObject(i);
+                    logger.debug("returned resultSetObject {} => (class=[{}]) {}", i, resultSetObject.getClass().getName(), resultSetObject);
                 }
+                resultSet.close();
             }
         }
     }
@@ -115,34 +111,26 @@ public class EmptyGeometriesTest {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
+    @Parameters({"jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
+    public void initJdbcConnection(String jdbcUrlSystemProperty,
                                    String jdbcUsernameSystemProperty,
                                    String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
         logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
         logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
         logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
         String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
         String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
         String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
         logger.debug("jdbcUrl: {}", jdbcUrl);
         logger.debug("jdbcUsername: {}", jdbcUsername);
         logger.debug("jdbcPassword: {}", jdbcPassword);
 
-        if (testWithDatabase) {
-            Class.forName(DRIVER_WRAPPER_CLASS_NAME);
-            Class.forName(DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME);
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-            statement = connection.createStatement();
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
-        }
+        Class.forName(DRIVER_WRAPPER_CLASS_NAME);
+        Class.forName(DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME);
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        statement = connection.createStatement();
     }
 
 

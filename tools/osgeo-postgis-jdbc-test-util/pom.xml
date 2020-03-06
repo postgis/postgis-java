@@ -19,7 +19,6 @@
     </description>
 
     <properties>
-        <maven.test.skip>true</maven.test.skip>
         <testTablePrefix>SMOKE_TEST</testTablePrefix>
         <jdbcUrl>jdbc:postgresql://localhost:5432/postgis1</jdbcUrl>
         <jdbcUsername>postgis1</jdbcUsername>
@@ -54,6 +53,31 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${maven.integration.test.skip}</skip>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>src/test/resources/testng-it.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                            <systemPropertyVariables>
+                                <testTablePrefix>${testTablePrefix}</testTablePrefix>
+                                <jdbcUrl>${jdbcUrl}</jdbcUrl>
+                                <jdbcUsername>${jdbcUsername}</jdbcUsername>
+                                <jdbcPassword>${jdbcPassword}</jdbcPassword>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
                     <execution>
@@ -81,16 +105,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <skip>${maven.test.skip}</skip>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                    <systemPropertyVariables>
-                        <testTablePrefix>${testTablePrefix}</testTablePrefix>
-                        <jdbcUrl>${jdbcUrl}</jdbcUrl>
-                        <jdbcUsername>${jdbcUsername}</jdbcUsername>
-                        <jdbcPassword>${jdbcPassword}</jdbcPassword>
-                    </systemPropertyVariables>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>
