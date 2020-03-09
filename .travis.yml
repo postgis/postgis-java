@@ -1,0 +1,10 @@
+dist: xenial
+language: java
+services: docker
+
+install:
+  - source .travis/install-zulu.sh
+  - source .travis/install-maven.sh
+
+script:
+  - mvn -U -V clean install

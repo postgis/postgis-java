@@ -28,12 +28,14 @@
 package org.postgis;
 
 
+import net.postgis.tools.testutils.TestContainerController;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.sql.*;
@@ -51,8 +53,6 @@ public class BoxesTest {
 
     public static final String[] BOXEN2D = new String[]{"BOX(1 2,3 4)"};
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
 
@@ -60,15 +60,11 @@ public class BoxesTest {
     public void testBoxes() throws Exception {
         for (String aBOXEN3D : BOXEN3D) {
             PGbox3d candidate = new PGbox3d(aBOXEN3D);
-            if (testWithDatabase) {
-                test(aBOXEN3D, candidate, false);
-            }
+            test(aBOXEN3D, candidate, false);
         }
         for (String aBOXEN2D : BOXEN2D) {
             PGbox2d candidate = new PGbox2d(aBOXEN2D);
-            if (testWithDatabase) {
-                test(aBOXEN2D, candidate, true);
-            }
+            test(aBOXEN2D, candidate, true);
         }
     }
 
@@ -113,31 +109,24 @@ public class BoxesTest {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
-                                   String jdbcUsernameSystemProperty,
-                                   String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
-        logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
-        logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
-        logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
+    public void initJdbcConnection(ITestContext ctx) throws Exception {
+        final String jdbcUrlSuffix = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_JDBC_URL_SUFFIX);
+        Assert.assertNotNull(jdbcUrlSuffix);
+        final String jdbcUrl = "jdbc:postgresql" + jdbcUrlSuffix;
+        final String jdbcUsername = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_USER_PARAM_NAME);
+        Assert.assertNotNull(jdbcUsername);
+        final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
+        Assert.assertNotNull(jdbcPassword);
+        Class.forName("org.postgis.DriverWrapper");
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+    }
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
-        String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
-        String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
-        String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
-        logger.debug("jdbcUrl: {}", jdbcUrl);
-        logger.debug("jdbcUsername: {}", jdbcUsername);
-        logger.debug("jdbcPassword: {}", jdbcPassword);
-
-        if (testWithDatabase) {
-            Class.forName("org.postgis.DriverWrapper");
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
+    @AfterClass
+    public void shutdown() throws Exception {
+        logger.debug("shutting down");
+        if (connection != null) {
+            connection.close();
         }
     }
 

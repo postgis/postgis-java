@@ -27,12 +27,13 @@ package org.postgis.jts;
 import org.postgis.binary.ValueSetter;
 
 import org.locationtech.jts.geom.*;
+import net.postgis.tools.testutils.TestContainerController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.sql.*;
@@ -117,8 +118,6 @@ public class JtsParserTest {
 
     private static final JtsBinaryWriter jtsBinaryWriter = new JtsBinaryWriter();
 
-    private boolean testWithDatabase = false;
-
     private Connection connection = null;
 
     private Statement statement = null;
@@ -181,75 +180,73 @@ public class JtsParserTest {
         logger.debug("HexCArray: {}", coordArrayWKT);
         Assert.assertEquals(coordArrayWKT, hexNWKT, "CoordArray HexWKT is not equal");
 
-        if (testWithDatabase) {
-            int serverPostgisMajor = getPostgisMajor();
+        int serverPostgisMajor = getPostgisMajor();
 
-            if ((flags.equals(ONLY10)) && serverPostgisMajor < 1) {
-                logger.info("PostGIS server too old, skipping test on connection {}", connection.getCatalog());
-            } else {
-                logger.debug("Testing on connection {}", connection.getCatalog());
+        if ((flags.equals(ONLY10)) && serverPostgisMajor < 1) {
+            logger.info("PostGIS server too old, skipping test on connection {}", connection.getCatalog());
+        } else {
+            logger.debug("Testing on connection {}", connection.getCatalog());
 
-                Geometry sqlGeom = viaSQL(WKT, statement);
-                logger.debug("SQLin: {}", sqlGeom.toString());
-                if (!geom.equalsExact(sqlGeom)) {
-                    logger.warn("Geometries after SQL are not equal");
-                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
-                    } else {
-                        Assert.fail();
-                    }
+            Geometry sqlGeom = viaSQL(WKT, statement);
+            logger.debug("SQLin: {}", sqlGeom.toString());
+            if (!geom.equalsExact(sqlGeom)) {
+                logger.warn("Geometries after SQL are not equal");
+                if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                    logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
+                } else {
+                    Assert.fail();
                 }
+            }
 
-                Geometry sqlreGeom = viaSQL(parsed, statement);
-                logger.debug("SQLout: {}", sqlreGeom);
-                if (!geom.equalsExact(sqlreGeom)) {
-                    logger.warn("Reparsed Geometries after SQL are not equal");
-                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
-                    } else {
-                        Assert.fail();
-                    }
+            Geometry sqlreGeom = viaSQL(parsed, statement);
+            logger.debug("SQLout: {}", sqlreGeom);
+            if (!geom.equalsExact(sqlreGeom)) {
+                logger.warn("Reparsed Geometries after SQL are not equal");
+                if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                    logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
+                } else {
+                    Assert.fail();
                 }
+            }
 
-                sqlreGeom = viaPrepSQL(geom, connection);
-                logger.debug("Prepared: {}", sqlreGeom);
-                if (!geom.equalsExact(sqlreGeom)) {
-                    logger.debug("Reparsed Geometries after prepared StatementSQL are not equal");
-                    if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
-                        logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
-                    } else {
-                        Assert.fail();
-                    }
+            sqlreGeom = viaPrepSQL(geom, connection);
+            logger.debug("Prepared: {}", sqlreGeom);
+            if (!geom.equalsExact(sqlreGeom)) {
+                logger.debug("Reparsed Geometries after prepared StatementSQL are not equal");
+                if (flags.equals(EQUAL10) && serverPostgisMajor < 1) {
+                    logger.info("This is expected with PostGIS {}.X", serverPostgisMajor);
+                } else {
+                    Assert.fail();
                 }
+            }
 
-                // asEWKT() function is not present on PostGIS 0.X, and the test
-                // is pointless as 0.X uses EWKT as canonical rep so the same
-                // functionality was already tested above.
-                if (serverPostgisMajor >= 1) {
-                    sqlGeom = ewktViaSQL(WKT, statement);
-                    logger.debug("asEWKT: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
+            // asEWKT() function is not present on PostGIS 0.X, and the test
+            // is pointless as 0.X uses EWKT as canonical rep so the same
+            // functionality was already tested above.
+            if (serverPostgisMajor >= 1) {
+                sqlGeom = ewktViaSQL(WKT, statement);
+                logger.debug("asEWKT: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
 
-                    sqlGeom = ewkbViaSQL(WKT, statement);
-                    logger.debug("asEWKB: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
+                sqlGeom = ewkbViaSQL(WKT, statement);
+                logger.debug("asEWKB: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
 
-                    sqlGeom = viaSQL(hexNWKT, statement);
-                    logger.debug("hexNWKT: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
+                sqlGeom = viaSQL(hexNWKT, statement);
+                logger.debug("hexNWKT: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
 
-                    sqlGeom = viaSQL(hexXWKT, statement);
-                    logger.debug("hexXWKT: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
+                sqlGeom = viaSQL(hexXWKT, statement);
+                logger.debug("hexXWKT: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
 
-                    sqlGeom = binaryViaSQL(NWKT, connection);
-                    logger.debug("NWKT: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
+                sqlGeom = binaryViaSQL(NWKT, connection);
+                logger.debug("NWKT: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
 
-                    sqlGeom = binaryViaSQL(XWKT, connection);
-                    logger.debug("XWKT: {}", sqlGeom);
-                    Assert.assertEquals(geom, sqlGeom);
-                }
+                sqlGeom = binaryViaSQL(XWKT, connection);
+                logger.debug("XWKT: {}", sqlGeom);
+                Assert.assertEquals(geom, sqlGeom);
             }
         }
     }
@@ -421,33 +418,17 @@ public class JtsParserTest {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
-                                   String jdbcUsernameSystemProperty,
-                                   String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
-        logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
-        logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
-        logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
-
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
-        String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
-        String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
-        String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
-
-        logger.debug("testWithDatabase: {}", testWithDatabase);
-        logger.debug("jdbcUrl: {}", jdbcUrl);
-        logger.debug("jdbcUsername: {}", jdbcUsername);
-        logger.debug("jdbcPassword: {}", jdbcPassword);
-
-        if (testWithDatabase) {
-            Class.forName(JTS_WRAPPER_CLASS_NAME);
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-            statement = connection.createStatement();
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
-        }
+    public void initJdbcConnection(ITestContext ctx) throws Exception {
+        final String jdbcUrlSuffix = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_JDBC_URL_SUFFIX);
+        Assert.assertNotNull(jdbcUrlSuffix);
+        final String jdbcUrl = "jdbc:postgres_jts" + jdbcUrlSuffix;
+        final String jdbcUsername = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_USER_PARAM_NAME);
+        Assert.assertNotNull(jdbcUsername);
+        final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
+        Assert.assertNotNull(jdbcPassword);
+        Class.forName(JTS_WRAPPER_CLASS_NAME);
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+        statement = connection.createStatement();
     }
 
 

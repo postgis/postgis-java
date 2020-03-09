@@ -15,16 +15,7 @@
     <name>Postgis JDBC Driver JTS Parser</name>
     <description>Parser between JTS and PostGIS geometry formats.</description>
 
-    <properties>
-        <!-- Dependency versions -->
-        <dependency.jts-version.version>1.16.1</dependency.jts-version.version>
-
-        <testWithDatabase>false</testWithDatabase>
-        <jdbcDriverClassName>org.postgresql.Driver</jdbcDriverClassName>
-        <jdbcUrl>jdbc:postgres_jts://localhost:5432/postgis1</jdbcUrl>
-        <jdbcUsername>postgis1</jdbcUsername>
-        <jdbcPassword>postgis1</jdbcPassword>
-    </properties>
+    <properties/>
 
     <dependencies>
         <dependency>
@@ -34,38 +25,59 @@
         </dependency>
         <dependency>
             <groupId>org.locationtech.jts</groupId>
-            <artifactId>jts</artifactId>
-            <version>${dependency.jts-version.version}</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
             <version>${dependency.jts-version.version}</version>
         </dependency>
         <dependency>
             <groupId>org.locationtech.spatial4j</groupId>
             <artifactId>spatial4j</artifactId>
-            <version>0.7</version>
+            <version>${dependency.spatial4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.postgis.tools</groupId>
+            <artifactId>test-utils</artifactId>
+            <version>2.4.1-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources-filtered</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <skip>${maven.integration.test.skip}</skip>
+                            <forkCount>${failsafe.forkCount}</forkCount>
+                            <useSystemClassLoader>${failsafe.useSystemClassLoader}</useSystemClassLoader>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>${project.build.testOutputDirectory}/testng-it.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
-                    <systemPropertyVariables>
-                        <testWithDatabase>${testWithDatabase}</testWithDatabase>
-                        <jdbcDriverClassName>${jdbcDriverClassName}</jdbcDriverClassName>
-                        <jdbcUrl>${jdbcUrl}</jdbcUrl>
-                        <jdbcUsername>${jdbcUsername}</jdbcUsername>
-                        <jdbcPassword>${jdbcPassword}</jdbcPassword>
-                    </systemPropertyVariables>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
         </plugins>

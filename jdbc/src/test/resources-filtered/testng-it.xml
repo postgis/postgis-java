@@ -1,0 +1,22 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Postgis JDBC Extensions Integration Test Suite" verbose="1">
+
+    <parameter name="test.container.image-name" value="${test.container.image}"/>
+    <parameter name="test.container.port" value="${test.db.port}"/>
+    <parameter name="test.container.env.user" value="${test.db.username}"/>
+    <parameter name="test.container.env.password" value="${test.db.password}"/>
+    <parameter name="test.container.env.db" value="${test.db.name}"/>
+
+    <test name="Postgis JDBC Integration Tests">
+        <classes>
+            <class name="net.postgis.tools.testutils.TestContainerController"/>
+            <class name="org.postgis.AutoRegistrationTest"/>
+            <class name="org.postgis.BoxesTest"/>
+            <class name="org.postgis.EmptyGeometriesTest"/>
+            <class name="org.postgis.ParserTest"/>
+            <class name="org.postgis.ServerTest"/>
+            <class name="org.postgis.VersionPrinter"/>
+        </classes>
+    </test>
+
+</suite>

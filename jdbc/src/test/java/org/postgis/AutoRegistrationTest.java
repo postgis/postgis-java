@@ -24,13 +24,15 @@
 package org.postgis;
 
 
+import net.postgis.tools.testutils.TestContainerController;
 import org.postgresql.Driver;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
+import org.testng.ITestContext;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import java.sql.*;
@@ -44,44 +46,39 @@ public class AutoRegistrationTest {
 
     private static final Logger logger = LoggerFactory.getLogger(AutoRegistrationTest.class);
 
-    private boolean testWithDatabase = false;
-
-    private Connection connection = null;
+    private Connection connection;
 
     @Test
-    public void testAutoRegistration() throws Exception {
-
+    public void testAutoRegistration(ITestContext ctx) throws Exception {
         logger.debug("Driver version: {}", Driver.getVersion());
         int major = new Driver().getMajorVersion();
         Assert.assertTrue(major >= 8, "postgresql driver " + major + ".X is too old, it does not support auto-registration");
 
-        if (testWithDatabase) {
-            Statement statement = connection.createStatement();
-            int postgisServerMajor = getPostgisMajor(statement);
-            logger.debug("PostGIS Version: " + postgisServerMajor);
-            Assert.assertNotEquals(postgisServerMajor, 0, "Could not get PostGIS version. Is PostGIS really installed in the database?");
+        Statement statement = connection.createStatement();
+        int postgisServerMajor = getPostgisMajor(statement);
+        logger.debug("PostGIS Version: " + postgisServerMajor);
+        Assert.assertNotEquals(postgisServerMajor, 0, "Could not get PostGIS version. Is PostGIS really installed in the database?");
 
-            // Test geometries
-            ResultSet resultSet = statement.executeQuery("SELECT 'POINT(1 2)'::geometry");
-            resultSet.next();
-            PGobject result = (PGobject) resultSet.getObject(1);
-            Assert.assertTrue(result instanceof PGgeometry);
+        // Test geometries
+        ResultSet resultSet = statement.executeQuery("SELECT 'POINT(1 2)'::geometry");
+        resultSet.next();
+        PGobject result = (PGobject) resultSet.getObject(1);
+        Assert.assertTrue(result instanceof PGgeometry);
 
-            // Test box3d
-            resultSet = statement.executeQuery("SELECT 'BOX3D(1 2 3, 4 5 6)'::box3d");
+        // Test box3d
+        resultSet = statement.executeQuery("SELECT 'BOX3D(1 2 3, 4 5 6)'::box3d");
+        resultSet.next();
+        result = (PGobject) resultSet.getObject(1);
+        Assert.assertTrue(result instanceof PGbox3d);
+
+        // Test box2d if appropriate
+        if (postgisServerMajor < 1) {
+            logger.info("PostGIS version is too old, skipping box2ed test");
+        } else {
+            resultSet = statement.executeQuery("SELECT 'BOX(1 2,3 4)'::box2d");
             resultSet.next();
             result = (PGobject) resultSet.getObject(1);
-            Assert.assertTrue(result instanceof PGbox3d);
-
-            // Test box2d if appropriate
-            if (postgisServerMajor < 1) {
-                logger.info("PostGIS version is too old, skipping box2ed test");
-            } else {
-                resultSet = statement.executeQuery("SELECT 'BOX(1 2,3 4)'::box2d");
-                resultSet.next();
-                result = (PGobject) resultSet.getObject(1);
-                Assert.assertTrue(result instanceof PGbox2d);
-            }
+            Assert.assertTrue(result instanceof PGbox2d);
         }
     }
 
@@ -100,30 +97,23 @@ public class AutoRegistrationTest {
 
 
     @BeforeClass
-    @Parameters({"testWithDatabaseSystemProperty", "jdbcUrlSystemProperty", "jdbcUsernameSystemProperty", "jdbcPasswordSystemProperty"})
-    public void initJdbcConnection(String testWithDatabaseSystemProperty,
-                                   String jdbcUrlSystemProperty,
-                                   String jdbcUsernameSystemProperty,
-                                   String jdbcPasswordSystemProperty) throws Exception {
-        logger.debug("testWithDatabaseSystemProperty: {}", testWithDatabaseSystemProperty);
-        logger.debug("jdbcUrlSystemProperty: {}", jdbcUrlSystemProperty);
-        logger.debug("jdbcUsernameSystemProperty: {}", jdbcUsernameSystemProperty);
-        logger.debug("jdbcPasswordSystemProperty: {}", jdbcPasswordSystemProperty);
+    public void initJdbcConnection(ITestContext ctx) throws Exception {
+        final String jdbcUrlSuffix = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_JDBC_URL_SUFFIX);
+        Assert.assertNotNull(jdbcUrlSuffix);
+        final String jdbcUrl = "jdbc:postgresql" + jdbcUrlSuffix;
+        final String jdbcUsername = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_USER_PARAM_NAME);
+        Assert.assertNotNull(jdbcUsername);
+        final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
+        Assert.assertNotNull(jdbcPassword);
+        connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
+    }
 
-        testWithDatabase = Boolean.parseBoolean(System.getProperty(testWithDatabaseSystemProperty));
-        String jdbcUrl = System.getProperty(jdbcUrlSystemProperty);
-        String jdbcUsername = System.getProperty(jdbcUsernameSystemProperty);
-        String jdbcPassword = System.getProperty(jdbcPasswordSystemProperty);
 
-        logger.debug("testWithDatabase: {}", testWithDatabase);
-        logger.debug("jdbcUrl: {}", jdbcUrl);
-        logger.debug("jdbcUsername: {}", jdbcUsername);
-        logger.debug("jdbcPassword: {}", jdbcPassword);
-
-        if (testWithDatabase) {
-            connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
-        } else {
-            logger.info("testWithDatabase value was false.  Database tests will be skipped.");
+    @AfterClass
+    public void shutdown() throws Exception {
+        logger.debug("shutting down");
+        if (connection != null) {
+            connection.close();
         }
     }
 

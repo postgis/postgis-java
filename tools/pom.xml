@@ -12,10 +12,12 @@
     <version>2.4.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>tools</name>
+    <name>Tools</name>
     <description>Miscellaneous tools and utilities</description>
 
     <modules>
         <module>osgeo-postgis-jdbc-test-util</module>
+        <module>test-utils</module>
     </modules>
+
 </project>
