@@ -29,6 +29,7 @@ package org.postgis;
 
 
 import net.postgis.tools.testutils.TestContainerController;
+import org.postgis.util.VersionUtil;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +87,7 @@ public class BoxesTest {
 
         logger.debug("testing on connection: {}", connection.getCatalog());
         Statement statement = connection.createStatement();
-        if (newPostgisOnly && AutoRegistrationTest.getPostgisMajor(statement) < 1) {
+        if (newPostgisOnly && Integer.parseInt(VersionUtil.retrievePostGISServerMajorVersion(connection)) < 1) {
             logger.debug("PostGIS version is too old, not testing box2d");
         } else {
             PGobject sqlGeom = viaSQL(candidate, statement);
