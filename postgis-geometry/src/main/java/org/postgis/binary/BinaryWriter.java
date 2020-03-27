@@ -34,6 +34,7 @@ import org.postgis.MultiPolygon;
 import org.postgis.Point;
 import org.postgis.Polygon;
 
+
 /**
  * Create binary representation of geometries. Currently, only text rep (hexed)
  * implementation is tested.
