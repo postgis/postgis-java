@@ -41,7 +41,13 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.Objects;
 
 
@@ -249,10 +255,10 @@ public class ParserTest {
 
     public void test(String WKT, String flags) throws SQLException {
         logger.debug("Original: {} ", WKT);
-        Geometry geom = PGgeometry.geomFromString(WKT);
+        Geometry geom = GeometryBuilder.geomFromString(WKT);
         String parsed = geom.toString();
         logger.debug("Parsed: {}", parsed);
-        Geometry regeom = PGgeometry.geomFromString(parsed);
+        Geometry regeom = GeometryBuilder.geomFromString(parsed);
         String reparsed = regeom.toString();
         logger.debug("Re-Parsed: {}", reparsed);
         Assert.assertEquals(geom, regeom, "Geometries are not equal");
@@ -260,13 +266,13 @@ public class ParserTest {
 
         String hexNWKT = binaryWriter.writeHexed(regeom, ValueSetter.NDR.NUMBER);
         logger.debug("NDRHex: {}", hexNWKT);
-        regeom = PGgeometry.geomFromString(hexNWKT);
+        regeom = GeometryBuilder.geomFromString(hexNWKT);
         logger.debug("ReNDRHex: {}", regeom);
         Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
         String hexXWKT = binaryWriter.writeHexed(regeom, ValueSetter.XDR.NUMBER);
         logger.debug("XDRHex: {}", hexXWKT);
-        regeom = PGgeometry.geomFromString(hexXWKT);
+        regeom = GeometryBuilder.geomFromString(hexXWKT);
         logger.debug("ReXDRHex: {}", regeom);
         Assert.assertEquals(geom, regeom, "Geometries are not equal");
 
@@ -415,7 +421,7 @@ public class ParserTest {
         ResultSet resultSet = stat.executeQuery("SELECT ST_AsEWKT(geometry_in('" + rep + "'))");
         resultSet.next();
         String resrep = resultSet.getString(1);
-        return PGgeometry.geomFromString(resrep);
+        return GeometryBuilder.geomFromString(resrep);
     }
 
 

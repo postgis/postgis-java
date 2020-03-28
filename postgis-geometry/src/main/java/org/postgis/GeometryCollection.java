@@ -29,6 +29,7 @@ package org.postgis;
 
 import java.sql.SQLException;
 
+
 /**
  * Geometry Collection class WARNING: Currently only implements empty
  * collections
@@ -64,7 +65,7 @@ public class GeometryCollection extends ComposedGeom {
     }
 
     protected Geometry createSubGeomInstance(String token, boolean haveM) throws SQLException {
-        return PGgeometry.geomFromString(token, haveM);
+        return GeometryBuilder.geomFromString(token, haveM);
     }
 
     protected void innerWKT(StringBuffer SB) {

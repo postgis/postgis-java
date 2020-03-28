@@ -36,6 +36,7 @@ import org.postgis.Polygon;
 import org.postgis.binary.ByteGetter.BinaryByteGetter;
 import org.postgis.binary.ByteGetter.StringByteGetter;
 
+
 /**
  * Parse binary representation of geometries.
  * 
@@ -79,13 +80,13 @@ public class BinaryParser {
      * @return resulting geometry for the parsed data
      */
     public synchronized Geometry parse(String value) {
-        StringByteGetter bytes = new ByteGetter.StringByteGetter(value);
+        StringByteGetter bytes = new StringByteGetter(value);
         return parseGeometry(valueGetterForEndian(bytes));
     }
 
     /**
      * Parse a binary encoded geometry.
-     * 
+     *
      * Is synchronized to protect offset counter. (Unfortunately, Java does not
      * have neither call by reference nor multiple return values.)
      *
@@ -93,7 +94,7 @@ public class BinaryParser {
      * @return resulting geometry for the parsed data
      */
     public synchronized Geometry parse(byte[] value) {
-        BinaryByteGetter bytes = new ByteGetter.BinaryByteGetter(value);
+        BinaryByteGetter bytes = new BinaryByteGetter(value);
         return parseGeometry(valueGetterForEndian(bytes));
     }
 

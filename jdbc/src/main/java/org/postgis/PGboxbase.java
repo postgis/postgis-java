@@ -88,7 +88,7 @@ public abstract class PGboxbase extends PGobject {
         int srid = Geometry.UNKNOWN_SRID;
         value = value.trim();
         if (value.startsWith("SRID=")) {
-            String[] temp = PGgeometry.splitSRID(value);
+            String[] temp = GeometryBuilder.splitSRID(value);
             value = temp[1].trim();
             srid = Geometry.parseSRID(Integer.parseInt(temp[0].substring(5)));
         }

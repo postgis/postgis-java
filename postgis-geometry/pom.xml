@@ -1,33 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-	
+
     <parent>
         <groupId>net.postgis</groupId>
         <artifactId>postgis-java-aggregator</artifactId>
         <version>2.4.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>postgis-jdbc</artifactId>
+    <artifactId>postgis-geometry</artifactId>
     <version>2.4.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Postgis JDBC Driver</name>
-    <description>PostGIS adds support for geographic objects to the PostgreSQL object-relational database.</description>
+    <name>PostGIS Geometry</name>
+    <description>Geometry classes provided by PostGIS JDBC Extension</description>
 
     <properties/>
 
     <dependencies>
-        <dependency>
-            <groupId>net.postgis</groupId>
-            <artifactId>postgis-geometry</artifactId>
-            <version>2.4.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${dependency.postgresql-jdbc.version}</version>
-        </dependency>
         <dependency>
             <groupId>net.postgis.tools</groupId>
             <artifactId>test-utils</artifactId>
@@ -53,27 +43,6 @@
             </testResource>
         </testResources>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>integration-tests</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                        <configuration>
-                            <skip>${maven.integration.test.skip}</skip>
-                            <forkCount>${failsafe.forkCount}</forkCount>
-                            <useSystemClassLoader>${failsafe.useSystemClassLoader}</useSystemClassLoader>
-                            <suiteXmlFiles>
-                                <suiteXmlFile>${project.build.testOutputDirectory}/testng-it.xml</suiteXmlFile>
-                            </suiteXmlFiles>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
