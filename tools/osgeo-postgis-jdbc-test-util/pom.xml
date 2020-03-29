@@ -39,11 +39,6 @@
             <version>${dependency.logback.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${dependency.slfj.version}</version>
-        </dependency>
-        <dependency>
             <groupId>net.postgis.tools</groupId>
             <artifactId>test-utils</artifactId>
             <version>2.4.1-SNAPSHOT</version>
