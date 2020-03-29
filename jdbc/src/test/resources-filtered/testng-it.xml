@@ -11,9 +11,10 @@
         <classes>
             <class name="net.postgis.tools.testutils.TestContainerController"/>
             <class name="org.postgis.util.VersionUtilIT"/>
-            <class name="org.postgis.AutoRegistrationTest"/>
+            <class name="org.postgis.DatatypesAutoRegistrationTest"/>
             <class name="org.postgis.BoxesTest"/>
             <class name="org.postgis.EmptyGeometriesTest"/>
+            <class name="org.postgis.GeographyDatatypeTest"/>
             <class name="org.postgis.ParserTest"/>
             <class name="org.postgis.ServerTest"/>
             <class name="org.postgis.VersionPrinter"/>
