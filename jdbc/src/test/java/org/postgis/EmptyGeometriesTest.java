@@ -65,7 +65,8 @@ public class EmptyGeometriesTest {
     public static final String[] castTypes = new String[] {
             "bytea",
             "text",
-            "geometry"
+            "geometry",
+            "geography"
     };
 
     private Connection connection = null;
@@ -83,7 +84,7 @@ public class EmptyGeometriesTest {
                  ResultSet resultSet = preparedStatement.executeQuery()
             ) {
                 resultSet.next();
-                for (int i = 1; i <= 3; i++) {
+                for (int i = 1; i <= castTypes.length; i++) {
                     Object resultSetObject = resultSet.getObject(i);
                     logger.debug("returned resultSetObject {} => (class=[{}]) {}", i, resultSetObject.getClass().getName(), resultSetObject);
                 }

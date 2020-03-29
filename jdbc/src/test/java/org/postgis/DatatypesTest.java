@@ -51,4 +51,13 @@ public class DatatypesTest {
     }
 
 
+    @Test
+    public void testPGgeography() throws SQLException {
+        logger.trace("void testPGgeography()");
+        logger.info(mlng_str);
+        PGgeography pgf = new PGgeography(mlng_str);
+        logger.info(pgf.toString());
+    }
+
+
 }

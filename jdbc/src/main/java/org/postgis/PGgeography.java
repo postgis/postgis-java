@@ -27,19 +27,19 @@ import java.sql.SQLException;
 
 
 /**
- * A PostgreSQL JDBC PGobject extension data type modeling the geometry type.
+ * A PostgreSQL JDBC PGobject extension data type modeling the geography type.
  *
  * @author Phillip Ross
  */
-public class PGgeometry extends PGgeo {
+public class PGgeography extends PGgeo {
 
-    private static final long serialVersionUID = 4116907189503026815L;
+    private static final long serialVersionUID = 3796853960196603896L;
 
 
     /** Instantiate with default state. */
-    public PGgeometry() {
+    public PGgeography() {
         super();
-        setType("geometry");
+        setType("geography");
     }
 
 
@@ -48,9 +48,10 @@ public class PGgeometry extends PGgeo {
      *
      * @param geometry the geometry to instantiate with
      */
-    public PGgeometry(final Geometry geometry) {
-        super(geometry);
-        setType("geometry");
+    public PGgeography(final Geometry geometry) {
+        this();
+        this.geometry = geometry;
+        setType("geography");
     }
 
 
@@ -59,16 +60,17 @@ public class PGgeometry extends PGgeo {
      *
      * @param value the value to instantiate with
      */
-    public PGgeometry(final String value) throws SQLException {
-        super(value);
-        setType("geometry");
+    public PGgeography(final String value) throws SQLException {
+        this();
+        setValue(value);
+        setType("geography");
     }
 
 
     /** {@inheritDoc} */
     @Override
     public Object clone() {
-        return new PGgeometry(geometry);
+        return new PGgeography(geometry);
     }
 
 
