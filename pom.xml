@@ -93,17 +93,21 @@
     </distributionManagement>
 
     <properties>
-        <checkstyle.skip>true</checkstyle.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.min.version>8</java.min.version>
         <maven.min.version>3.6</maven.min.version>
         <maven.test.skip>false</maven.test.skip>
-        <surefire.forkCount>1</surefire.forkCount>
-        <surefire.useSystemClassLoader>true</surefire.useSystemClassLoader>
         <maven.integration.test.skip>false</maven.integration.test.skip>
         <failsafe.forkCount>1</failsafe.forkCount>
         <failsafe.useSystemClassLoader>true</failsafe.useSystemClassLoader>
+        <surefire.forkCount>1</surefire.forkCount>
+        <surefire.useSystemClassLoader>true</surefire.useSystemClassLoader>
+        <checkstyle.skip>true</checkstyle.skip>
+        <cpd.skip>true</cpd.skip>
+        <jxr.skip>false</jxr.skip>
+        <pmd.skip>true</pmd.skip>
+        <spotbugs.skip>true</spotbugs.skip>
         <test.container.image>postgis/postgis:13-3.1-alpine</test.container.image>
         <test.db.username>postgis1</test.db.username>
         <test.db.password>postgis1</test.db.password>
@@ -116,7 +120,9 @@
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <git-commit-id-plugin.version>4.0.5</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
+        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
         <maven-archetype-plugin.version>3.2.0</maven-archetype-plugin.version>
+        <maven-assembly-plugin.version>3.2.0</maven-assembly-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -132,21 +138,27 @@
         <maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
         <maven-javadoc-plugin.version>3.3.0</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>3.1.1</maven-jxr-plugin.version>
+        <maven-pmd-plugin.version>3.13.0</maven-pmd-plugin.version>
+        <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+        <spotbugs-maven-plugin.version>4.0.0</spotbugs-maven-plugin.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <!-- Dependency versions -->
         <dependency.checkstyle.version>8.45</dependency.checkstyle.version>
         <dependency.jts-version.version>1.18.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.5</dependency.logback.version>
+        <dependency.pmd.version>6.22.0</dependency.pmd.version>
         <dependency.postgresql-jdbc.version>42.2.23</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.32</dependency.slfj.version>
         <dependency.spatial4j.version>0.8</dependency.spatial4j.version>
+        <dependency.spotbugs.version>4.0.2</dependency.spotbugs.version>
         <dependency.testcontainers.version>1.16.0</dependency.testcontainers.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
@@ -165,11 +177,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${dependency.slfj.version}</version>
-        </dependency>
-        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${dependency.logback.version}</version>
@@ -181,9 +188,32 @@
             <version>${dependency.logback.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${dependency.slf4j.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources-filtered</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources-filtered</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -192,9 +222,43 @@
                     <version>${download-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${spotbugs-maven-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.github.spotbugs</groupId>
+                            <artifactId>spotbugs</artifactId>
+                            <version>${dependency.spotbugs.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>spotbugs-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <skip>${spotbugs.skip}</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven-antrun-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-archetype-plugin</artifactId>
                     <version>${maven-archetype-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>${maven-assembly-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -207,6 +271,21 @@
                             <version>${dependency.checkstyle.version}</version>
                         </dependency>
                     </dependencies>
+                    <executions>
+                        <execution>
+                            <id>checkstyle</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                        <skip>${checkstyle.skip}</skip>
+                        <violationSeverity>warning</violationSeverity>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -217,6 +296,10 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.min.version}</source>
+                        <target>${java.min.version}</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -237,11 +320,43 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${maven-enforcer-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-maven</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireMavenVersion>
+                                        <version>[${maven.min.version},)</version>
+                                    </requireMavenVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-failsafe-plugin</artifactId>
                     <version>${maven-failsafe-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>integration-tests</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                            <configuration>
+                                <forkCount>${failsafe.forkCount}</forkCount>
+                                <skip>${maven.integration.test.skip}</skip>
+                                <suiteXmlFiles>
+                                    <suiteXmlFile>${project.build.testOutputDirectory}/testng-it.xml</suiteXmlFile>
+                                </suiteXmlFiles>
+                                <useSystemClassLoader>${failsafe.useSystemClassLoader}</useSystemClassLoader>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -267,6 +382,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
+                    <configuration>
+                        <source>${java.min.version}</source>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -275,8 +393,75 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${maven-pmd-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-core</artifactId>
+                            <version>${dependency.pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-java</artifactId>
+                            <version>${dependency.pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-javascript</artifactId>
+                            <version>${dependency.pmd.version}</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>net.sourceforge.pmd</groupId>
+                            <artifactId>pmd-jsp</artifactId>
+                            <version>${dependency.pmd.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>pmd-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <skip>${pmd.skip}</skip>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>cpd-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>cpd-check</goal>
+                            </goals>
+                            <configuration>
+                                <skip>${cpd.skip}</skip>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <printFailingErrors>true</printFailingErrors>
+                        <rulesets>
+                            <!--suppress UnresolvedMavenProperty -->
+                            <ruleset>file:///${multi.module.root}/pmd.xml</ruleset>
+                        </rulesets>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>${maven-project-info-reports-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>${maven-release-plugin.version}</version>
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <localCheckout>true</localCheckout>
+                        <pushChanges>false</pushChanges>
+                        <releaseProfiles>release-sign-artifacts,sonatype-deployment</releaseProfiles>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -302,6 +487,14 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
+                    <configuration>
+                        <forkCount>${surefire.forkCount}</forkCount>
+                        <skip>${maven.test.skip}</skip>
+                        <suiteXmlFiles>
+                            <suiteXmlFile>${project.build.testOutputDirectory}/testng.xml</suiteXmlFile>
+                        </suiteXmlFiles>
+                        <useSystemClassLoader>${surefire.useSystemClassLoader}</useSystemClassLoader>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -330,175 +523,129 @@
                     <groupId>org.commonjava.maven.plugins</groupId>
                     <artifactId>directory-maven-plugin</artifactId>
                     <version>${directory-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>directory-of-property</id>
+                            <goals>
+                                <goal>directory-of</goal>
+                            </goals>
+                            <phase>validate</phase>
+                            <configuration>
+                                <property>multi.module.root</property>
+                                <project>
+                                    <groupId>net.postgis</groupId>
+                                    <artifactId>postgis-java-aggregator</artifactId>
+                                </project>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>pre-unit-test</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>unit-test-report</id>
+                            <phase>test</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>pre-integration-test</id>
+                            <goals>
+                                <goal>prepare-agent-integration</goal>
+                            </goals>
+                            <configuration>
+                                <destFile>${project.build.directory}/jacoco-it.exec</destFile>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>integration-test-report</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>report-integration</goal>
+                            </goals>
+                            <configuration>
+                                <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
+                                <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
+                            </configuration>
+                        </execution>
+                    </executions>
+
                 </plugin>
                 <plugin>
                     <groupId>pl.project13.maven</groupId>
                     <artifactId>git-commit-id-plugin</artifactId>
                     <version>${git-commit-id-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>git-describe</id>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                            <configuration>
+                                <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                                <generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/git.properties</generateGitPropertiesFilename>
+                                <includeOnlyProperties>
+                                    <property>git.branch$</property>
+                                    <!--<property>git.build.host$</property>-->
+                                    <property>git.build.number$</property>
+                                    <property>git.build.number.unique$</property>
+                                    <property>git.build.time$</property>
+                                    <property>git.build.user.email$</property>
+                                    <property>git.build.user.name$</property>
+                                    <property>git.build.version$</property>
+                                    <property>git.closest.tag.commit.count$</property>
+                                    <property>git.closest.tag.name$</property>
+                                    <property>git.commit.id$</property>
+                                    <property>git.commit.id.abbrev$</property>
+                                    <property>git.commit.user.email$</property>
+                                    <property>git.commit.user.name$</property>
+                                    <property>git.commit.time$</property>
+                                    <property>git.tags$</property>
+                                </includeOnlyProperties>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <configuration>
-                    <configLocation>checkstyle.xml</configLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <skip>${checkstyle.skip}</skip>
-                    <!--<suppressionsLocation>suppressions.xml</suppressionsLocation>-->
-                    <violationSeverity>warning</violationSeverity>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.min.version}</source>
-                    <target>${java.min.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>enforce-maven</id>
-                        <goals>
-                            <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <requireMavenVersion>
-                                    <version>[${maven.min.version},)</version>
-                                </requireMavenVersion>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.commonjava.maven.plugins</groupId>
+                <artifactId>directory-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <forkCount>${failsafe.forkCount}</forkCount>
-                    <skip>${maven.integration.test.skip}</skip>
-                    <systemPropertyVariables>
-                        <derby.stream.error.file>
-                            ${project.build.directory}/derby.log
-                        </derby.stream.error.file>
-                    </systemPropertyVariables>
-                    <useSystemClassLoader>${failsafe.useSystemClassLoader}</useSystemClassLoader>
-                </configuration>
+                <artifactId>maven-checkstyle-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <source>${java.min.version}</source>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <localCheckout>true</localCheckout>
-                    <pushChanges>false</pushChanges>
-                    <releaseProfiles>release-sign-artifacts</releaseProfiles>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkCount>${surefire.forkCount}</forkCount>
-                    <skip>${maven.test.skip}</skip>
-                    <systemPropertyVariables>
-                        <derby.stream.error.file>
-                            ${project.build.directory}/derby.log
-                        </derby.stream.error.file>
-                    </systemPropertyVariables>
-                    <useSystemClassLoader>${surefire.useSystemClassLoader}</useSystemClassLoader>
-                </configuration>
+                <artifactId>maven-pmd-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>unit-test-report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>pre-integration-test</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                        <configuration>
-                            <destFile>${project.build.directory}/jacoco-it.exec</destFile>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>integration-test-report</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>report-integration</goal>
-                        </goals>
-                        <configuration>
-                            <dataFile>${project.build.directory}/jacoco-it.exec</dataFile>
-                            <outputDirectory>${project.reporting.outputDirectory}/jacoco-it</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>git-describe</id>
-                        <goals>
-                            <goal>revision</goal>
-                        </goals>
-                        <configuration>
-                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                            <generateGitPropertiesFilename>${project.build.outputDirectory}/META-INF/git.properties</generateGitPropertiesFilename>
-                            <includeOnlyProperties>
-                                <property>git.branch$</property>
-                                <!--<property>git.build.host$</property>-->
-                                <property>git.build.number$</property>
-                                <property>git.build.number.unique$</property>
-                                <property>git.build.time$</property>
-                                <property>git.build.user.email$</property>
-                                <property>git.build.user.name$</property>
-                                <property>git.build.version$</property>
-                                <property>git.closest.tag.commit.count$</property>
-                                <property>git.closest.tag.name$</property>
-                                <property>git.commit.id$</property>
-                                <property>git.commit.id.abbrev$</property>
-                                <property>git.commit.user.email$</property>
-                                <property>git.commit.user.name$</property>
-                                <property>git.commit.time$</property>
-                                <property>git.tags$</property>
-                            </includeOnlyProperties>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
@@ -520,26 +667,6 @@
             <id>check-versions</id>
             <build>
                 <plugins>
-                    <plugin>
-                        <groupId>org.commonjava.maven.plugins</groupId>
-                        <artifactId>directory-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>directory-of-property</id>
-                                <goals>
-                                    <goal>directory-of</goal>
-                                </goals>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <property>multi.module.root</property>
-                                    <project>
-                                        <groupId>net.postgis</groupId>
-                                        <artifactId>postgis-java-aggregator</artifactId>
-                                    </project>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>versions-maven-plugin</artifactId>
@@ -564,10 +691,10 @@
             </build>
         </profile>
         <!--
-        The release-sign-artifacts profile only needs activated when cutting a release for maven central.
-        It will generate additional artifacts for javadoc and source as well as GPG signatures for each artifact.
-        This profile also assumes that the properties for the gpg plugin (such as gpg.keyname and gpg.passphrase
-        are either defined in a settings.xml file or similar facility.
+        The release-sign-artifacts and sonatype deployment profiles only need activated when pushing snapshots or
+        releases to maven central.  When enabled, additional artifacts will be generated for javadoc and source as well
+        as GPG signatures for each artifact.  This profiles assume that the properties for the gpg plugin
+        (such as gpg.keyname and gpg.passphrase are either defined in a settings.xml file or similar facility.
         -->
         <profile>
             <id>release-sign-artifacts</id>
@@ -626,7 +753,7 @@
                 </repository>
             </distributionManagement>
         </profile>
-        
+
         <profile>
             <id>SkipUnitTests</id>
             <properties>
