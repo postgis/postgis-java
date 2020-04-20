@@ -85,6 +85,12 @@
         <system>GitHub Issues</system>
         <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
+    <distributionManagement>
+        <site>
+            <id>${project.artifactId}-site</id>
+            <url>${project.baseUri}</url>
+        </site>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -140,6 +146,7 @@
         <maven-shade-plugin.version>3.2.3</maven-shade-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>2.22.2</maven-surefire-report-plugin.version>
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <spotbugs-maven-plugin.version>4.0.0</spotbugs-maven-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
@@ -491,6 +498,11 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>${maven-surefire-report-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-war-plugin</artifactId>
                     <version>${maven-war-plugin.version}</version>
                 </plugin>
@@ -508,8 +520,18 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>versions-maven-plugin</artifactId>
                     <version>${versions-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>check-parent-versions-update</id>
+                            <goals>
+                                <goal>display-parent-updates</goal>
+                            </goals>
+                            <phase>validate</phase>
+                        </execution>
+                    </executions>
                     <configuration>
-                        <rulesUri>file:///${pom.basedir}/maven-version-rules.xml</rulesUri>
+                        <!--suppress UnresolvedMavenProperty -->
+                        <rulesUri>file:///${multi.module.root}/maven-version-rules.xml</rulesUri>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -518,11 +540,25 @@
                     <version>${directory-maven-plugin.version}</version>
                     <executions>
                         <execution>
-                            <id>directory-of-property</id>
+                            <id>multi-module-root-directory-build</id>
                             <goals>
                                 <goal>directory-of</goal>
                             </goals>
                             <phase>validate</phase>
+                            <configuration>
+                                <property>multi.module.root</property>
+                                <project>
+                                    <groupId>net.postgis</groupId>
+                                    <artifactId>postgis-java-aggregator</artifactId>
+                                </project>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>multi-module-root-directory-site</id>
+                            <goals>
+                                <goal>directory-of</goal>
+                            </goals>
+                            <phase>pre-site</phase>
                             <configuration>
                                 <property>multi.module.root</property>
                                 <project>
@@ -624,34 +660,126 @@
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>javadoc-aggregated</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                            <report>test-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>jxr-aggregated</id>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>aggregate</report>
+                            <report>test-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>spotbugs</id>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                        <reports>
+                            <report>spotbugs</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <id>checkstyle-aggregated</id>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                        <reports>
+                            <report>checkstyle-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>pmd</id>
+                        <inherited>false</inherited>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <skip>false</skip>
+                            <rulesets>
+                                <ruleset>pmd.xml</ruleset>
+                            </rulesets>
+                        </configuration>
+                        <reports>
+                            <report>pmd</report>
+                            <report>cpd</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>version-update-reports</id>
+                        <reports>
+                            <report>dependency-updates-report</report>
+                            <report>plugin-updates-report</report>
+                            <report>property-updates-report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>test-coverage-report</id>
+                        <reports>
+                            <report>report</report>
+                            <report>report-integration</report>
+                            <report>report-aggregate</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
     <profiles>
-        <profile>
-            <id>check-versions</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>versions-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>check-versions</id>
-                                <goals>
-                                    <goal>display-parent-updates</goal>
-                                    <goal>display-plugin-updates</goal>
-                                    <goal>display-dependency-updates</goal>
-                                    <goal>display-property-updates</goal>
-                                </goals>
-                                <phase>validate</phase>
-                                <configuration>
-                                    <!--suppress MavenModelInspection -->
-                                    <rulesUri>file:///${multi.module.root}/maven-version-rules.xml</rulesUri>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <!--
         The release-sign-artifacts and sonatype deployment profiles only need activated when pushing snapshots or
         releases to maven central.  When enabled, additional artifacts will be generated for javadoc and source as well
