@@ -7,4 +7,4 @@ install:
   - source .travis/install-maven.sh
 
 script:
-  - mvn -U -V clean install
+  - mvn -U -V clean install site site:stage
