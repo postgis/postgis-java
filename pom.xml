@@ -103,6 +103,7 @@
         <failsafe.useSystemClassLoader>true</failsafe.useSystemClassLoader>
         <surefire.forkCount>1</surefire.forkCount>
         <surefire.useSystemClassLoader>true</surefire.useSystemClassLoader>
+        <javadoc.path>${java.home}/bin/javadoc</javadoc.path>
         <checkstyle.skip>true</checkstyle.skip>
         <cpd.skip>true</cpd.skip>
         <jxr.skip>false</jxr.skip>
@@ -120,9 +121,9 @@
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
         <git-commit-id-plugin.version>4.0.5</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
-        <maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+        <maven-antrun-plugin.version>3.0.0</maven-antrun-plugin.version>
         <maven-archetype-plugin.version>3.2.0</maven-archetype-plugin.version>
-        <maven-assembly-plugin.version>3.2.0</maven-assembly-plugin.version>
+        <maven-assembly-plugin.version>3.3.0</maven-assembly-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -142,7 +143,6 @@
         <maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
-        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
         <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
         <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
@@ -154,7 +154,7 @@
         <dependency.checkstyle.version>8.45</dependency.checkstyle.version>
         <dependency.jts-version.version>1.18.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.5</dependency.logback.version>
-        <dependency.pmd.version>6.22.0</dependency.pmd.version>
+        <dependency.pmd.version>6.23.0</dependency.pmd.version>
         <dependency.postgresql-jdbc.version>42.2.23</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.32</dependency.slfj.version>
         <dependency.spatial4j.version>0.8</dependency.spatial4j.version>
@@ -217,11 +217,6 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>com.googlecode.maven-download-plugin</groupId>
-                    <artifactId>download-maven-plugin</artifactId>
-                    <version>${download-maven-plugin.version}</version>
-                </plugin>
-                <plugin>
                     <groupId>com.github.spotbugs</groupId>
                     <artifactId>spotbugs-maven-plugin</artifactId>
                     <version>${spotbugs-maven-plugin.version}</version>
@@ -244,6 +239,11 @@
                     <configuration>
                         <skip>${spotbugs.skip}</skip>
                     </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.googlecode.maven-download-plugin</groupId>
+                    <artifactId>download-maven-plugin</artifactId>
+                    <version>${download-maven-plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -326,15 +326,15 @@
                             <goals>
                                 <goal>enforce</goal>
                             </goals>
-                            <configuration>
-                                <rules>
-                                    <requireMavenVersion>
-                                        <version>[${maven.min.version},)</version>
-                                    </requireMavenVersion>
-                                </rules>
-                            </configuration>
                         </execution>
                     </executions>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>[${maven.min.version},)</version>
+                            </requireMavenVersion>
+                        </rules>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -383,6 +383,7 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>${maven-javadoc-plugin.version}</version>
                     <configuration>
+                        <javadocExecutable>${javadoc.path}</javadocExecutable>
                         <source>${java.min.version}</source>
                     </configuration>
                 </plugin>
@@ -477,6 +478,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
                     <version>${maven-site-plugin.version}</version>
+                    <configuration>
+                        <skipDeploy>true</skipDeploy>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -608,7 +612,6 @@
                             </configuration>
                         </execution>
                     </executions>
-
                 </plugin>
                 <plugin>
                     <groupId>pl.project13.maven</groupId>
@@ -667,6 +670,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -728,7 +735,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin.version}</version>
                 <reportSets>
                     <reportSet>
                         <id>checkstyle-aggregated</id>
@@ -766,6 +772,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
+                <reportSets>
+                    <reportSet>
+                        <id>surefire</id>
+                        <reports>
+                            <report>report-only</report>
+                            <report>failsafe-report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -809,6 +824,17 @@
             </activation>
             <properties>
                 <javadoc.path>${java.home}/bin/javadoc.exe</javadoc.path>
+            </properties>
+        </profile>
+        <profile>
+            <id>javahome-env-javadoc</id>
+            <activation>
+                <property>
+                    <name>env.JAVA_HOME</name>
+                </property>
+            </activation>
+            <properties>
+                <javadoc.path>${env.JAVA_HOME}/bin/javadoc</javadoc.path>
             </properties>
         </profile>
         <profile>
