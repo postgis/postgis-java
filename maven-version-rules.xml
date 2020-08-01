@@ -21,5 +21,11 @@
                 <ignoreVersion type="regex">7\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
+        <!-- Ignore logback version with groovyless suffix -->
+        <rule groupId="ch.qos.logback">
+            <ignoreVersions>
+                <ignoreVersion type="regex">.*-groovyless</ignoreVersion>
+            </ignoreVersions>
+        </rule>
     </rules>
 </ruleset>
