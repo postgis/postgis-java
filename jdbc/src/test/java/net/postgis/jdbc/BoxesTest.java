@@ -29,7 +29,7 @@ package net.postgis.jdbc;
 
 
 import net.postgis.tools.testutils.TestContainerController;
-import net.postgis.util.VersionUtil;
+import net.postgis.jdbc.geometry.util.VersionUtil;
 import org.postgresql.util.PGobject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

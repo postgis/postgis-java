@@ -34,8 +34,8 @@ import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
-import net.postgis.binary.ByteSetter;
-import net.postgis.binary.ValueSetter;
+import net.postgis.jdbc.geometry.binary.ByteSetter;
+import net.postgis.jdbc.geometry.binary.ValueSetter;
 
 /**
  * Create binary representation of geometries. Currently, only text rep (hexed)
@@ -157,25 +157,25 @@ public class JtsBinaryWriter {
         }
 
         switch (plaintype) {
-        case net.postgis.Geometry.POINT:
+        case net.postgis.jdbc.geometry.Geometry.POINT:
             writePoint((Point) geom, dest);
             break;
-        case net.postgis.Geometry.LINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.LINESTRING:
             writeLineString((LineString) geom, dest);
             break;
-        case net.postgis.Geometry.POLYGON:
+        case net.postgis.jdbc.geometry.Geometry.POLYGON:
             writePolygon((Polygon) geom, dest);
             break;
-        case net.postgis.Geometry.MULTIPOINT:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOINT:
             writeMultiPoint((MultiPoint) geom, dest);
             break;
-        case net.postgis.Geometry.MULTILINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.MULTILINESTRING:
             writeMultiLineString((MultiLineString) geom, dest);
             break;
-        case net.postgis.Geometry.MULTIPOLYGON:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOLYGON:
             writeMultiPolygon((MultiPolygon) geom, dest);
             break;
-        case net.postgis.Geometry.GEOMETRYCOLLECTION:
+        case net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION:
             writeCollection((GeometryCollection) geom, dest);
             break;
         default:
@@ -187,21 +187,21 @@ public class JtsBinaryWriter {
         // We always write empty geometries as empty collections - for OpenGIS
         // conformance
         if (geom.isEmpty()) {
-            return net.postgis.Geometry.GEOMETRYCOLLECTION;
+            return net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION;
         } else if (geom instanceof Point) {
-            return net.postgis.Geometry.POINT;
+            return net.postgis.jdbc.geometry.Geometry.POINT;
         } else if (geom instanceof org.locationtech.jts.geom.LineString) {
-            return net.postgis.Geometry.LINESTRING;
+            return net.postgis.jdbc.geometry.Geometry.LINESTRING;
         } else if (geom instanceof org.locationtech.jts.geom.Polygon) {
-            return net.postgis.Geometry.POLYGON;
+            return net.postgis.jdbc.geometry.Geometry.POLYGON;
         } else if (geom instanceof MultiPoint) {
-            return net.postgis.Geometry.MULTIPOINT;
+            return net.postgis.jdbc.geometry.Geometry.MULTIPOINT;
         } else if (geom instanceof MultiLineString) {
-            return net.postgis.Geometry.MULTILINESTRING;
+            return net.postgis.jdbc.geometry.Geometry.MULTILINESTRING;
         } else if (geom instanceof org.locationtech.jts.geom.MultiPolygon) {
-            return net.postgis.Geometry.MULTIPOLYGON;
+            return net.postgis.jdbc.geometry.Geometry.MULTIPOLYGON;
         } if (geom instanceof org.locationtech.jts.geom.GeometryCollection) {
-            return net.postgis.Geometry.GEOMETRYCOLLECTION;
+            return net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION;
         } else {
             throw new IllegalArgumentException("Unknown Geometry Type: " + geom.getClass().getName());
         }
@@ -286,25 +286,25 @@ public class JtsBinaryWriter {
         }
 
         switch (getWKBType(geom)) {
-        case net.postgis.Geometry.POINT:
+        case net.postgis.jdbc.geometry.Geometry.POINT:
             result += estimatePoint((Point) geom);
             break;
-        case net.postgis.Geometry.LINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.LINESTRING:
             result += estimateLineString((LineString) geom);
             break;
-        case net.postgis.Geometry.POLYGON:
+        case net.postgis.jdbc.geometry.Geometry.POLYGON:
             result += estimatePolygon((Polygon) geom);
             break;
-        case net.postgis.Geometry.MULTIPOINT:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOINT:
             result += estimateMultiPoint((MultiPoint) geom);
             break;
-        case net.postgis.Geometry.MULTILINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.MULTILINESTRING:
             result += estimateMultiLineString((MultiLineString) geom);
             break;
-        case net.postgis.Geometry.MULTIPOLYGON:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOLYGON:
             result += estimateMultiPolygon((MultiPolygon) geom);
             break;
-        case net.postgis.Geometry.GEOMETRYCOLLECTION:
+        case net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION:
             result += estimateCollection((GeometryCollection) geom);
             break;
         default:

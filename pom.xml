@@ -69,7 +69,7 @@
 
     <modules>
         <module>tools</module>
-        <module>postgis-geometry</module>
+        <module>postgis-jdbc-geometry</module>
         <module>jdbc</module>
         <module>jdbc_jtsparser</module>
         <module>postgis-jdbc-java2d</module>

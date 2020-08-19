@@ -20,8 +20,8 @@ package net.postgis.jdbc.util;
 
 
 import net.postgis.tools.testutils.TestContainerController;
-import net.postgis.util.VersionFunctions;
-import net.postgis.util.VersionUtil;
+import net.postgis.jdbc.geometry.util.VersionFunctions;
+import net.postgis.jdbc.geometry.util.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

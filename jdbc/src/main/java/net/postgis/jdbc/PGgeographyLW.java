@@ -21,8 +21,8 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.Geometry;
-import net.postgis.binary.BinaryWriter;
+import net.postgis.jdbc.geometry.Geometry;
+import net.postgis.jdbc.geometry.binary.BinaryWriter;
 
 import java.sql.SQLException;
 

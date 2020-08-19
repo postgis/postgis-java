@@ -28,13 +28,13 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.Geometry;
-import net.postgis.GeometryBuilder;
-import net.postgis.binary.BinaryParser;
-import net.postgis.binary.BinaryWriter;
-import net.postgis.binary.ValueSetter;
+import net.postgis.jdbc.geometry.Geometry;
+import net.postgis.jdbc.geometry.GeometryBuilder;
+import net.postgis.jdbc.geometry.binary.BinaryParser;
+import net.postgis.jdbc.geometry.binary.BinaryWriter;
+import net.postgis.jdbc.geometry.binary.ValueSetter;
 import net.postgis.tools.testutils.TestContainerController;
-import net.postgis.util.VersionUtil;
+import net.postgis.jdbc.geometry.util.VersionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;

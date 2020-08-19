@@ -1,7 +1,7 @@
 /*
- * PGbox2d.java
+ * MultiPolygon.java
  * 
- * PostGIS extension for PostgreSQL JDBC driver - bounding box model
+ * PostGIS extension for PostgreSQL JDBC driver - geometry model
  * 
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
@@ -25,45 +25,51 @@
  * 
  */
 
-package net.postgis.jdbc;
-
-import net.postgis.jdbc.geometry.Point;
+package net.postgis.jdbc.geometry;
 
 import java.sql.SQLException;
 
-public class PGbox2d extends PGboxbase {
+public class MultiPolygon extends ComposedGeom {
     /* JDK 1.5 Serialization */
     private static final long serialVersionUID = 0x100;
 
-    public PGbox2d() {
-        super();
+    public MultiPolygon() {
+        super(MULTIPOLYGON);
     }
 
-    public PGbox2d(Point llb, Point urt) {
-        super(llb, urt);
+    public MultiPolygon(Polygon[] polygons) {
+        super(MULTIPOLYGON, polygons);
     }
 
-    public PGbox2d(String value) throws SQLException {
-        super(value);
+    public MultiPolygon(String value) throws SQLException {
+        this(value, false);
     }
 
-    public void setValue(String value) throws SQLException {
-        super.setValue(value);
+    protected MultiPolygon(String value, boolean haveM) throws SQLException {
+        super(MULTIPOLYGON, value, haveM);
+    }
 
-        if (llb.dimension != 2 || urt.dimension != 2) {
-            throw new SQLException("PGbox2d is only allowed to have 2 dimensions!");
+    protected Geometry[] createSubGeomArray(int npolygons) {
+        return new Polygon[npolygons];
+    }
+
+    protected Geometry createSubGeomInstance(String token, boolean haveM) throws SQLException {
+        return new Polygon(token, haveM);
+    }
+
+    public int numPolygons() {
+        return subgeoms.length;
+    }
+
+    public Polygon getPolygon(int idx) {
+        if (idx >= 0 & idx < subgeoms.length) {
+            return (Polygon) subgeoms[idx];
+        } else {
+            return null;
         }
     }
-
-    public String getPrefix() {
-        return "BOX";
-    }
-
-    public String getPGtype() {
-        return "box2d";
-    }
-
-    protected PGboxbase newInstance() {
-        return new PGbox2d();
+    
+    public Polygon[] getPolygons() {
+        return (Polygon[]) subgeoms;
     }
 }

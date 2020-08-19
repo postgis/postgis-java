@@ -1,8 +1,7 @@
 /*
- * PGbox3d.java
+ * Polygon.java
  * 
- * PostGIS extension for PostgreSQL JDBC driver - bounding box model
- * 
+ * PostGIS extension for PostgreSQL JDBC driver - geometry model
  * 
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
@@ -26,37 +25,47 @@
  * 
  */
 
-package net.postgis.jdbc;
-
-import net.postgis.jdbc.geometry.Point;
+package net.postgis.jdbc.geometry;
 
 import java.sql.SQLException;
 
-public class PGbox3d extends PGboxbase {
+public class Polygon extends ComposedGeom {
     /* JDK 1.5 Serialization */
     private static final long serialVersionUID = 0x100;
 
-    public PGbox3d() {
-        super();
+    public Polygon() {
+        super(POLYGON);
     }
 
-    public PGbox3d(Point llb, Point urt) {
-        super(llb, urt);
+    public Polygon(LinearRing[] rings) {
+        super(POLYGON, rings);
     }
 
-    public PGbox3d(String value) throws SQLException {
-        super(value);
+    public Polygon(String value) throws SQLException {
+        this(value, false);
     }
 
-    public String getPrefix() {
-        return ("BOX3D");
+    public Polygon(String value, boolean haveM) throws SQLException {
+        super(POLYGON, value, haveM);
     }
 
-    public String getPGtype() {
-        return ("box3d");
+    protected Geometry createSubGeomInstance(String token, boolean haveM) throws SQLException {
+        return new LinearRing(token, haveM);
     }
 
-    protected PGboxbase newInstance() {
-        return new PGbox3d();
+    protected Geometry[] createSubGeomArray(int ringcount) {
+        return new LinearRing[ringcount];
+    }
+
+    public int numRings() {
+        return subgeoms.length;
+    }
+
+    public LinearRing getRing(int idx) {
+        if (idx >= 0 & idx < subgeoms.length) {
+            return (LinearRing) subgeoms[idx];
+        } else {
+            return null;
+        }
     }
 }

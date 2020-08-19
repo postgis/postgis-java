@@ -27,10 +27,10 @@ package net.postgis.jts;
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.impl.PackedCoordinateSequence;
 import org.locationtech.spatial4j.context.jts.JtsSpatialContextFactory;
-import net.postgis.binary.ByteGetter;
-import net.postgis.binary.ByteGetter.BinaryByteGetter;
-import net.postgis.binary.ByteGetter.StringByteGetter;
-import net.postgis.binary.ValueGetter;
+import net.postgis.jdbc.geometry.binary.ByteGetter;
+import net.postgis.jdbc.geometry.binary.ByteGetter.BinaryByteGetter;
+import net.postgis.jdbc.geometry.binary.ByteGetter.StringByteGetter;
+import net.postgis.jdbc.geometry.binary.ValueGetter;
 
 /**
  * Parse binary representation of geometries. Currently, only text rep (hexed)
@@ -123,37 +123,37 @@ public class JtsBinaryParser {
         boolean haveS = (typeword & 0x20000000) != 0;
 
         if (haveS) {
-            int newsrid = net.postgis.Geometry.parseSRID(data.getInt());
+            int newsrid = net.postgis.jdbc.geometry.Geometry.parseSRID(data.getInt());
             if (inheritSrid && newsrid != srid) {
                 throw new IllegalArgumentException("Inconsistent srids in complex geometry: " + srid + ", " + newsrid);
             } else {
                 srid = newsrid;
             }
         } else if (!inheritSrid) {
-            srid = net.postgis.Geometry.UNKNOWN_SRID;
+            srid = net.postgis.jdbc.geometry.Geometry.UNKNOWN_SRID;
         }
        
         Geometry result;
         switch (realtype) {
-        case net.postgis.Geometry.POINT:
+        case net.postgis.jdbc.geometry.Geometry.POINT:
             result = parsePoint(data, haveZ, haveM);
             break;
-        case net.postgis.Geometry.LINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.LINESTRING:
             result = parseLineString(data, haveZ, haveM);
             break;
-        case net.postgis.Geometry.POLYGON:
+        case net.postgis.jdbc.geometry.Geometry.POLYGON:
             result = parsePolygon(data, haveZ, haveM, srid);
             break;
-        case net.postgis.Geometry.MULTIPOINT:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOINT:
             result = parseMultiPoint(data, srid);
             break;
-        case net.postgis.Geometry.MULTILINESTRING:
+        case net.postgis.jdbc.geometry.Geometry.MULTILINESTRING:
             result = parseMultiLineString(data, srid);
             break;
-        case net.postgis.Geometry.MULTIPOLYGON:
+        case net.postgis.jdbc.geometry.Geometry.MULTIPOLYGON:
             result = parseMultiPolygon(data, srid);
             break;
-        case net.postgis.Geometry.GEOMETRYCOLLECTION:
+        case net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION:
             result = parseCollection(data, srid);
             break;
         default:

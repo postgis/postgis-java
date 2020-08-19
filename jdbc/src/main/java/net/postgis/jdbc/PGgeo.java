@@ -23,9 +23,9 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.Geometry;
-import net.postgis.GeometryBuilder;
-import net.postgis.binary.BinaryParser;
+import net.postgis.jdbc.geometry.Geometry;
+import net.postgis.jdbc.geometry.GeometryBuilder;
+import net.postgis.jdbc.geometry.binary.BinaryParser;
 import org.postgresql.util.PGobject;
 
 import java.sql.SQLException;

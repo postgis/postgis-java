@@ -24,7 +24,7 @@
 package net.postgis.jts;
 
 
-import net.postgis.binary.ValueSetter;
+import net.postgis.jdbc.geometry.binary.ValueSetter;
 
 import org.locationtech.jts.geom.*;
 import net.postgis.tools.testutils.TestContainerController;

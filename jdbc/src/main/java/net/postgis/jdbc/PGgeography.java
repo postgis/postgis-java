@@ -23,7 +23,7 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.Geometry;
+import net.postgis.jdbc.geometry.Geometry;
 
 import java.sql.SQLException;
 

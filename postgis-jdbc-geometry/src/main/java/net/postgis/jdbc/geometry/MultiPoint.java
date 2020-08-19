@@ -1,8 +1,7 @@
 /*
- * PGbox3d.java
+ * MultiPoint.java
  * 
- * PostGIS extension for PostgreSQL JDBC driver - bounding box model
- * 
+ * PostGIS extension for PostgreSQL JDBC driver - geometry model
  * 
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
  * 
@@ -26,37 +25,27 @@
  * 
  */
 
-package net.postgis.jdbc;
-
-import net.postgis.jdbc.geometry.Point;
+package net.postgis.jdbc.geometry;
 
 import java.sql.SQLException;
 
-public class PGbox3d extends PGboxbase {
+public class MultiPoint extends PointComposedGeom {
     /* JDK 1.5 Serialization */
     private static final long serialVersionUID = 0x100;
 
-    public PGbox3d() {
-        super();
+    public MultiPoint() {
+        super(MULTIPOINT);
     }
 
-    public PGbox3d(Point llb, Point urt) {
-        super(llb, urt);
+    public MultiPoint(Point[] points) {
+        super(MULTIPOINT, points);
     }
 
-    public PGbox3d(String value) throws SQLException {
-        super(value);
+    public MultiPoint(String value) throws SQLException {
+        this(value, false);
     }
 
-    public String getPrefix() {
-        return ("BOX3D");
-    }
-
-    public String getPGtype() {
-        return ("box3d");
-    }
-
-    protected PGboxbase newInstance() {
-        return new PGbox3d();
+    protected MultiPoint(String value, boolean haveM) throws SQLException {
+        super(MULTIPOINT, value, haveM);
     }
 }

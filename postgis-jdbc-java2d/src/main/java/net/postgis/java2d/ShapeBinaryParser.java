@@ -26,11 +26,11 @@ package net.postgis.java2d;
 
 import java.awt.geom.GeneralPath;
 
-import net.postgis.Geometry;
-import net.postgis.binary.ByteGetter;
-import net.postgis.binary.ValueGetter;
-import net.postgis.binary.ByteGetter.BinaryByteGetter;
-import net.postgis.binary.ByteGetter.StringByteGetter;
+import net.postgis.jdbc.geometry.Geometry;
+import net.postgis.jdbc.geometry.binary.ByteGetter;
+import net.postgis.jdbc.geometry.binary.ValueGetter;
+import net.postgis.jdbc.geometry.binary.ByteGetter.BinaryByteGetter;
+import net.postgis.jdbc.geometry.binary.ByteGetter.StringByteGetter;
 
 /**
  * Parse binary representation of geometries. Currently, only text rep (hexed)
@@ -126,25 +126,25 @@ public class ShapeBinaryParser {
         }
 
         switch (realtype) {
-            case net.postgis.Geometry.POINT :
+            case net.postgis.jdbc.geometry.Geometry.POINT :
                 parsePoint(data, haveZ, haveM, path);
                 break;
-            case net.postgis.Geometry.LINESTRING :
+            case net.postgis.jdbc.geometry.Geometry.LINESTRING :
                 parseLineString(data, haveZ, haveM, path);
                 break;
-            case net.postgis.Geometry.POLYGON :
+            case net.postgis.jdbc.geometry.Geometry.POLYGON :
                 parsePolygon(data, haveZ, haveM, path);
                 break;
-            case net.postgis.Geometry.MULTIPOINT :
+            case net.postgis.jdbc.geometry.Geometry.MULTIPOINT :
                 parseMultiPoint(data, path);
                 break;
-            case net.postgis.Geometry.MULTILINESTRING :
+            case net.postgis.jdbc.geometry.Geometry.MULTILINESTRING :
                 parseMultiLineString(data, path);
                 break;
-            case net.postgis.Geometry.MULTIPOLYGON :
+            case net.postgis.jdbc.geometry.Geometry.MULTIPOLYGON :
                 parseMultiPolygon(data, path);
                 break;
-            case net.postgis.Geometry.GEOMETRYCOLLECTION :
+            case net.postgis.jdbc.geometry.Geometry.GEOMETRYCOLLECTION :
                 parseCollection(data, path);
                 break;
             default :
