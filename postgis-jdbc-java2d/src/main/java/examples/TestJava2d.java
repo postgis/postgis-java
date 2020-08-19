@@ -38,7 +38,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import org.postgis.java2d.Java2DWrapper;
+import net.postgis.java2d.Java2DWrapper;
 
 public class TestJava2d {
     private static final boolean DEBUG = true;

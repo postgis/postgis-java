@@ -3,8 +3,8 @@
 
     <test name="Postgis Geometry Tests">
         <classes>
-            <class name="org.postgis.DatatypesTest"/>
-            <class name="org.postgis.TokenizerTest"/>
+            <class name="net.postgis.DatatypesTest"/>
+            <class name="net.postgis.TokenizerTest"/>
         </classes>
     </test>
 

@@ -10,6 +10,6 @@
         <appender-ref ref="STDOUT" />
     </root>
 
-    <logger name="org.postgis.java2d" level="ERROR"/>
+    <logger name="net.postgis.java2d" level="ERROR"/>
 
 </configuration>

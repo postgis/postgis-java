@@ -10,14 +10,14 @@
     <test name="Postgis JDBC Integration Tests">
         <classes>
             <class name="net.postgis.tools.testutils.TestContainerController"/>
-            <class name="org.postgis.util.VersionUtilIT"/>
-            <class name="org.postgis.DatatypesAutoRegistrationTest"/>
-            <class name="org.postgis.BoxesTest"/>
-            <class name="org.postgis.EmptyGeometriesTest"/>
-            <class name="org.postgis.GeographyDatatypeTest"/>
-            <class name="org.postgis.ParserTest"/>
-            <class name="org.postgis.ServerTest"/>
-            <class name="org.postgis.VersionPrinter"/>
+            <class name="net.postgis.util.VersionUtilIT"/>
+            <class name="net.postgis.DatatypesAutoRegistrationTest"/>
+            <class name="net.postgis.BoxesTest"/>
+            <class name="net.postgis.EmptyGeometriesTest"/>
+            <class name="net.postgis.GeographyDatatypeTest"/>
+            <class name="net.postgis.ParserTest"/>
+            <class name="net.postgis.ServerTest"/>
+            <class name="net.postgis.VersionPrinter"/>
         </classes>
     </test>
 

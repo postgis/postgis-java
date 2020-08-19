@@ -10,7 +10,7 @@
     <test name="JTS Parser Integration Tests">
         <classes>
             <class name="net.postgis.tools.testutils.TestContainerController"/>
-            <class name="org.postgis.jts.JtsParserTest"/>
+            <class name="net.postgis.jts.JtsParserTest"/>
         </classes>
     </test>
 

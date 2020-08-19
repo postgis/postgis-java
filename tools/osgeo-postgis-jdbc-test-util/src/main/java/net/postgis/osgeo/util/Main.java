@@ -1,7 +1,7 @@
 package net.postgis.osgeo.util;
 
-import org.postgis.PGbox3d;
-import org.postgis.PGgeometry;
+import net.postgis.PGbox3d;
+import net.postgis.PGgeometry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

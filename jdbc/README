@@ -121,7 +121,7 @@ There are three ways to do this:
   extension for the PostGIS data types (geometry, box2d, box3d)
   within the pgjdbc driver.
 
-- You can use the org.postgis.DriverWrapper as replacement for the
+- You can use the net.postgis.DriverWrapper as replacement for the
   jdbc driver. This class wraps the PostGreSQL Driver to
   transparently add the PostGIS Object Classes. This method currently
   works both with J2EE DataSources, and with the older DriverManager
@@ -132,21 +132,21 @@ There are three ways to do this:
   "jdbc:postgresql_postGIS" in the jdbc URL, and make your
   environment aware of the new Driver class.
 
-  DriverManager users simply register org/postgis/DriverWrapper
+  DriverManager users simply register net/postgis/DriverWrapper
   instead of  (or in addition to) org.postgresql.Driver, see
   examples/TestBoxes.connect()  for an working code.
 
   DataSource users similarly have to configure their datasource to
   use the different class. The following works for jboss, put it in
-  your-ds.xml: <driver-class>org.postgis.DriverWrapper</driver-class>
+  your-ds.xml: <driver-class>net.postgis.DriverWrapper</driver-class>
 
 - Of course, you can also manually register the Datatypes on your
   pgjdbc connection. You have to cast your connection to PGConnection
   and then call:
 
-        pgconn.addDataType("geometry", "org.postgis.PGgeometry");
-        pgconn.addDataType("box3d", "org.postgis.PGbox3d");
-        pgconn.addDataType("box2d", "org.postgis.PGbox2d");
+        pgconn.addDataType("geometry", "net.postgis.PGgeometry");
+        pgconn.addDataType("box3d", "net.postgis.PGbox3d");
+        pgconn.addDataType("box2d", "net.postgis.PGbox2d");
 
   You may need to dig through some wrappers when running in an
   appserver. E. G. for JBoss, The datasource actually gives you a

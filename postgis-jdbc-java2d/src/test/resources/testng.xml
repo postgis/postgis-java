@@ -3,7 +3,7 @@
 
     <test name="PostGIS JDBC Java2D Tests">
         <classes>
-            <class name="org.postgis.java2d.SimpleJava2DWrapperTest"/>
+            <class name="net.postgis.java2d.SimpleJava2DWrapperTest"/>
         </classes>
     </test>
 
