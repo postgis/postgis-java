@@ -3,8 +3,8 @@
 
     <test name="Postgis JDBC Tests">
         <classes>
-            <class name="net.postgis.DatatypesTest"/>
-            <class name="net.postgis.SerializationTest"/>
+            <class name="net.postgis.jdbc.DatatypesTest"/>
+            <class name="net.postgis.jdbc.SerializationTest"/>
         </classes>
     </test>
 

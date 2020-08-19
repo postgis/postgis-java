@@ -26,8 +26,12 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
+import net.postgis.Geometry;
+import net.postgis.GeometryBuilder;
+import net.postgis.GeometryTokenizer;
+import net.postgis.Point;
 import org.postgresql.util.PGobject;
 
 import java.sql.SQLException;

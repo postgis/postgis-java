@@ -20,9 +20,11 @@
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
+import net.postgis.Geometry;
+import net.postgis.GeometryBuilder;
 import net.postgis.binary.BinaryParser;
 import org.postgresql.util.PGobject;
 

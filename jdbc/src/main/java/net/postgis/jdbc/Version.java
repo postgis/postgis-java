@@ -23,7 +23,7 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import java.io.IOException;

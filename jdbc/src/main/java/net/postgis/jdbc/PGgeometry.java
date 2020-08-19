@@ -20,26 +20,28 @@
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
+
+import net.postgis.Geometry;
 
 import java.sql.SQLException;
 
 
 /**
- * A PostgreSQL JDBC PGobject extension data type modeling the geography type.
+ * A PostgreSQL JDBC PGobject extension data type modeling the geometry type.
  *
  * @author Phillip Ross
  */
-public class PGgeography extends PGgeo {
+public class PGgeometry extends PGgeo {
 
-    private static final long serialVersionUID = 3796853960196603896L;
+    private static final long serialVersionUID = 4116907189503026815L;
 
 
     /** Instantiate with default state. */
-    public PGgeography() {
+    public PGgeometry() {
         super();
-        setType("geography");
+        setType("geometry");
     }
 
 
@@ -48,10 +50,9 @@ public class PGgeography extends PGgeo {
      *
      * @param geometry the geometry to instantiate with
      */
-    public PGgeography(final Geometry geometry) {
-        this();
-        this.geometry = geometry;
-        setType("geography");
+    public PGgeometry(final Geometry geometry) {
+        super(geometry);
+        setType("geometry");
     }
 
 
@@ -60,17 +61,16 @@ public class PGgeography extends PGgeo {
      *
      * @param value the value to instantiate with
      */
-    public PGgeography(final String value) throws SQLException {
-        this();
-        setValue(value);
-        setType("geography");
+    public PGgeometry(final String value) throws SQLException {
+        super(value);
+        setType("geometry");
     }
 
 
     /** {@inheritDoc} */
     @Override
     public Object clone() {
-        return new PGgeography(geometry);
+        return new PGgeometry(geometry);
     }
 
 

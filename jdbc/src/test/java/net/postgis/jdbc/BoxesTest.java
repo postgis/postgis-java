@@ -25,7 +25,7 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import net.postgis.tools.testutils.TestContainerController;
@@ -118,7 +118,7 @@ public class BoxesTest {
         Assert.assertNotNull(jdbcUsername);
         final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
         Assert.assertNotNull(jdbcPassword);
-        Class.forName("net.postgis.DriverWrapper");
+        Class.forName("net.postgis.jdbc.DriverWrapper");
         connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
     }
 

@@ -1,13 +1,14 @@
 /*
- * ServerTest.java
- *
- * PostGIS extension for PostgreSQL JDBC driver - example and test classes
- *
+ * PGbox3d.java
+ * 
+ * PostGIS extension for PostgreSQL JDBC driver - bounding box model
+ * 
+ * 
  * (C) 2004 Paul Ramsey, pramsey@refractions.net
- *
+ * 
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
- *
- * (C) 2017 Phillip Ross, phillip.w.g.ross@gmail.com
+ * 
+ * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,33 +23,40 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
+ * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
+import net.postgis.Point;
 
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import java.sql.SQLException;
 
-import java.io.ByteArrayOutputStream;
-import java.io.NotSerializableException;
-import java.io.ObjectOutputStream;
+public class PGbox3d extends PGboxbase {
+    /* JDK 1.5 Serialization */
+    private static final long serialVersionUID = 0x100;
 
-
-public class SerializationTest {
-
-
-    @Test
-    public void serializationCheckPGgeometry() throws Exception {
-        try {
-            new ObjectOutputStream(new ByteArrayOutputStream())
-                    .writeObject(new PGgeometry("MULTIPOLYGON(((1 1,1 2,2 1,1 1)))"));
-        }
-        catch (NotSerializableException ex) {
-            Assert.fail("serialization of PGgeometry failed: " + ex);
-        }
+    public PGbox3d() {
+        super();
     }
 
+    public PGbox3d(Point llb, Point urt) {
+        super(llb, urt);
+    }
 
+    public PGbox3d(String value) throws SQLException {
+        super(value);
+    }
+
+    public String getPrefix() {
+        return ("BOX3D");
+    }
+
+    public String getPGtype() {
+        return ("box3d");
+    }
+
+    protected PGboxbase newInstance() {
+        return new PGbox3d();
+    }
 }

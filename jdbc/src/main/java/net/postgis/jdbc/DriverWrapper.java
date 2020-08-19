@@ -18,7 +18,7 @@
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import java.sql.Connection;
@@ -50,7 +50,7 @@ import org.postgresql.PGConnection;
  * following works for jboss:
  * 
  * <code>
- * &lt;driver-class&gt;net.postgis.DriverWrapper&lt;/driver-class&gt;
+ * &lt;driver-class&gt;net.postgis.jdbc.DriverWrapper&lt;/driver-class&gt;
  * </code>
  * If you don't like or want to use the DriverWrapper, you have two
  * alternatives, see the README file.
@@ -70,7 +70,7 @@ import org.postgresql.PGConnection;
 public class DriverWrapper extends Driver {
 
     /** The static logger instance. */
-    protected static final Logger logger = Logger.getLogger("net.postgis.DriverWrapper");
+    protected static final Logger logger = Logger.getLogger("net.postgis.jdbc.DriverWrapper");
     
     public static final String POSTGRES_PROTOCOL = "jdbc:postgresql:";
     public static final String POSTGIS_PROTOCOL = "jdbc:postgresql_postGIS:";
@@ -134,7 +134,7 @@ public class DriverWrapper extends Driver {
 
     private static TypesAdder loadTypesAdder(final String version) throws SQLException {
         try {
-            Class klass = Class.forName("net.postgis.DriverWrapper$TypesAdder" + version);
+            Class klass = Class.forName("net.postgis.jdbc.DriverWrapper$TypesAdder" + version);
             return (TypesAdder) klass.newInstance();
         } catch (Exception e) {
             throw new SQLException("Cannot create TypesAdder instance! " + e.getMessage());
@@ -298,29 +298,29 @@ public class DriverWrapper extends Driver {
         @Override
         public void addGeometries(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("public.geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.PGgeometry.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("public.geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.jdbc.PGgeometry.class);
 
-            pgconn.addDataType("geography", net.postgis.PGgeography.class);
-            pgconn.addDataType("public.geography", net.postgis.PGgeography.class);
-            pgconn.addDataType("\"public\".\"geography\"", net.postgis.PGgeography.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeography.class);
+            pgconn.addDataType("public.geography", net.postgis.jdbc.PGgeography.class);
+            pgconn.addDataType("\"public\".\"geography\"", net.postgis.jdbc.PGgeography.class);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addBoxen(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("box3d", net.postgis.PGbox3d.class);
-            pgconn.addDataType("box2d", net.postgis.PGbox2d.class);
+            pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+            pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addBinaryGeometries(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometryLW.class);
-            pgconn.addDataType("geography", net.postgis.PGgeographyLW.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometryLW.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeographyLW.class);
         }
     }
 
@@ -332,29 +332,29 @@ public class DriverWrapper extends Driver {
         @Override
         public void addGeometries(final Connection conn) throws SQLException {
             org.postgresql.PGConnection pgconn = (org.postgresql.PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("public.geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.PGgeometry.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("public.geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.jdbc.PGgeometry.class);
 
-            pgconn.addDataType("geography", net.postgis.PGgeography.class);
-            pgconn.addDataType("public.geography", net.postgis.PGgeography.class);
-            pgconn.addDataType("\"public\".\"geography\"", net.postgis.PGgeography.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeography.class);
+            pgconn.addDataType("public.geography", net.postgis.jdbc.PGgeography.class);
+            pgconn.addDataType("\"public\".\"geography\"", net.postgis.jdbc.PGgeography.class);
         }
 
         /** {@inheritDoc} */
         @Override
 		public void addBoxen(final Connection conn) throws SQLException {
             org.postgresql.PGConnection pgconn = (org.postgresql.PGConnection) conn;
-            pgconn.addDataType("box3d", net.postgis.PGbox3d.class);
-            pgconn.addDataType("box2d", net.postgis.PGbox2d.class);
+            pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+            pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addBinaryGeometries(final Connection conn) throws SQLException {
             org.postgresql.PGConnection pgconn = (org.postgresql.PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometryLW.class);
-            pgconn.addDataType("geography", net.postgis.PGgeographyLW.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometryLW.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeographyLW.class);
         }
     }
 
@@ -366,29 +366,29 @@ public class DriverWrapper extends Driver {
         @Override
         public void addGeometries(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("public.geometry", net.postgis.PGgeometry.class);
-            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.PGgeometry.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("public.geometry", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geometry\"", net.postgis.jdbc.PGgeometry.class);
 
-            pgconn.addDataType("geography", net.postgis.PGgeometry.class);
-            pgconn.addDataType("public.geography", net.postgis.PGgeometry.class);
-            pgconn.addDataType("\"public\".\"geography\"", net.postgis.PGgeometry.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("public.geography", net.postgis.jdbc.PGgeometry.class);
+            pgconn.addDataType("\"public\".\"geography\"", net.postgis.jdbc.PGgeometry.class);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addBoxen(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("box3d", net.postgis.PGbox3d.class);
-            pgconn.addDataType("box2d", net.postgis.PGbox2d.class);
+            pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+            pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
         }
 
         /** {@inheritDoc} */
         @Override
         public void addBinaryGeometries(final Connection conn) throws SQLException {
             PGConnection pgconn = (PGConnection) conn;
-            pgconn.addDataType("geometry", net.postgis.PGgeometryLW.class);
-            pgconn.addDataType("geography", net.postgis.PGgeographyLW.class);
+            pgconn.addDataType("geometry", net.postgis.jdbc.PGgeometryLW.class);
+            pgconn.addDataType("geography", net.postgis.jdbc.PGgeographyLW.class);
         }
     }
 

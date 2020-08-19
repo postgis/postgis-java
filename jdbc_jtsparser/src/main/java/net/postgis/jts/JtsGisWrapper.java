@@ -26,6 +26,8 @@
 
 package net.postgis.jts;
 
+import net.postgis.jdbc.PGbox2d;
+import net.postgis.jdbc.PGbox3d;
 import org.postgresql.Driver;
 import org.postgresql.PGConnection;
 
@@ -92,8 +94,8 @@ public class JtsGisWrapper extends Driver {
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
         pgconn.addDataType("geometry", net.postgis.jts.JtsGeometry.class);
-        pgconn.addDataType("box3d", net.postgis.PGbox3d.class);
-        pgconn.addDataType("box2d", net.postgis.PGbox2d.class);
+        pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+        pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
     }
 
     /**

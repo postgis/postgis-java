@@ -25,7 +25,7 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import org.slf4j.Logger;

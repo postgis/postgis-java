@@ -21,7 +21,7 @@
  *
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import net.postgis.tools.testutils.TestContainerController;
@@ -47,9 +47,9 @@ public class EmptyGeometriesTest {
 
     private static final Logger logger = LoggerFactory.getLogger(EmptyGeometriesTest.class);
 
-    private static final String DRIVER_WRAPPER_CLASS_NAME = "net.postgis.DriverWrapper";
+    private static final String DRIVER_WRAPPER_CLASS_NAME = "net.postgis.jdbc.DriverWrapper";
 
-    private static final String DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME = "net.postgis.DriverWrapperAutoprobe";
+    private static final String DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME = "net.postgis.jdbc.DriverWrapperAutoprobe";
 
 
     public static final String[] geometriesToTest = new String[] {

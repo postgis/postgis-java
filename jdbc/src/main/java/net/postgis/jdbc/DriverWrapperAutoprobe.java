@@ -23,7 +23,7 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 import org.postgresql.Driver;
 
@@ -47,7 +47,7 @@ import java.util.logging.Level;
  * access incompatible PostGIS versions that reside in other schemas.
  * 
  * For usage notes, see DriverWrapper class, but use "jdbc:postgresql_autogis:"
- * as JDBC url prefix and net.postgis.DriverWrapperAutoprobe as driver class.
+ * as JDBC url prefix and net.postgis.jdbc.DriverWrapperAutoprobe as driver class.
  * 
  * @author {@literal Markus Schaber <markus.schaber@logix-tt.com>}
  * @see DriverWrapper

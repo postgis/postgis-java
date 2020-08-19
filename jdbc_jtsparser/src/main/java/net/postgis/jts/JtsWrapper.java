@@ -58,7 +58,7 @@ import org.postgresql.PGConnection;
  */
 public class JtsWrapper extends Driver {
 
-    protected static final Logger logger = Logger.getLogger("net.postgis.DriverWrapper");
+    protected static final Logger logger = Logger.getLogger("net.postgis.jdbc.DriverWrapper");
 
     private static final String POSTGRES_PROTOCOL = "jdbc:postgresql:";
     private static final String POSTGIS_PROTOCOL = "jdbc:postgres_jts:";

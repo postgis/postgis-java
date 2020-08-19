@@ -6,5 +6,5 @@ module net.postgis.jdbc {
 
   requires net.postgis.geometry;
 
-  exports net.postgis;
+  exports net.postgis.jdbc;
 }

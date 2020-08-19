@@ -16,7 +16,7 @@
  * (C) 2020 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
 import net.postgis.tools.testutils.TestContainerController;
@@ -127,7 +127,7 @@ public class GeographyDatatypeTest {
         Assert.assertNotNull(jdbcUsername);
         final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
         Assert.assertNotNull(jdbcPassword);
-        Class.forName("net.postgis.DriverWrapperLW");
+        Class.forName("net.postgis.jdbc.DriverWrapperLW");
         connection = DriverManager.getConnection(jdbcUrl, jdbcUsername, jdbcPassword);
         connectionLW = DriverManager.getConnection(jdbcUrlLW, jdbcUsername, jdbcPassword);
     }

@@ -23,7 +23,7 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 import org.postgresql.Driver;
 
@@ -42,7 +42,7 @@ import java.util.logging.Level;
  * representation, and thus only works against PostGIS 1.x servers and newer.
  * 
  * For usage notes, see DriverWrapper class, but use "jdbc:postgresql_lwgis:" as
- * JDBC url prefix and net.postgis.DriverWrapperLW as driver class.
+ * JDBC url prefix and net.postgis.jdbc.DriverWrapperLW as driver class.
  * 
  * @author {@literal Markus Schaber <markus.schaber@logix-tt.com>}
  * @see DriverWrapper

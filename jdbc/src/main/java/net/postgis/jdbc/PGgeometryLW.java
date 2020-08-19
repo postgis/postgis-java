@@ -18,9 +18,10 @@
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
+import net.postgis.Geometry;
 import net.postgis.binary.BinaryWriter;
 
 import java.sql.SQLException;

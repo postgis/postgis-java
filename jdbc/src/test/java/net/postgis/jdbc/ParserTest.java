@@ -25,9 +25,11 @@
  * 
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
+import net.postgis.Geometry;
+import net.postgis.GeometryBuilder;
 import net.postgis.binary.BinaryParser;
 import net.postgis.binary.BinaryWriter;
 import net.postgis.binary.ValueSetter;
@@ -55,9 +57,9 @@ public class ParserTest {
 
     private static final Logger logger = LoggerFactory.getLogger(ParserTest.class);
 
-    private static final String DRIVER_WRAPPER_CLASS_NAME = "net.postgis.DriverWrapper";
+    private static final String DRIVER_WRAPPER_CLASS_NAME = "net.postgis.jdbc.DriverWrapper";
 
-    private static final String DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME = "net.postgis.DriverWrapperAutoprobe";
+    private static final String DRIVER_WRAPPER_AUTOPROBE_CLASS_NAME = "net.postgis.jdbc.DriverWrapperAutoprobe";
 
     /** The srid we use for the srid tests */
     public static final int SRID = 4326;

@@ -26,12 +26,13 @@
 
 package net.postgis.java2d;
 
+import net.postgis.jdbc.PGbox2d;
+import net.postgis.jdbc.PGbox3d;
 import org.postgresql.Driver;
 import org.postgresql.PGConnection;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -98,8 +99,8 @@ public class Java2DWrapper extends Driver {
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
         pgconn.addDataType("geometry", PGShapeGeometry.class);
-        pgconn.addDataType("box3d", net.postgis.PGbox3d.class);
-        pgconn.addDataType("box2d", net.postgis.PGbox2d.class);
+        pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+        pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
     }
 
 

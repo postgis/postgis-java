@@ -25,9 +25,9 @@
 
 package examples;
 
-import net.postgis.PGbox2d;
-import net.postgis.PGbox3d;
-import net.postgis.PGgeometry;
+import net.postgis.jdbc.PGbox2d;
+import net.postgis.jdbc.PGbox3d;
+import net.postgis.jdbc.PGgeometry;
 import org.postgresql.Driver;
 import org.postgresql.util.PGobject;
 

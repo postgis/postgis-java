@@ -13,15 +13,17 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
+ * (C) 2004 Paul Ramsey, pramsey@refractions.net
+ *
  * (C) 2005 Markus Schaber, markus.schaber@logix-tt.com
  *
  * (C) 2015 Phillip Ross, phillip.w.g.ross@gmail.com
  */
 
-package net.postgis;
+package net.postgis.jdbc;
 
 
-import net.postgis.binary.BinaryWriter;
+import net.postgis.Geometry;
 
 import java.sql.SQLException;
 
@@ -29,31 +31,29 @@ import java.sql.SQLException;
 /**
  * A PostgreSQL JDBC PGobject extension data type modeling the geography type.
  *
- * The hex-encoded EWKB format is used to communicate with the backend, which is much more efficient,
- * but only works with Lwgeom enabled PostGIS (1.0.0 and up).
- *
  * @author Phillip Ross
  */
-public class PGgeographyLW extends PGgeography {
+public class PGgeography extends PGgeo {
 
-    private static final long serialVersionUID = 7717856818804158022L;
-
-    /** The binary writer to be used for serializing geometry to a PGobject value. */
-    BinaryWriter bw = new BinaryWriter();
+    private static final long serialVersionUID = 3796853960196603896L;
 
 
     /** Instantiate with default state. */
-    public PGgeographyLW() {
+    public PGgeography() {
         super();
+        setType("geography");
     }
+
 
     /**
      * Instantiate with the specified state.
      *
      * @param geometry the geometry to instantiate with
      */
-    public PGgeographyLW(final Geometry geometry) {
-        super(geometry);
+    public PGgeography(final Geometry geometry) {
+        this();
+        this.geometry = geometry;
+        setType("geography");
     }
 
 
@@ -62,22 +62,17 @@ public class PGgeographyLW extends PGgeography {
      *
      * @param value the value to instantiate with
      */
-    public PGgeographyLW(final String value) throws SQLException {
-        super(value);
-    }
-
-
-    /** {@inheritDoc} */
-    @Override
-    public String getValue() {
-        return bw.writeHexed(geometry);
+    public PGgeography(final String value) throws SQLException {
+        this();
+        setValue(value);
+        setType("geography");
     }
 
 
     /** {@inheritDoc} */
     @Override
     public Object clone() {
-        return new PGgeographyLW(geometry);
+        return new PGgeography(geometry);
     }
 
 
