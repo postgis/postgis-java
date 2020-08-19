@@ -24,10 +24,8 @@
  * 
  */
 
-package net.postgis.java2d;
+package net.postgis.jdbc.java2d;
 
-import net.postgis.jdbc.PGbox2d;
-import net.postgis.jdbc.PGbox3d;
 import org.postgresql.Driver;
 import org.postgresql.PGConnection;
 

@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  */
-package net.postgis.java2d;
+package net.postgis.jdbc.java2d;
 
 
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class SimpleJava2DWrapperTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleJava2DWrapperTest.class);
 
-    private static final String JAVA2D_WRAPPER_CLASS_NAME = "net.postgis.java2d.Java2DWrapper";
+    private static final String JAVA2D_WRAPPER_CLASS_NAME = "net.postgis.jdbc.java2d.Java2DWrapper";
 
 
     @Test

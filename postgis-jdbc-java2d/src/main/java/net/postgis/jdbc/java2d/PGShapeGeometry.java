@@ -23,7 +23,7 @@
  * 
  */
 
-package net.postgis.java2d;
+package net.postgis.jdbc.java2d;
 
 import java.awt.Rectangle;
 import java.awt.Shape;
