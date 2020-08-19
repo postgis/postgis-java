@@ -5,4 +5,5 @@ module net.postgis.geometry {
 
   exports net.postgis;
   exports net.postgis.binary;
+  exports net.postgis.util;
 }

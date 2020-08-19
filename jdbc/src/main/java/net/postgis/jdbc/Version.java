@@ -34,7 +34,7 @@ import java.util.Properties;
 public class Version {
 
     /** We read our version information from this resource... */
-    private static final String RESOURCE_FILENAME = "net/postgis/version.properties";
+    private static final String RESOURCE_FILENAME = "net/postgis/jdbc/version.properties";
 
     private static final String VERSION_PROPERTY_NAME = "VERSION";
 
