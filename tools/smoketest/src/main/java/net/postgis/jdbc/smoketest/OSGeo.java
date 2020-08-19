@@ -1,4 +1,4 @@
-package net.postgis.osgeo.util;
+package net.postgis.jdbc.smoketest;
 
 import net.postgis.jdbc.PGbox3d;
 import net.postgis.jdbc.PGgeometry;
@@ -21,9 +21,9 @@ import java.util.UUID;
  *
  * @author Phillip Ross
  */
-public class Main {
+public class OSGeo {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger logger = LoggerFactory.getLogger(OSGeo.class);
 
     private static final String DEFAULT_TEST_TABLE_PREFIX = "SMOKE_TEST";
 
@@ -36,10 +36,10 @@ public class Main {
     private String testTableName = null;
 
 
-    public Main(final String jdbcUrl,
-                final String jdbcUsername,
-                final String jdbcPassword,
-                final String testTablePrefix) {
+    public OSGeo(final String jdbcUrl,
+                 final String jdbcUsername,
+                 final String jdbcPassword,
+                 final String testTablePrefix) {
         try {
             Objects.requireNonNull(jdbcUrl, "A JDBC URL must be specified");
             Objects.requireNonNull(jdbcUsername, "A database username must be specified.");
@@ -226,11 +226,11 @@ public class Main {
             if (args.length > 3) {
                 testTablePrefix = args[3];
             }
-            new Main(jdbcUrl, jdbcUsername, jdbcPassword, testTablePrefix);
+            new OSGeo(jdbcUrl, jdbcUsername, jdbcPassword, testTablePrefix);
         }
     }
 
 
 }
 
-// java -classpath ~/.m2/repository/net/postgis/postgis-jdbc/2.2.1-SNAPSHOT/postgis-jdbc-2.2.1-SNAPSHOT.jar:target/osgeo-postgis-jdbc-test-util-0.0.1-SNAPSHOT.jar net.postgis.osgeo.util.Main jdbc:postgresql://db01:5432/postgis1 postgis1 postgis1 smoke_test
+// java -classpath ~/.m2/repository/net/postgis/postgis-jdbc/2.2.1-SNAPSHOT/postgis-jdbc-2.2.1-SNAPSHOT.jar:target/smoketest-0.0.1-SNAPSHOT.jar net.postgis.osgeo.util.Main jdbc:postgresql://db01:5432/postgis1 postgis1 postgis1 smoke_test

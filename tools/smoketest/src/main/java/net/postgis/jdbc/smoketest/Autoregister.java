@@ -23,7 +23,7 @@
  * 
  */
 
-package examples;
+package net.postgis.jdbc.smoketest;
 
 import net.postgis.jdbc.PGbox2d;
 import net.postgis.jdbc.PGbox3d;
@@ -44,7 +44,7 @@ import java.sql.Statement;
  * versions. (But it will work fine against older servers.) It also checks for
  * postgis version to know whether box2d is available.
  */
-public class TestAutoregister {
+public class Autoregister {
 
     public static void main(String[] args) {
         String dburl = null;

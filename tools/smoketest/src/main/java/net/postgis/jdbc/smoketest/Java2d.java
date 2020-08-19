@@ -25,7 +25,7 @@
  * 
  */
 
-package examples;
+package net.postgis.jdbc.smoketest;
 
 import java.awt.*;
 import java.awt.event.WindowEvent;
@@ -40,7 +40,7 @@ import java.util.ArrayList;
 
 import net.postgis.java2d.Java2DWrapper;
 
-public class TestJava2d {
+public class Java2d {
     private static final boolean DEBUG = true;
 
     public static final Shape[] SHAPEARRAY = new Shape[0];

@@ -1,4 +1,4 @@
-package net.postgis.osgeo.util;
+package net.postgis.jdbc.smoketest;
 
 import net.postgis.tools.testutils.TestContainerController;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class UtilTest {
         final String jdbcUsername = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_USER_PARAM_NAME);
         Assert.assertNotNull(jdbcUsername);
         final String jdbcPassword = (String)ctx.getAttribute(TestContainerController.TEST_CONTAINER_ENV_PW_PARAM_NAME);
-        Main.main(new String[] {jdbcUrl, jdbcUsername, jdbcPassword});
+        OSGeo.main(new String[] {jdbcUrl, jdbcUsername, jdbcPassword});
     }
 
 

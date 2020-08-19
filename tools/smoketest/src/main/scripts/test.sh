@@ -10,7 +10,7 @@ DB_PASSWORD=${4}               # This should be the database password to be used
 # points to a jar file in a local maven repository.
 MVN_REPO_LOCATION=~/.m2/repository
 GROUP_ID_DIR=/net/postgis
-TEST_UTIL_JAR=${MVN_REPO_LOCATION}${GROUP_ID_DIR}/osgeo-postgis-jdbc-test-util/0.0.1-SNAPSHOT/osgeo-postgis-jdbc-test-util-0.0.1-SNAPSHOT.jar
+TEST_UTIL_JAR=${MVN_REPO_LOCATION}${GROUP_ID_DIR}/smoketest/0.0.1-SNAPSHOT/smoketest-0.0.1-SNAPSHOT.jar
 
 # The following variables are derived from the variables above.
 # They are used to invoke the JVM with the test utility.
@@ -19,6 +19,6 @@ JDBC_USERNAME=${DB_USERNAME}
 JDBC_PASSWORD=${DB_PASSWORD}
 
 # The exactly commandline used to invoke the utility is output before it is actually invoked.
-echo "==> java -classpath ${TEST_JAR}:${TEST_UTIL_JAR} net.postgis.osgeo.util.Main ${JDBC_URL} ${JDBC_USERNAME} ${JDBC_PASSWORD}"
+echo "==> java -classpath ${TEST_JAR}:${TEST_UTIL_JAR} net.postgis.jdbc.smoketest.OSGeo ${JDBC_URL} ${JDBC_USERNAME} ${JDBC_PASSWORD}"
 
 java -classpath ${TEST_JAR}:${TEST_UTIL_JAR} net.postgis.osgeo.util.Main ${JDBC_URL} ${JDBC_USERNAME} ${JDBC_PASSWORD}

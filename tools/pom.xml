@@ -16,7 +16,7 @@
     <description>Miscellaneous tools and utilities</description>
 
     <modules>
-        <module>osgeo-postgis-jdbc-test-util</module>
+        <module>smoketest</module>
         <module>test-utils</module>
     </modules>
 
