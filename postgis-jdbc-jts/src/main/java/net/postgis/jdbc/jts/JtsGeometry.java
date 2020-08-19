@@ -24,7 +24,7 @@
  * 
  */
 
-package net.postgis.jts;
+package net.postgis.jdbc.jts;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-module net.postgis.jdbc.jtsparser {
+module net.postgis.jdbc.jts {
   requires java.datatransfer;
   requires java.desktop;
   requires java.logging;

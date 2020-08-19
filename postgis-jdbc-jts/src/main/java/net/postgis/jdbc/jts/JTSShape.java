@@ -23,7 +23,7 @@
  *
  */
 
-package net.postgis.jts;
+package net.postgis.jdbc.jts;
 
 import org.locationtech.jts.geom.*;
 import org.locationtech.jts.geom.Point;

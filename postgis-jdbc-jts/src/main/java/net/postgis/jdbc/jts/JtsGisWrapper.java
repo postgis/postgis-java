@@ -1,5 +1,5 @@
 /*
- * JtsWrapper.java
+ * JtsGisWrapper.java
  * 
  * Allows transparent usage of JTS Geometry classes via PostgreSQL JDBC driver
  * connected to a PostGIS enabled PostgreSQL server.
@@ -24,61 +24,50 @@
  * 
  */
 
-package net.postgis.jts;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+package net.postgis.jdbc.jts;
 
 import org.postgresql.Driver;
 import org.postgresql.PGConnection;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Properties;
+
 /**
- * JtsWrapper
+ * JtsGisWrapper
  * 
  * Wraps the PostGreSQL Driver to add the JTS/PostGIS Object Classes.
  * 
  * This method currently works with J2EE DataSource implementations, and with
  * DriverManager framework.
  * 
- * Simply replace the "jdbc:postgresql:" with a "jdbc:postgres_jts:" in the jdbc
- * URL.
- * 
- * When using the drivermanager, you need to initialize JtsWrapper instead of
- * (or in addition to) org.postgresql.Driver. When using a J2EE DataSource
- * implementation, set the driver class property in the datasource config, the
- * following works for jboss:
- * 
- * &lt;driver-class&gt;net.postgis.jts.PostGisWrapper&lt;/driver-class&gt;
+ * Simply replace the "jdbc:postgresql:" with a "jdbc:postgresql_JTS" in the
+ * jdbc URL.
  * 
  * @author markus.schaber@logix-tt.com
  * 
  */
-public class JtsWrapper extends Driver {
-
-    protected static final Logger logger = Logger.getLogger("net.postgis.jdbc.DriverWrapper");
+public class JtsGisWrapper extends Driver {
 
     private static final String POSTGRES_PROTOCOL = "jdbc:postgresql:";
-    private static final String POSTGIS_PROTOCOL = "jdbc:postgres_jts:";
+    private static final String POSTGIS_PROTOCOL = "jdbc:postgresql_JTS:";
     public static final String REVISION = "$Revision$";
 
-    public JtsWrapper() {
+    public JtsGisWrapper() {
         super();
     }
 
     static {
         try {
-            // Try to register ourself to the DriverManager
-            java.sql.DriverManager.registerDriver(new JtsWrapper());
+            // Analogy to org.postgresql.Driver
+            java.sql.DriverManager.registerDriver(new JtsGisWrapper());
         } catch (SQLException e) {
-            logger.log(Level.WARNING, "Error registering PostgreSQL Jts Wrapper Driver", e);
+            e.printStackTrace();
         }
     }
 
     /**
-     * Creates a postgresql connection, and then adds the JTS GIS data types to
+     * Creates a postgresql connection, and then adds the PostGIS data types to
      * it calling addpgtypes()
      * 
      * @param url the URL of the database to connect to
@@ -92,7 +81,7 @@ public class JtsWrapper extends Driver {
     public java.sql.Connection connect(String url, Properties info) throws SQLException {
         url = mangleURL(url);
         Connection result = super.connect(url, info);
-        addGISTypes((PGConnection)result);
+        addGISTypes((PGConnection) result);
         return result;
     }
 
@@ -102,7 +91,9 @@ public class JtsWrapper extends Driver {
      * @throws SQLException when an SQLException occurs
      */
     public static void addGISTypes(PGConnection pgconn) throws SQLException {
-        pgconn.addDataType("geometry", net.postgis.jts.JtsGeometry.class);
+        pgconn.addDataType("geometry", net.postgis.jdbc.jts.JtsGeometry.class);
+        pgconn.addDataType("box3d", net.postgis.jdbc.PGbox3d.class);
+        pgconn.addDataType("box2d", net.postgis.jdbc.PGbox2d.class);
     }
 
     /**
@@ -121,7 +112,10 @@ public class JtsWrapper extends Driver {
     }
 
     /**
-     * Check whether the driver thinks he can handle the given URL.
+     * Returns true if the driver thinks it can open a connection to the given
+     * URL. Typically, drivers will return true if they understand the
+     * subprotocol specified in the URL and false if they don't. Our protocols
+     * start with jdbc:postgresql_postGIS:
      * 
      * @see java.sql.Driver#acceptsURL
      * @param url the URL of the driver

@@ -21,7 +21,7 @@
  *
  */
 
-package net.postgis.jts;
+package net.postgis.jdbc.jts;
 
 
 import net.postgis.jdbc.geometry.binary.ValueSetter;
@@ -51,7 +51,7 @@ public class JtsParserTest {
 
     private static final Logger logger = LoggerFactory.getLogger(JtsParserTest.class);
 
-    private static final String JTS_WRAPPER_CLASS_NAME = "net.postgis.jts.JtsWrapper";
+    private static final String JTS_WRAPPER_CLASS_NAME = "net.postgis.jdbc.jts.JtsWrapper";
 
     /** The srid we use for the srid tests */
     public static final int SRID = 4326;

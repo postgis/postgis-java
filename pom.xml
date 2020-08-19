@@ -68,11 +68,11 @@
     </mailingLists>
 
     <modules>
-        <module>tools</module>
-        <module>postgis-jdbc-geometry</module>
         <module>postgis-jdbc</module>
-        <module>jdbc_jtsparser</module>
+        <module>postgis-jdbc-geometry</module>
         <module>postgis-jdbc-java2d</module>
+        <module>postgis-jdbc-jts</module>
+        <module>tools</module>
     </modules>
 
     <scm>
