@@ -1,4 +1,4 @@
-module net.postgis.geometry {
+module net.postgis.jdbc.geometry {
   requires java.sql;
 
   requires org.slf4j;
