@@ -100,7 +100,7 @@
         <checkstyle.skip>true</checkstyle.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.min.version>9</java.min.version>
+        <java.min.version>8</java.min.version>
         <maven.min.version>3.6</maven.min.version>
         <maven.test.skip>false</maven.test.skip>
         <surefire.forkCount>1</surefire.forkCount>
