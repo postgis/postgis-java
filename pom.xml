@@ -68,11 +68,11 @@
     </mailingLists>
 
     <modules>
-        <module>tools</module>
-        <module>postgis-geometry</module>
-        <module>jdbc</module>
-        <module>jdbc_jtsparser</module>
+        <module>postgis-jdbc</module>
+        <module>postgis-jdbc-geometry</module>
         <module>postgis-jdbc-java2d</module>
+        <module>postgis-jdbc-jts</module>
+        <module>tools</module>
     </modules>
 
     <scm>
@@ -100,7 +100,7 @@
         <checkstyle.skip>true</checkstyle.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.min.version>1.8</java.min.version>
+        <java.min.version>8</java.min.version>
         <maven.min.version>3.6</maven.min.version>
         <maven.test.skip>false</maven.test.skip>
         <surefire.forkCount>1</surefire.forkCount>

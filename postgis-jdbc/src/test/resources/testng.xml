@@ -1,0 +1,11 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Postgis JDBC Extensions Test Suite" verbose="1">
+
+    <test name="Postgis JDBC Tests">
+        <classes>
+            <class name="net.postgis.jdbc.DatatypesTest"/>
+            <class name="net.postgis.jdbc.SerializationTest"/>
+        </classes>
+    </test>
+
+</suite>

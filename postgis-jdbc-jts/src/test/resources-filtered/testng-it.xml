@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="JTS Parser Integration Test Suite" verbose="1">
+
+    <parameter name="test.container.image-name" value="${test.container.image}"/>
+    <parameter name="test.container.port" value="${test.db.port}"/>
+    <parameter name="test.container.env.user" value="${test.db.username}"/>
+    <parameter name="test.container.env.password" value="${test.db.password}"/>
+    <parameter name="test.container.env.db" value="${test.db.name}"/>
+
+    <test name="JTS Parser Integration Tests">
+        <classes>
+            <class name="net.postgis.tools.testutils.TestContainerController"/>
+            <class name="net.postgis.jdbc.jts.JtsParserTest"/>
+        </classes>
+    </test>
+
+</suite>
