@@ -114,13 +114,13 @@
         <test.db.name>postgis1</test.db.name>
         <test.db.port>5432</test.db.port>
         <!-- Plugin versioning -->
-        <build-helper-maven-plugin.version>3.1.0</build-helper-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
         <directory-maven-plugin.version>0.3.1</directory-maven-plugin.version>
-        <download-maven-plugin.version>1.5.0</download-maven-plugin.version>
-        <exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
-        <git-commit-id-plugin.version>4.0.0</git-commit-id-plugin.version>
+        <download-maven-plugin.version>1.6.0</download-maven-plugin.version>
+        <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
+        <git-commit-id-plugin.version>4.0.2</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
-        <maven-archetype-plugin.version>3.1.2</maven-archetype-plugin.version>
+        <maven-archetype-plugin.version>3.2.0</maven-archetype-plugin.version>
         <maven-checkstyle-plugin.version>3.1.1</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -137,21 +137,21 @@
         <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>3.0.0</maven-jxr-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
-        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-        <maven-site-plugin.version>3.9.0</maven-site-plugin.version>
-        <maven-shade-plugin.version>3.2.2</maven-shade-plugin.version>
+        <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+        <maven-site-plugin.version>3.9.1</maven-site-plugin.version>
+        <maven-shade-plugin.version>3.2.4</maven-shade-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
-        <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
+        <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
+        <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <!-- Dependency versions -->
-        <dependency.checkstyle.version>8.31</dependency.checkstyle.version>
-        <dependency.jts-version.version>1.16.1</dependency.jts-version.version>
+        <dependency.checkstyle.version>8.36</dependency.checkstyle.version>
+        <dependency.jts-version.version>1.17.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.3</dependency.logback.version>
-        <dependency.postgresql-jdbc.version>42.2.11</dependency.postgresql-jdbc.version>
+        <dependency.postgresql-jdbc.version>42.2.16</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.30</dependency.slfj.version>
         <dependency.spatial4j.version>0.7</dependency.spatial4j.version>
-        <dependency.testcontainers.version>1.13.0</dependency.testcontainers.version>
+        <dependency.testcontainers.version>1.14.3</dependency.testcontainers.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
 
