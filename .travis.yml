@@ -1,10 +1,11 @@
-dist: xenial
+dist: focal
 language: java
 services: docker
 
 install:
-  - source .travis/install-zulu.sh
-  - source .travis/install-maven.sh
+  - source .travis-ci/install-gpg.sh
+  - source .travis-ci/install-zulu8.sh
+  - source .travis-ci/install-maven.sh
 
 script:
-  - mvn -U -V clean install
+  - mvn -s settings.xml -U -V -Pgpg,release-sign-artifacts help:active-profiles clean install site site:stage

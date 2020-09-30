@@ -27,21 +27,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/resources</directory>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources-filtered</directory>
-                <filtering>true</filtering>
-            </testResource>
-        </testResources>
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -51,18 +36,6 @@
                             <Automatic-Module-Name>net.postgis.jdbc.geometry</Automatic-Module-Name>
                         </manifestEntries>
                     </archive>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>${maven.test.skip}</skip>
-                    <forkCount>${surefire.forkCount}</forkCount>
-                    <useSystemClassLoader>${surefire.useSystemClassLoader}</useSystemClassLoader>
-                    <suiteXmlFiles>
-                        <suiteXmlFile>${project.build.testOutputDirectory}/testng.xml</suiteXmlFile>
-                    </suiteXmlFiles>
                 </configuration>
             </plugin>
         </plugins>
