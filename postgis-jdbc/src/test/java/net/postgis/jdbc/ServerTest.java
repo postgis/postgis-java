@@ -28,7 +28,15 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.tools.testutils.TestContainerController;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
@@ -37,8 +45,15 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import java.sql.*;
-import java.util.UUID;
+import net.postgis.jdbc.geometry.GeometryBuilder;
+import net.postgis.jdbc.geometry.LineString;
+import net.postgis.jdbc.geometry.LinearRing;
+import net.postgis.jdbc.geometry.MultiLineString;
+import net.postgis.jdbc.geometry.MultiPoint;
+import net.postgis.jdbc.geometry.MultiPolygon;
+import net.postgis.jdbc.geometry.Point;
+import net.postgis.jdbc.geometry.Polygon;
+import net.postgis.tools.testutils.TestContainerController;
 
 
 public class ServerTest {
@@ -94,6 +109,144 @@ public class ServerTest {
             logger.debug("Row {}: {}", id, obj.toString());
         }
 
+    }
+
+    @Test
+    public void testColumnTypeSafetyNonEmpty1() throws SQLException {
+        String tableName = "polygraph_" + UUID.randomUUID().toString().replace('-', '_');
+
+        String createSQL = "create table " + tableName + " (point geometry(point,4326), polygon geometry(polygon,4326), line_string geometry(linestring,4326), multi_line_string geometry(multilinestring,4326), multi_point geometry(multipoint,4326), multi_polygon geometry(multipolygon,4326));";
+        String dropSQL = "drop table " + tableName;
+
+        statement.execute(createSQL);
+
+        final PreparedStatement prep = connection
+            .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
+        prep.setObject(1, new PGgeometryLW(new Point("SRID=4326;POINT(2.8 1.7)")));
+        prep.setObject(2, new PGgeometryLW(new Polygon("SRID=4326;POLYGON((2 2, 2 -2, -2 -2, -2 2, 2 2))")));
+        prep.setObject(3, new PGgeometryLW(new LineString("SRID=4326;LINESTRING(0 0, 1 2)")));
+        prep.setObject(4, new PGgeometryLW(new MultiLineString("SRID=4326;MULTILINESTRING((0 0, 1 2), (1 2, 3 -1))")));
+        prep.setObject(5, new PGgeometryLW(new MultiPoint("SRID=4326;MULTIPOINT((2 3), (7 8))")));
+        prep.setObject(6, new PGgeometryLW(new MultiPolygon("SRID=4326;MULTIPOLYGON(((1 1, 1 -1, -1 -1, -1 1, 1 1)),((1 1, 3 1, 3 3, 1 3, 1 1)))")));
+
+        prep.execute();
+        statement.execute(dropSQL);
+    }
+
+    @Test
+    public void testColumnTypeSafetyNonEmpty2() throws SQLException {
+
+        String tableName = "polygraph_" + UUID.randomUUID().toString().replace('-', '_');
+
+        String createSQL = "create table " + tableName + " (point geometry(point,4326), polygon geometry(polygon,4326), line_string geometry(linestring,4326), multi_line_string geometry(multilinestring,4326), multi_point geometry(multipoint,4326), multi_polygon geometry(multipolygon,4326));";
+        String dropSQL = "drop table " + tableName;
+
+        statement.execute(createSQL);
+
+        final PreparedStatement prep = connection
+            .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
+
+        prep.setObject(1, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;POINT(2.8 1.7)")));
+        prep.setObject(2, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;POLYGON((2 2, 2 -2, -2 -2, -2 2, 2 2))")));
+        prep.setObject(3, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;LINESTRING(0 0, 1 2)")));
+        prep.setObject(4, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;MULTILINESTRING((0 0, 1 2), (1 2, 3 -1))")));
+        prep.setObject(5, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;MULTIPOINT((2 3), (7 8))")));
+        prep.setObject(6, new PGgeometryLW(
+            GeometryBuilder.geomFromString("SRID=4326;MULTIPOLYGON(((1 1, 1 -1, -1 -1, -1 1, 1 1)),((1 1, 3 1, 3 3, 1 3, 1 1)))")
+        ));
+
+        prep.execute();
+        statement.execute(dropSQL);
+    }
+
+
+    @Test
+    public void testColumnTypeSafetyEmpty1() throws SQLException {
+        String tableName = "polygraph_" + UUID.randomUUID().toString().replace('-', '_');
+
+        String createSQL = "create table " + tableName + " (point geometry(point,4326), polygon geometry(polygon,4326), line_string geometry(linestring,4326), multi_line_string geometry(multilinestring,4326), multi_point geometry(multipoint,4326), multi_polygon geometry(multipolygon,4326));";
+        String dropSQL = "drop table " + tableName;
+
+        statement.execute(createSQL);
+
+        final PreparedStatement prep = connection
+            .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
+
+        prep.setObject(1, new PGgeometryLW(new Point()));
+        prep.setObject(2, new PGgeometryLW(new Polygon()));
+        prep.setObject(3, new PGgeometryLW(new LineString()));
+        prep.setObject(4, new PGgeometryLW(new MultiLineString()));
+        prep.setObject(5, new PGgeometryLW(new MultiPoint()));
+        prep.setObject(6, new PGgeometryLW(new MultiPolygon()));
+
+        prep.execute();
+        statement.execute(dropSQL);
+    }
+
+
+    @Test
+    public void testColumnTypeSafetyEmpty2() throws SQLException {
+
+        String tableName = "polygraph_" + UUID.randomUUID().toString().replace('-', '_');
+
+        String createSQL = "create table " + tableName + " (point geometry(point,4326), polygon geometry(polygon,4326), line_string geometry(linestring,4326), multi_line_string geometry(multilinestring,4326), multi_point geometry(multipoint,4326), multi_polygon geometry(multipolygon,4326));";
+        String dropSQL = "drop table " + tableName;
+
+        statement.execute(createSQL);
+
+        final PreparedStatement prep = connection
+            .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
+
+        prep.setObject(1, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;POINT EMPTY")));
+        prep.setObject(2, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;POLYGON EMPTY")));
+        prep.setObject(3, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;LINESTRING EMPTY")));
+        prep.setObject(4, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;MULTILINESTRING EMPTY")));
+        prep.setObject(5, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;MULTIPOINT EMPTY")));
+        prep.setObject(6, new PGgeometryLW(GeometryBuilder.geomFromString("SRID=4326;MULTIPOLYGON EMPTY")));
+
+        prep.execute();
+        statement.execute(dropSQL);
+    }
+
+
+    @Test
+    public void testColumnTypeSafetyEmpty3() throws SQLException {
+        String tableName = "polygraph_" + UUID.randomUUID().toString().replace('-', '_');
+
+        String createSQL = "create table " + tableName + " (point geometry(point,4326), polygon geometry(polygon,4326), line_string geometry(linestring,4326), multi_line_string geometry(multilinestring,4326), multi_point geometry(multipoint,4326), multi_polygon geometry(multipolygon,4326));";
+        String dropSQL = "drop table " + tableName;
+
+        statement.execute(createSQL);
+
+        final PreparedStatement prep = connection
+            .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
+
+        final Point point = new Point();
+        point.setSrid(4326);
+        prep.setObject(1, new PGgeometryLW(point));
+
+        final Polygon polygon = new Polygon(new LinearRing[0]);
+        polygon.setSrid(4326);
+        prep.setObject(2, new PGgeometryLW(polygon));
+
+        final LineString lineString = new LineString(new Point[0]);
+        lineString.setSrid(4326);
+        prep.setObject(3, new PGgeometryLW(lineString));
+
+        final MultiLineString multiLineString = new MultiLineString(new LineString[0]);
+        multiLineString.setSrid(4326);
+        prep.setObject(4, new PGgeometryLW(multiLineString));
+
+        final MultiPoint multiPoint = new MultiPoint(new Point[0]);
+        multiPoint.setSrid(4326);
+        prep.setObject(5, new PGgeometryLW(multiPoint));
+
+        final MultiPolygon multiPolygon = new MultiPolygon(new Polygon[0]);
+        multiPolygon.setSrid(4326);
+        prep.setObject(6, new PGgeometryLW(multiPolygon));
+
+        prep.execute();
+        statement.execute(dropSQL);
     }
 
 

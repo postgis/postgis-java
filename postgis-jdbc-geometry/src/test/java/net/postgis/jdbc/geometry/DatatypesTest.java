@@ -28,6 +28,8 @@
 package net.postgis.jdbc.geometry;
 
 
+import static org.junit.Assert.assertNotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
@@ -105,5 +107,25 @@ public class DatatypesTest {
         logger.info(mlng.toString());
     }
 
+
+    @Test
+    public void testCreateAndGetPoints() {
+        assertNotNull(new LineString().getPoints());
+        assertNotNull(new MultiLineString().getLines());
+        assertNotNull(new LinearRing(new Point[0]).getPoints());
+        assertNotNull(new MultiPoint().getPoints());
+        assertNotNull(new MultiPolygon().getPolygons());
+    }
+
+
+    @Test
+    public void testCreateAndGetPointsEmpty() throws SQLException {
+        new Point("POINT EMPTY");
+        new Polygon("POLYGON EMPTY");
+        new LineString("LINESTRING EMPTY");
+        new MultiLineString("MULTILINESTRING EMPTY");
+        new MultiPoint("MULTIPOINT EMPTY");
+        new MultiPolygon("MULTIPOLYGON EMPTY");
+    }
 
 }
