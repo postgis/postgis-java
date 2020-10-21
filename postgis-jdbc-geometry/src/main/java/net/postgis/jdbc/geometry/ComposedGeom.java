@@ -102,6 +102,11 @@ public abstract class ComposedGeom extends Geometry {
             return;
         }
 
+        if (value.equals("EMPTY")) {
+            // Empty collection
+            return;
+        }
+
         String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value, "(", ")");
         List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ',');
 

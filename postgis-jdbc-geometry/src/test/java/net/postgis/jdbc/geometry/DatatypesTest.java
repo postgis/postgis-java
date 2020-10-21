@@ -22,13 +22,14 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- * 
+ *
  */
 
 package net.postgis.jdbc.geometry;
 
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +120,17 @@ public class DatatypesTest {
 
 
     @Test
-    public void testCreateAndGetPointsEmpty() throws SQLException {
+    public void testParseEmpty() throws SQLException {
+        assertTrue(GeometryBuilder.geomFromString("POINT EMPTY") instanceof Point);
+        assertTrue(GeometryBuilder.geomFromString("POLYGON EMPTY") instanceof Polygon);
+        assertTrue(GeometryBuilder.geomFromString("LINESTRING EMPTY") instanceof LineString);
+        assertTrue(GeometryBuilder.geomFromString("MULTILINESTRING EMPTY") instanceof MultiLineString);
+        assertTrue(GeometryBuilder.geomFromString("MULTIPOINT EMPTY") instanceof MultiPoint);
+        assertTrue(GeometryBuilder.geomFromString("MULTIPOLYGON EMPTY") instanceof MultiPolygon);
+    }
+
+    @Test
+    public void testCreateEmpty() throws SQLException {
         new Point("POINT EMPTY");
         new Polygon("POLYGON EMPTY");
         new LineString("LINESTRING EMPTY");
