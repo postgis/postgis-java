@@ -45,6 +45,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import net.postgis.jdbc.geometry.Geometry;
 import net.postgis.jdbc.geometry.GeometryBuilder;
 import net.postgis.jdbc.geometry.LineString;
 import net.postgis.jdbc.geometry.LinearRing;
@@ -172,17 +173,16 @@ public class ServerTest {
         final PreparedStatement prep = connection
             .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
 
-        prep.setObject(1, new PGgeometryLW(new Point()));
-        prep.setObject(2, new PGgeometryLW(new Polygon()));
-        prep.setObject(3, new PGgeometryLW(new LineString()));
-        prep.setObject(4, new PGgeometryLW(new MultiLineString()));
-        prep.setObject(5, new PGgeometryLW(new MultiPoint()));
-        prep.setObject(6, new PGgeometryLW(new MultiPolygon()));
+        prep.setObject(1, withSRID(new Point(), 4326));
+        prep.setObject(2, withSRID(new Polygon(), 4326));
+        prep.setObject(3, withSRID(new LineString(), 4326));
+        prep.setObject(4, withSRID(new MultiLineString(), 4326));
+        prep.setObject(5, withSRID(new MultiPoint(), 4326));
+        prep.setObject(6, withSRID(new MultiPolygon(), 4326));
 
         prep.execute();
         statement.execute(dropSQL);
     }
-
 
     @Test
     public void testColumnTypeSafetyEmpty2() throws SQLException {
@@ -221,29 +221,12 @@ public class ServerTest {
         final PreparedStatement prep = connection
             .prepareStatement("INSERT INTO " + tableName + " VALUES (?, ?, ?, ?, ?, ?)");
 
-        final Point point = new Point();
-        point.setSrid(4326);
-        prep.setObject(1, new PGgeometryLW(point));
-
-        final Polygon polygon = new Polygon(new LinearRing[0]);
-        polygon.setSrid(4326);
-        prep.setObject(2, new PGgeometryLW(polygon));
-
-        final LineString lineString = new LineString(new Point[0]);
-        lineString.setSrid(4326);
-        prep.setObject(3, new PGgeometryLW(lineString));
-
-        final MultiLineString multiLineString = new MultiLineString(new LineString[0]);
-        multiLineString.setSrid(4326);
-        prep.setObject(4, new PGgeometryLW(multiLineString));
-
-        final MultiPoint multiPoint = new MultiPoint(new Point[0]);
-        multiPoint.setSrid(4326);
-        prep.setObject(5, new PGgeometryLW(multiPoint));
-
-        final MultiPolygon multiPolygon = new MultiPolygon(new Polygon[0]);
-        multiPolygon.setSrid(4326);
-        prep.setObject(6, new PGgeometryLW(multiPolygon));
+        prep.setObject(1, withSRID(new Point(), 4326));
+        prep.setObject(2, withSRID(new Polygon(new LinearRing[0]), 4326));
+        prep.setObject(3, withSRID(new LineString(new Point[0]), 4326));
+        prep.setObject(4, withSRID(new MultiLineString(new LineString[0]), 4326));
+        prep.setObject(5, withSRID(new MultiPoint(new Point[0]), 4326));
+        prep.setObject(6, withSRID(new MultiPolygon(new Polygon[0]), 4326));
 
         prep.execute();
         statement.execute(dropSQL);
@@ -275,5 +258,8 @@ public class ServerTest {
         }
     }
 
-
+    private static PGgeometryLW withSRID(Geometry geo, int srid) {
+        geo.setSrid(srid);
+        return new PGgeometryLW(geo);
+    }
 }
