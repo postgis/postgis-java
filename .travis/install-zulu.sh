@@ -4,7 +4,7 @@ set -euf
 
 AZUL_GPG_KEY=0xB1998361219BD9C9
 ZULU_VERSION=8
-ZULU_RELEASE=8.0.265-5
+ZULU_RELEASE=8.0.292-1
 JAVA_HOME=/usr/lib/jvm/zulu-8-amd64
 
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys ${AZUL_GPG_KEY}
