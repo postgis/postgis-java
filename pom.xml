@@ -108,7 +108,7 @@
         <maven.integration.test.skip>false</maven.integration.test.skip>
         <failsafe.forkCount>1</failsafe.forkCount>
         <failsafe.useSystemClassLoader>true</failsafe.useSystemClassLoader>
-        <test.container.image>postgis/postgis:12-3.0-alpine</test.container.image>
+        <test.container.image>postgis/postgis:13-3.1-alpine</test.container.image>
         <test.db.username>postgis1</test.db.username>
         <test.db.password>postgis1</test.db.password>
         <test.db.name>postgis1</test.db.name>
