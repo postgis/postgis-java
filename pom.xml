@@ -472,6 +472,18 @@
     </build>
 
     <profiles>
+        <!-- This profile isn't tested on windows, the path may not be specified correctly. -->
+        <profile>
+            <id>windows-javadoc</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <javadoc.path>${java.home}/bin/javadoc.exe</javadoc.path>
+            </properties>
+        </profile>
         <profile>
             <id>check-versions</id>
             <build>
