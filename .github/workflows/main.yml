@@ -13,6 +13,11 @@ jobs:
         os: [ubuntu-20.04]
         java_version: [8]
         maven_version: [3.8.1]
+        include:
+          - os: ubuntu-20.04
+            java_version: 8
+            maven_version: 3.8.1
+            maven_deploy: true
     name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using Zulu ${{ matrix.java_version }}
     runs-on: ${{ matrix.os }}
     env:
@@ -59,3 +64,10 @@ jobs:
 
     - name: Maven build/test
       run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} clean install
+
+    - name: Maven deploy
+      if: ${{ matrix.maven_deploy && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request')  }}
+      env:
+        OSSRHU: ${{ secrets.OSSRHU }}
+        OSSRHT: ${{ secrets.OSSRHT }}
+      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} deploy
