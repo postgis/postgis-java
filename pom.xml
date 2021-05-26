@@ -145,7 +145,7 @@
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <!-- Dependency versions -->
-        <dependency.checkstyle.version>8.31</dependency.checkstyle.version>
+        <dependency.checkstyle.version>8.42</dependency.checkstyle.version>
         <dependency.jts-version.version>1.18.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.3</dependency.logback.version>
         <dependency.postgresql-jdbc.version>42.2.11</dependency.postgresql-jdbc.version>
