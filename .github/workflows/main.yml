@@ -1,0 +1,61 @@
+name: PostGIS Java CI
+
+on: [push, pull_request]
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-codebase:
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        java_version: [8]
+        maven_version: [3.8.1]
+    name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using Zulu ${{ matrix.java_version }}
+    runs-on: ${{ matrix.os }}
+    env:
+      JAVA_HOME: /usr/lib/jvm/zulu${{ matrix.java_version }}-ca-amd64
+      MAVEN_HOME: /usr/share/maven
+      MAVEN_PROPS: -Djavadoc.path=`which javadoc`
+      PROFILES: gpg,release-sign-artifacts,sonatype-deployment,sonatype-snapshots,sonatype-staging,sonatype-releases
+      SETTINGS: .github/settings.xml
+
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v2
+
+    - name: Install GPG and generate test key
+      run: .github/install-gpg.sh
+
+    - name: Install Zulu OpenJDK
+      run: .github/install-zulu${{ matrix.java_version }}.sh
+
+    - name: Install Maven
+      run: .github/install-maven.sh
+
+    - name: Setup Maven repository cache
+      uses: actions/cache@v2
+      env:
+        cache-name: m2repo
+      with:
+        path: ~/.m2/repository
+        key: ${{ env.cache-name }}-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ env.cache-name }}-
+
+    - name: Log github.ref
+      run: echo "${{ github.ref }}"
+
+    - name: Show Maven dependency tree
+      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} dependency:tree
+
+    - name: Show Maven active profiles
+      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:active-profiles
+
+    - name: Show Maven effective POM
+      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:effective-pom
+
+    - name: Maven build/test
+      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} clean install

@@ -86,14 +86,10 @@
         <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
+        <site>
+            <id>local-staging-site</id>
+            <url>http://local-staging/</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -108,7 +104,7 @@
         <maven.integration.test.skip>false</maven.integration.test.skip>
         <failsafe.forkCount>1</failsafe.forkCount>
         <failsafe.useSystemClassLoader>true</failsafe.useSystemClassLoader>
-        <test.container.image>postgis/postgis:12-3.0-alpine</test.container.image>
+        <test.container.image>postgis/postgis:13-3.1-alpine</test.container.image>
         <test.db.username>postgis1</test.db.username>
         <test.db.password>postgis1</test.db.password>
         <test.db.name>postgis1</test.db.name>
@@ -145,13 +141,13 @@
         <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
         <versions-maven-plugin.version>2.7</versions-maven-plugin.version>
         <!-- Dependency versions -->
-        <dependency.checkstyle.version>8.31</dependency.checkstyle.version>
+        <dependency.checkstyle.version>8.42</dependency.checkstyle.version>
         <dependency.jts-version.version>1.18.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.3</dependency.logback.version>
         <dependency.postgresql-jdbc.version>42.2.11</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.30</dependency.slfj.version>
         <dependency.spatial4j.version>0.7</dependency.spatial4j.version>
-        <dependency.testcontainers.version>1.13.0</dependency.testcontainers.version>
+        <dependency.testcontainers.version>1.15.3</dependency.testcontainers.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
 
@@ -472,6 +468,18 @@
     </build>
 
     <profiles>
+        <!-- This profile isn't tested on windows, the path may not be specified correctly. -->
+        <profile>
+            <id>windows-javadoc</id>
+            <activation>
+                <os>
+                    <family>windows</family>
+                </os>
+            </activation>
+            <properties>
+                <javadoc.path>${java.home}/bin/javadoc.exe</javadoc.path>
+            </properties>
+        </profile>
         <profile>
             <id>check-versions</id>
             <build>
@@ -569,7 +577,20 @@
                 </plugins>
             </build>
         </profile>
-
+        <profile>
+            <id>sonatype-deployment</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        
         <profile>
             <id>SkipUnitTests</id>
             <properties>
