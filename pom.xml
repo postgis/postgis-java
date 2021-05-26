@@ -146,7 +146,7 @@
         <dependency.logback.version>1.2.3</dependency.logback.version>
         <dependency.postgresql-jdbc.version>42.2.20</dependency.postgresql-jdbc.version>
         <dependency.slfj.version>1.7.30</dependency.slfj.version>
-        <dependency.spatial4j.version>0.7</dependency.spatial4j.version>
+        <dependency.spatial4j.version>0.8</dependency.spatial4j.version>
         <dependency.testcontainers.version>1.15.3</dependency.testcontainers.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
     </properties>
