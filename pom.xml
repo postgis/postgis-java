@@ -86,14 +86,10 @@
         <url>https://github.com/postgis/postgis-java/issues</url>
     </issueManagement>
     <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
+        <site>
+            <id>local-staging-site</id>
+            <url>http://local-staging/</url>
+        </site>
     </distributionManagement>
 
     <properties>
@@ -581,7 +577,20 @@
                 </plugins>
             </build>
         </profile>
-
+        <profile>
+            <id>sonatype-deployment</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>ossrh</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        
         <profile>
             <id>SkipUnitTests</id>
             <properties>
