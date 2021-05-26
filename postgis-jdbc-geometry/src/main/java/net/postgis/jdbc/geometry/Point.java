@@ -181,6 +181,9 @@ public class Point extends Geometry {
         }
         String valueNoParans = GeometryTokenizer.removeLeadingAndTrailingStrings(value, "(", ")");
         List<String> tokens = GeometryTokenizer.tokenize(valueNoParans, ' ');
+        if (tokens.size() == 1 && "EMPTY".equals(tokens.get(0))) {
+            return;
+        }
         try {
             x = Double.valueOf(tokens.get(0)).doubleValue();
             y = Double.valueOf(tokens.get(1)).doubleValue();
