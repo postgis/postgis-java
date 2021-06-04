@@ -28,7 +28,6 @@
 package net.postgis.jdbc;
 
 
-import net.postgis.jdbc.PGgeometry;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
