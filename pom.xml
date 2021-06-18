@@ -114,13 +114,13 @@
         <directory-maven-plugin.version>0.3.1</directory-maven-plugin.version>
         <download-maven-plugin.version>1.6.3</download-maven-plugin.version>
         <exec-maven-plugin.version>3.0.0</exec-maven-plugin.version>
-        <git-commit-id-plugin.version>4.0.4</git-commit-id-plugin.version>
+        <git-commit-id-plugin.version>4.0.5</git-commit-id-plugin.version>
         <jacoco-maven-plugin.version>0.8.7</jacoco-maven-plugin.version>
         <maven-archetype-plugin.version>3.2.0</maven-archetype-plugin.version>
         <maven-checkstyle-plugin.version>3.1.2</maven-checkstyle-plugin.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-ear-plugin.version>3.2.0</maven-ear-plugin.version>
         <maven-ejb-plugin.version>3.0.1</maven-ejb-plugin.version>
@@ -130,7 +130,7 @@
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-jarsigner-plugin.version>3.0.0</maven-jarsigner-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
+        <maven-javadoc-plugin.version>3.3.0</maven-javadoc-plugin.version>
         <maven-jxr-plugin.version>3.1.1</maven-jxr-plugin.version>
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
@@ -141,11 +141,11 @@
         <maven-war-plugin.version>3.3.1</maven-war-plugin.version>
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <!-- Dependency versions -->
-        <dependency.checkstyle.version>8.42</dependency.checkstyle.version>
+        <dependency.checkstyle.version>8.43</dependency.checkstyle.version>
         <dependency.jts-version.version>1.18.1</dependency.jts-version.version>
         <dependency.logback.version>1.2.3</dependency.logback.version>
-        <dependency.postgresql-jdbc.version>42.2.20</dependency.postgresql-jdbc.version>
-        <dependency.slfj.version>1.7.30</dependency.slfj.version>
+        <dependency.postgresql-jdbc.version>42.2.22</dependency.postgresql-jdbc.version>
+        <dependency.slfj.version>1.7.31</dependency.slfj.version>
         <dependency.spatial4j.version>0.8</dependency.spatial4j.version>
         <dependency.testcontainers.version>1.15.3</dependency.testcontainers.version>
         <dependency.testng.version>6.14.3</dependency.testng.version>
