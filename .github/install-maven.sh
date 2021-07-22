@@ -17,3 +17,4 @@ sudo ln -fs /usr/share/maven/bin/mvn /usr/bin/mvn
 mvn -version
 
 set +euf
+
