@@ -410,7 +410,14 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <localCheckout>true</localCheckout>
                     <pushChanges>false</pushChanges>
-                    <releaseProfiles>release-sign-artifacts</releaseProfiles>
+                    <releaseProfiles>release-sign-artifacts,sonatype-deployment</releaseProfiles>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <skipDeploy>true</skipDeploy>
                 </configuration>
             </plugin>
             <plugin>
