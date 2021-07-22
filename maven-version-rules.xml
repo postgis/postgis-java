@@ -9,8 +9,14 @@
         <ignoreVersion type="regex">.*\.jre[6-7]</ignoreVersion>
     </ignoreVersions>
     <rules>
+        <!-- Pin git-commit-id-plugin version to final release version before V5 until codebase migrates to Java11 -->
+        <rule groupId="pl.project13.maven" artifactId="git-commit-id-plugin">
+            <ignoreVersions>
+                <ignoreVersion type="regex">4\.9\.9</ignoreVersion>
+            </ignoreVersions>
+        </rule>
         <!-- Pin testng version to pre-V7 -->
-        <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
+        <rule groupId="org.testng" artifactId="testng">
             <ignoreVersions>
                 <ignoreVersion type="regex">7\..*</ignoreVersion>
             </ignoreVersions>
