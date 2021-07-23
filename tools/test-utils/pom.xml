@@ -5,12 +5,12 @@
     <parent>
         <groupId>net.postgis</groupId>
         <artifactId>tools</artifactId>
-        <version>2.5.1-SNAPSHOT</version>
+        <version>2.5.1</version>
     </parent>
 
     <groupId>net.postgis.tools</groupId>
     <artifactId>test-utils</artifactId>
-    <version>2.5.1-SNAPSHOT</version>
+    <version>2.5.1</version>
 
     <name>Test Utilities</name>
     <description>Tools to facilities building and maintaining test suites</description>
