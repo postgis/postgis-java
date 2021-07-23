@@ -5,11 +5,11 @@
     <parent>
         <groupId>net.postgis</groupId>
         <artifactId>postgis-java-aggregator</artifactId>
-        <version>2.5.1</version>
+        <version>2.5.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>postgis-jdbc-java2d</artifactId>
-    <version>2.5.1</version>
+    <version>2.5.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>postgis-jdbc-java2d</name>
@@ -19,12 +19,12 @@
         <dependency>
             <groupId>net.postgis</groupId>
             <artifactId>postgis-jdbc</artifactId>
-            <version>2.5.1</version>
+            <version>2.5.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>net.postgis.tools</groupId>
             <artifactId>test-utils</artifactId>
-            <version>2.5.1</version>
+            <version>2.5.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
