@@ -71,7 +71,7 @@ public class DriverWrapperAutoprobe extends DriverWrapper {
             // Try to register ourself to the DriverManager
             java.sql.DriverManager.registerDriver(new DriverWrapperAutoprobe());
         } catch (SQLException e) {
-            logger.log(Level.WARNING, "Error registering PostGIS LW Wrapper Driver", e);
+            logger.log(Level.WARNING, "Error registering PostGIS Autoprobe Wrapper Driver", e);
         }
     }
 
