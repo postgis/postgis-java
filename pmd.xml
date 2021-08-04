@@ -1,6 +1,6 @@
 <ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd"
          name="PMD Ruleset"
 >
     <description>
@@ -11,17 +11,15 @@
     </description>
     <rule ref="category/java/bestpractices.xml/AvoidUsingHardCodedIP"/>
     <rule ref="category/java/bestpractices.xml/CheckResultSet"/>
-    <rule ref="category/java/bestpractices.xml/UnusedImports"/>
     <rule ref="category/java/bestpractices.xml/UnusedFormalParameter"/>
     <rule ref="category/java/bestpractices.xml/UnusedLocalVariable"/>
     <rule ref="category/java/bestpractices.xml/UnusedPrivateField"/>
     <rule ref="category/java/bestpractices.xml/UnusedPrivateMethod"/>
-    <rule ref="category/java/codestyle.xml/DontImportJavaLang"/>
-    <rule ref="category/java/codestyle.xml/DuplicateImports"/>
     <rule ref="category/java/codestyle.xml/ExtendsObject"/>
     <rule ref="category/java/codestyle.xml/ForLoopShouldBeWhileLoop"/>
     <rule ref="category/java/codestyle.xml/TooManyStaticImports"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryFullyQualifiedName"/>
+    <rule ref="category/java/codestyle.xml/UnnecessaryImport"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryModifier"/>
     <rule ref="category/java/codestyle.xml/UnnecessaryReturn"/>
     <rule ref="category/java/codestyle.xml/UselessParentheses"/>
@@ -47,7 +45,6 @@
     <rule ref="category/java/errorprone.xml/EmptySynchronizedBlock"/>
     <rule ref="category/java/errorprone.xml/EmptyTryBlock"/>
     <rule ref="category/java/errorprone.xml/EmptyWhileStmt"/>
-    <rule ref="category/java/errorprone.xml/ImportFromSamePackage"/>
     <rule ref="category/java/errorprone.xml/JumbledIncrementer"/>
     <rule ref="category/java/errorprone.xml/MisplacedNullCheck"/>
     <rule ref="category/java/errorprone.xml/OverrideBothEqualsAndHashcode"/>
