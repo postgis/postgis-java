@@ -145,9 +145,7 @@ public class DriverWrapper extends Driver {
     /**
      * Creates a postgresql connection, and then adds the PostGIS data types to it calling addpgtypes().
      *
-     * A side-effect of this method is that the specified url parameter may be changed
-     * 
-     * @param url the URL of the database to connect to (may be changed as a side-effect of this method)
+     * @param url the URL of the database to connect to
      * @param info a list of arbitrary tag/value pairs as connection arguments
      * @return a connection to the URL or null if the driver does not support the subprotocol specified in the URL
      * @exception SQLException if a database access error occurs
@@ -186,7 +184,7 @@ public class DriverWrapper extends Driver {
      * A side-effect of this method is that the specified url parameter may be be changed
      * 
      * @see java.sql.Driver#acceptsURL
-     * @param url the URL of the driver (may be changed as a side-effect of this method)
+     * @param url the URL of the driver
      * @return true if this driver accepts the given URL
      */
     public boolean acceptsURL(String url) {
