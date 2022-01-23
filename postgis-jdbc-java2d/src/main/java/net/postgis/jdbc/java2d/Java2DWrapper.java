@@ -106,15 +106,12 @@ public class Java2DWrapper extends Driver {
      * Mangles the PostGIS URL to return the original PostGreSQL URL
      *
      * @param url String containing the url to be "mangled"
-     * @return "mangled" string
-     * @throws SQLException when a SQLException occurs
+     * @return "mangled" string or null if the URL is unsupported
      */
-    public static String mangleURL(String url) throws SQLException {
-        if (url.startsWith(POSTGIS_PROTOCOL)) {
-            return POSTGRES_PROTOCOL + url.substring(POSTGIS_PROTOCOL.length());
-        } else {
-            throw new SQLException("Unknown protocol or subprotocol in url " + url);
-        }
+    public static String mangleURL(String url) {
+        return url.startsWith(POSTGIS_PROTOCOL)
+            ? POSTGRES_PROTOCOL + url.substring(POSTGIS_PROTOCOL.length())
+            : null;
     }
 
     /**
@@ -128,12 +125,8 @@ public class Java2DWrapper extends Driver {
      * @return true if this driver accepts the given URL
      */
     public boolean acceptsURL(String url) {
-        try {
-            url = mangleURL(url);
-        } catch (SQLException e) {
-            return false;
-        }
-        return super.acceptsURL(url);
+        url = mangleURL(url);
+        return url != null && super.acceptsURL(url);
     }
 
     /**
