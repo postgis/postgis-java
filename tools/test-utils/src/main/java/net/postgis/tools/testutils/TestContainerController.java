@@ -47,7 +47,7 @@ public class TestContainerController {
 
 
     @BeforeSuite
-    public void initializeTestContainer(ITestContext ctx) {
+    public void initializeTestContainer(ITestContext ctx) throws Exception {
         logger.debug("initializing test container");
 
         Objects.requireNonNull(ctx, "test context was null");
@@ -84,6 +84,7 @@ public class TestContainerController {
         final int mappedPort = container.getMappedPort(containerPort);
         final String containerIpAddress = container.getContainerIpAddress();
         logger.debug("started container with containerIPAddress=[{}] mappedPort=[{}]", containerIpAddress, mappedPort);
+        Thread.sleep(200); // wait a moment more for container to come up beyond the test container wait strategy
         final String jdbcUrlSuffix = "://" + containerIpAddress + ":" + mappedPort + "/" + containerEnvDb;
 
         ctx.setAttribute(TEST_CONTAINER_ATTR_NAME, container);
