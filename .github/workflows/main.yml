@@ -12,11 +12,11 @@ jobs:
       matrix:
         os: [ubuntu-20.04]
         java_version: [8]
-        maven_version: [3.8.1]
+        maven_version: [3.8.4]
         include:
           - os: ubuntu-20.04
             java_version: 8
-            maven_version: 3.8.1
+            maven_version: 3.8.4
             maven_deploy: true
     name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using Zulu ${{ matrix.java_version }}
     runs-on: ${{ matrix.os }}
