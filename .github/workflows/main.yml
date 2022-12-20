@@ -10,13 +10,13 @@ jobs:
   build-codebase:
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-22.04]
         java_version: [8]
-        maven_version: [3.8.4]
+        maven_version: [3.8.6]
         include:
-          - os: ubuntu-20.04
+          - os: ubuntu-22.04
             java_version: 8
-            maven_version: 3.8.4
+            maven_version: 3.8.6
             maven_deploy: true
     name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using Zulu ${{ matrix.java_version }}
     runs-on: ${{ matrix.os }}
@@ -29,7 +29,7 @@ jobs:
 
     steps:
     - name: Checkout Source
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Install GPG and generate test key
       run: .github/install-gpg.sh
@@ -41,7 +41,7 @@ jobs:
       run: .github/install-maven.sh
 
     - name: Setup Maven repository cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       env:
         cache-name: m2repo
       with:
