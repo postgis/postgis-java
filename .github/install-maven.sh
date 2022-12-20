@@ -3,8 +3,8 @@
 set -euf
 
 MAVEN_BASE_URL=https://archive.apache.org/dist/maven/maven-3/
-MAVEN_VERSION=3.8.4
-MAVEN_SHA=2cdc9c519427bb20fdc25bef5a9063b790e4abd930e7b14b4e9f4863d6f9f13c
+MAVEN_VERSION=3.8.6
+MAVEN_SHA=c7047a48deb626abf26f71ab3643d296db9b1e67f1faa7d988637deac876b5a9
 
 sudo apt-get update
 sudo apt-get install -y curl
