@@ -229,7 +229,7 @@ public class JtsBinaryParser {
 
     private Polygon parsePolygon(ValueGetter data, boolean haveZ, boolean haveM, int srid) {
         int count = data.getInt();
-        if(count == 0) {
+        if (count == 0) {
             return jtsFactory.getGeometryFactory().createPolygon();
         }
         LinearRing shell = parseLinearRing(data, haveZ, haveM);
