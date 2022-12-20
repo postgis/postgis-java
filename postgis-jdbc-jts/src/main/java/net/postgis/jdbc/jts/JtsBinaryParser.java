@@ -228,11 +228,15 @@ public class JtsBinaryParser {
     }
 
     private Polygon parsePolygon(ValueGetter data, boolean haveZ, boolean haveM, int srid) {
-        int holecount = data.getInt() - 1;
-        LinearRing[] rings = new LinearRing[holecount];
+        int count = data.getInt();
+        if (count == 0) {
+            return jtsFactory.getGeometryFactory().createPolygon();
+        }
         LinearRing shell = parseLinearRing(data, haveZ, haveM);
         shell.setSRID(srid);
-        for (int i = 0; i < holecount; i++) {
+        int holeCount = count-1;
+        LinearRing[] rings = new LinearRing[holeCount];
+        for (int i = 0; i < holeCount; i++) {
             rings[i] = parseLinearRing(data, haveZ, haveM);
             rings[i].setSRID(srid);
         }
