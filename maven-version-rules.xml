@@ -4,27 +4,33 @@
          xsi:schemaLocation="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0 http://mojo.codehaus.org/versions-maven-plugin/xsd/rule-2.0.0.xsd">
     <ignoreVersions>
         <!-- Exclude milestones, release candidates, alphas, and betas-->
-        <ignoreVersion type="regex">.*-[M|RC|alpha|beta|rc].*</ignoreVersion>
+        <ignoreVersion type="regex">.*[\.-](?i)([M|alpha|beta|rc]).*</ignoreVersion>
         <!-- Exclude milestones, release candidates, alphas, and betas, and Java7 qualifiers -->
         <ignoreVersion type="regex">.*\.jre[6-7]</ignoreVersion>
     </ignoreVersions>
     <rules>
-        <!-- Pin git-commit-id-plugin version to final release version before V5 until codebase migrates to Java11 -->
+        <!-- Pin logback version to v1.3.x (v1.4.0+ requires Java11) -->
+        <rule groupId="ch.qos.logback" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">1\.4\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <!-- Pin checkstyle version to pre-v10 (v10 is requires Java11) -->
+        <rule groupId="com.puppycrawl.tools" artifactId="checkstyle" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">10\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <!-- Pin testng version to 7.5.x (v7.6+ requires Java11) -->
+        <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">7\.[6-9].*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <!-- Pin git-commit-id-plugin version to final 4.x release version (v5+ requires Java11 -->
         <rule groupId="pl.project13.maven" artifactId="git-commit-id-plugin">
             <ignoreVersions>
                 <ignoreVersion type="regex">4\.9\.9</ignoreVersion>
-            </ignoreVersions>
-        </rule>
-        <!-- Pin testng version to pre-V7 -->
-        <rule groupId="org.testng" artifactId="testng">
-            <ignoreVersions>
-                <ignoreVersion type="regex">7\..*</ignoreVersion>
-            </ignoreVersions>
-        </rule>
-        <!-- Ignore logback version with groovyless suffix -->
-        <rule groupId="ch.qos.logback">
-            <ignoreVersions>
-                <ignoreVersion type="regex">.*-groovyless</ignoreVersion>
             </ignoreVersions>
         </rule>
     </rules>
