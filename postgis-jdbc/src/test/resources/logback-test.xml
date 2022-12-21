@@ -12,7 +12,7 @@
 
     <logger name="com.github.dockerjava" level="ERROR"/>
     <logger name="org.testcontainers" level="ERROR"/>
-    <logger name="net.postgis" level="ERROR"/>
+    <logger name="org.testng" level="ERROR"/>
 
     <logger name="net.postgis" level="ERROR"/>
 
