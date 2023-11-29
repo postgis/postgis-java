@@ -154,7 +154,7 @@
         <!-- Dependency versions -->
         <dependency.checkstyle.version>9.3</dependency.checkstyle.version>
         <dependency.jts-version.version>1.19.0</dependency.jts-version.version>
-        <dependency.logback.version>1.3.5</dependency.logback.version>
+        <dependency.logback.version>1.3.12</dependency.logback.version>
         <dependency.pmd.version>6.52.0</dependency.pmd.version>
         <dependency.postgresql-jdbc.version>42.5.1</dependency.postgresql-jdbc.version>
         <dependency.slf4j.version>2.0.6</dependency.slf4j.version>
