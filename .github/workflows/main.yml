@@ -11,14 +11,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        jdk_version: [8.0.352-zulu, 11.0.17-zulu, 17.0.5-zulu, 19.0.1-zulu]
-        maven_version: [3.8.6]
+        jdk_version: [8.0.392-zulu, 11.0.21-zulu, 17.0.9-zulu, 21.0.1-zulu]
+        maven_version: [3.9.6]
         include:
           - os: ubuntu-22.04
-            jdk_version: 8.0.352-zulu
-            maven_version: 3.8.6
+            jdk_version: 8.0.392-zulu
+            zulu_version: 8.74.0.17
+            maven_version: 3.9.6
             maven_deploy: true
             docker_build: true
+            maven_docker_container_image_repo: luminositylabs
+            maven_docker_container_image_name: maven
+            maven_docker_container_image_tag: 3.9.6_openjdk-8u392_zulu-8.74.0.17
     name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using JDK ${{ matrix.jdk_version }}
     runs-on: ${{ matrix.os }}
     env:
@@ -89,9 +93,6 @@ jobs:
     - name: Docker maven build
       if: ${{ matrix.docker_build }}
       env:
-        maven_docker_container_image_repo: luminositylabs
-        maven_docker_container_image_name: maven
-        maven_docker_container_image_tag: 3.8.6_openjdk-8u352_zulu-alpine-8.66.0.15
         CBD: /usr/src/build
         P: luminositylabs-oss
-      run: docker container run --rm -i -v "$(pwd)":"${CBD}" -v ${HOME}/.gnupg:/root/.gnupg -v ${P}-${{ env.maven_docker_container_image_tag }}-mvn-repo:/root/.m2 -w "${CBD}" ${{ env.maven_docker_container_image_repo }}/${{ env.maven_docker_container_image_name }}:${{ env.maven_docker_container_image_tag }} mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} -Djavadoc.path=/usr/bin/javadoc -Dmaven.integration.test.skip=true dependency:list-repositories dependency:tree help:active-profiles clean install site site:stage
+      run: docker container run --rm -i -v "$(pwd)":"${CBD}" -v ${HOME}/.gnupg:/root/.gnupg -v ${P}-${{ matrix.maven_docker_container_image_tag }}-mvn-repo:/root/.m2 -w "${CBD}" ${{ matrix.maven_docker_container_image_repo }}/${{ matrix.maven_docker_container_image_name }}:${{ matrix.maven_docker_container_image_tag }} mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} -Djavadoc.path=/usr/bin/javadoc -Dmaven.integration.test.skip=true dependency:list-repositories dependency:tree help:active-profiles clean install site site:stage
