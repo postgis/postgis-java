@@ -154,7 +154,9 @@ public class DriverWrapper extends Driver {
      * @see org.postgresql.Driver
      */
     public java.sql.Connection connect(String url, final Properties info) throws SQLException {
-        if (!acceptsURL(url)) {
+        if (acceptsURL(url)) {
+            url = mangleURL(url);
+        } else {
             return null;
         }
         Connection result = super.connect(url, info);
@@ -186,8 +188,12 @@ public class DriverWrapper extends Driver {
      * @return true if this driver accepts the given URL
      */
     public boolean acceptsURL(String url) {
-        url = mangleURL(url);
-        return url != null && super.acceptsURL(url);
+        String mangledURL = mangleURL(url);
+        if (mangledURL == null) {
+            return false;
+        } else {
+            return super.acceptsURL(mangledURL);
+        }
     }
 
 
