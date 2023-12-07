@@ -145,18 +145,20 @@ public class DriverWrapper extends Driver {
     /**
      * Creates a postgresql connection, and then adds the PostGIS data types to it calling addpgtypes().
      *
-     * A side-effect of this method is that the specified url parameter may be be changed
-     * 
-     * @param url the URL of the database to connect to (may be changed as a side-effect of this method)
+     * @param url the URL of the database to connect to
      * @param info a list of arbitrary tag/value pairs as connection arguments
-     * @return a connection to the URL or null if it isnt us
+     * @return a connection to the URL or null if the driver does not support the subprotocol specified in the URL
      * @exception SQLException if a database access error occurs
      * 
      * @see java.sql.Driver#connect
      * @see org.postgresql.Driver
      */
     public java.sql.Connection connect(String url, final Properties info) throws SQLException {
-        url = mangleURL(url);
+        if (acceptsURL(url)) {
+            url = mangleURL(url);
+        } else {
+            return null;
+        }
         Connection result = super.connect(url, info);
         typesAdder.addGT(result, useLW(result));
         return result;
@@ -181,19 +183,17 @@ public class DriverWrapper extends Driver {
     /**
      * Check whether the driver thinks he can handle the given URL.
      *
-     * A side-effect of this method is that the specified url parameter may be be changed
-     * 
      * @see java.sql.Driver#acceptsURL
-     * @param url the URL of the driver (may be changed as a side-effect of this method)
+     * @param url the URL of the driver
      * @return true if this driver accepts the given URL
      */
     public boolean acceptsURL(String url) {
-        try {
-            url = mangleURL(url);
-        } catch (SQLException e) {
+        String mangledURL = mangleURL(url);
+        if (mangledURL == null) {
             return false;
+        } else {
+            return super.acceptsURL(mangledURL);
         }
-        return super.acceptsURL(url);
     }
 
 
@@ -254,16 +254,13 @@ public class DriverWrapper extends Driver {
      * Mangles the PostGIS URL to return the original PostGreSQL URL
      *
      * @param url String containing the url to be "mangled"
-     * @return "mangled" string
-     * @throws SQLException when a SQLException occurs
+     * @return "mangled" string or null if the URL is unsupported
      */
-    protected String mangleURL(final String url) throws SQLException {
-        String myProgo = getProtoString();
-        if (url.startsWith(myProgo)) {
-            return POSTGRES_PROTOCOL + url.substring(myProgo.length());
-        } else {
-            throw new SQLException("Unknown protocol or subprotocol in url " + url);
-        }
+    protected String mangleURL(final String url) {
+        String myProto = getProtoString();
+        return url.startsWith(myProto)
+            ? POSTGRES_PROTOCOL + url.substring(myProto.length())
+            : null;
     }
 
 
