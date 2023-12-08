@@ -4,7 +4,7 @@
 
     <groupId>net.postgis</groupId>
     <artifactId>postgis-java-aggregator</artifactId>
-    <version>2023.1.0</version>
+    <version>2023.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>PostGIS Java Project</name>
@@ -79,7 +79,7 @@
         <url>https://github.com/postgis/postgis-java</url>
         <connection>scm:git:git://github.com/postgis/postgis-java.git</connection>
         <developerConnection>scm:git:git@github.com:postgis/postgis-java.git</developerConnection>
-        <tag>postgis-java-aggregator-2023.1.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <issueManagement>
         <system>GitHub Issues</system>
