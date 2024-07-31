@@ -12,7 +12,7 @@
         <!-- Pin logback version to v1.3.x (v1.4.0+ requires Java11) -->
         <rule groupId="ch.qos.logback" comparisonMethod="maven">
             <ignoreVersions>
-                <ignoreVersion type="regex">1\.4\..*</ignoreVersion>
+                <ignoreVersion type="regex">1\.[4-9]\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
         <!-- Pin checkstyle version to pre-v10 (v10 is requires Java11) -->
@@ -25,6 +25,7 @@
         <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
             <ignoreVersions>
                 <ignoreVersion type="regex">7\.[6-9].*</ignoreVersion>
+                <ignoreVersion type="regex">7\.10\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
         <!-- Pin git-commit-id-plugin version to final 4.x release version (v5+ requires Java11 -->
