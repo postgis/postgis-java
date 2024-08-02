@@ -827,17 +827,6 @@
             </properties>
         </profile>
         <profile>
-            <id>javahome-env-javadoc</id>
-            <activation>
-                <property>
-                    <name>env.JAVA_HOME</name>
-                </property>
-            </activation>
-            <properties>
-                <javadoc.path>${env.JAVA_HOME}/bin/javadoc</javadoc.path>
-            </properties>
-        </profile>
-        <profile>
             <id>check-versions</id>
             <build>
                 <plugins>
