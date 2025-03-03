@@ -11,19 +11,17 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-24.04]
-        jdk_version: [8.0.422-zulu, 11.0.24-zulu, 17.0.12-zulu, 21.0.4-zulu]
-        maven_version: [3.9.8]
+        jdk_version: [8.0.442-zulu, 11.0.25-zulu, 17.0.13-zulu, 21.0.5-zulu]
         include:
           - os: ubuntu-24.04
-            jdk_version: 8.0.422-zulu
-            zulu_version: 8.80.0.17
-            maven_version: 3.9.8
+            jdk_version: 8.0.442-zulu
+            zulu_version: 8.84.0.15
             maven_deploy: true
             docker_build: true
             maven_docker_container_image_repo: luminositylabs
-            maven_docker_container_image_name: maven
-            maven_docker_container_image_tag: 3.9.8_openjdk-8u422_zulu-alpine-8.80.0.17
-    name: Build on OS ${{ matrix.os }} with Maven ${{ matrix.maven_version }} using JDK ${{ matrix.jdk_version }}
+            maven_docker_container_image_name: openjdk
+            maven_docker_container_image_tag: 8u442_zulu-alpine-8.84.0.15
+    name: Build on OS ${{ matrix.os }} using JDK ${{ matrix.jdk_version }}
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_PROPS: -Djavadoc.path=`which javadoc`
@@ -39,18 +37,16 @@ jobs:
 
     - name: Install SDKMAN and java environment
       run: |
-        .github/install-sdkman.sh ${{ matrix.jdk_version }} ${{ matrix.maven_version }}
+        .github/install-sdkman.sh ${{ matrix.jdk_version }}
         echo "SDKMAN_DIR=${HOME}/.sdkman" >> $GITHUB_ENV
 
     - name: Add SDKMAN candidate environment variables
       run: |
         echo "JAVA_HOME=${SDKMAN_DIR}/candidates/java/current" >> $GITHUB_ENV
-        echo "MAVEN_HOME=${SDKMAN_DIR}/candidates/maven/current" >> $GITHUB_ENV
 
     - name: Add SDKMAN candidate paths to system path
       run: |
         echo "${JAVA_HOME}/bin" >> $GITHUB_PATH
-        echo "${MAVEN_HOME}/bin" >> $GITHUB_PATH
 
     - name: Setup Maven repository cache
       uses: actions/cache@v4
@@ -66,33 +62,33 @@ jobs:
       run: echo "${{ github.ref }}"
 
     - name: List Maven repositories
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} dependency:list-repositories
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} dependency:list-repositories
 
     - name: Show Maven dependency tree
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} dependency:tree
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} dependency:tree
 
     - name: Show Maven active profiles
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:active-profiles
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:active-profiles
 
     - name: Show Maven effective POM
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:effective-pom
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} help:effective-pom
 
     - name: Maven build/test
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} clean install
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} clean install
 
     - name: Maven generate site
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} site site:stage
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} site site:stage
 
     - name: Maven deploy
       if: ${{ matrix.maven_deploy && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request')  }}
       env:
         OSSRHU: ${{ secrets.OSSRHU }}
         OSSRHT: ${{ secrets.OSSRHT }}
-      run: mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} deploy
+      run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} deploy
 
     - name: Docker maven build
       if: ${{ matrix.docker_build }}
       env:
         CBD: /usr/src/build
         P: luminositylabs-oss
-      run: docker container run --rm -i -v "$(pwd)":"${CBD}" -v ${HOME}/.gnupg:/root/.gnupg -v ${P}-${{ matrix.maven_docker_container_image_tag }}-mvn-repo:/root/.m2 -w "${CBD}" ${{ matrix.maven_docker_container_image_repo }}/${{ matrix.maven_docker_container_image_name }}:${{ matrix.maven_docker_container_image_tag }} mvn -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} -Djavadoc.path=/usr/bin/javadoc -Dmaven.integration.test.skip=true dependency:list-repositories dependency:tree help:active-profiles clean install site site:stage
+      run: docker container run --rm -i -v "$(pwd)":"${CBD}" -v ${HOME}/.gnupg:/root/.gnupg -v ${P}-${{ matrix.maven_docker_container_image_tag }}-mvn-repo:/root/.m2 -w "${CBD}" ${{ matrix.maven_docker_container_image_repo }}/${{ matrix.maven_docker_container_image_name }}:${{ matrix.maven_docker_container_image_tag }} sh -l -c "apk update && apk add -u gnupg && ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} -Djavadoc.path=/usr/bin/javadoc -Dmaven.integration.test.skip=true dependency:list-repositories dependency:tree help:active-profiles clean install site site:stage"

@@ -1,7 +1,6 @@
 <ruleset comparisonMethod="maven"
-         xmlns="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://mojo.codehaus.org/versions-maven-plugin/rule/2.0.0 http://mojo.codehaus.org/versions-maven-plugin/xsd/rule-2.0.0.xsd">
+         xmlns="https://www.mojohaus.org/VERSIONS/RULE/2.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://www.mojohaus.org/VERSIONS/RULE/2.1.0 https://www.mojohaus.org/versions/versions-model/xsd/rule-2.1.0.xsd">
     <ignoreVersions>
         <!-- Exclude milestones, release candidates, alphas, and betas-->
         <ignoreVersion type="regex">.*[\.-](?i)([M|alpha|beta|rc]).*</ignoreVersion>
@@ -9,29 +8,40 @@
         <ignoreVersion type="regex">.*\.jre[6-7]</ignoreVersion>
     </ignoreVersions>
     <rules>
+        <!-- Pin checkstyle version to pre-v10 (v10 requires Java11) -->
+        <rule groupId="com.puppycrawl.tools" artifactId="checkstyle" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">10\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <!-- Pin spotbugs version to pre-v4.9.0 (v4.9.0 requires Java11) -->
+        <rule groupId="com.github.spotbugs" artifactId="spotbugs" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">4\.9\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <rule groupId="com.github.spotbugs" artifactId="spotbugs-annotations" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">4\.9\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
+        <!-- Pin testng version to 7.5.x (v7.6+ requires Java11) -->
+        <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
+            <ignoreVersions>
+                <ignoreVersion type="regex">7\.[6-9]\..*</ignoreVersion>
+                <ignoreVersion type="regex">7\.1[0-1]\..*</ignoreVersion>
+            </ignoreVersions>
+        </rule>
         <!-- Pin logback version to v1.3.x (v1.4.0+ requires Java11) -->
         <rule groupId="ch.qos.logback" comparisonMethod="maven">
             <ignoreVersions>
                 <ignoreVersion type="regex">1\.[4-9]\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
-        <!-- Pin checkstyle version to pre-v10 (v10 is requires Java11) -->
-        <rule groupId="com.puppycrawl.tools" artifactId="checkstyle" comparisonMethod="maven">
+        <!-- Pin hazendaz directory-maven-plugin to pre 1.2.x versions (v1.2.0+ requires Java11) -->
+        <rule groupId="com.github.hazendaz.maven" artifactId="directory-maven-plugin" comparisonMethod="maven">
             <ignoreVersions>
-                <ignoreVersion type="regex">10\..*</ignoreVersion>
-            </ignoreVersions>
-        </rule>
-        <!-- Pin testng version to 7.5.x (v7.6+ requires Java11) -->
-        <rule groupId="org.testng" artifactId="testng" comparisonMethod="maven">
-            <ignoreVersions>
-                <ignoreVersion type="regex">7\.[6-9].*</ignoreVersion>
-                <ignoreVersion type="regex">7\.10\..*</ignoreVersion>
-            </ignoreVersions>
-        </rule>
-        <!-- Pin git-commit-id-plugin version to final 4.x release version (v5+ requires Java11 -->
-        <rule groupId="pl.project13.maven" artifactId="git-commit-id-plugin">
-            <ignoreVersions>
-                <ignoreVersion type="regex">4\.9\.9</ignoreVersion>
+                <ignoreVersion type="regex">1.2\..*</ignoreVersion>
             </ignoreVersions>
         </rule>
     </rules>
