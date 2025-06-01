@@ -9,11 +9,11 @@
 
     <name>PostGIS Java Project</name>
     <description>Aggregates java projects associated with the PostGIS project.</description>
-    <url>http://postgis.net</url>
+    <url>https://postgis.net</url>
     <licenses>
         <license>
             <name>GNU Lesser General Public License</name>
-            <url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -21,7 +21,7 @@
     <developers>
         <developer>
             <name>PostGIS Development Team</name>
-            <url>http://postgis.net</url>
+            <url>https://postgis.net</url>
         </developer>
         <developer>
             <name>Phillip Ross</name>
@@ -35,7 +35,7 @@
         <contributor>
             <name>Hakan Tandogan</name>
             <email>hakan@gurkensalat.com</email>
-            <url>http://www.gurkensalat.com/</url>
+            <url>https://www.gurkensalat.com/</url>
             <roles>
                 <role>Maven Packager</role>
             </roles>
@@ -43,7 +43,6 @@
         <contributor>
             <name>Baris Ergun</name>
             <email>barisergun75@gmail.com</email>
-            <url>http://www.barisergun.com/</url>
             <roles>
                 <role>Maven Packager</role>
             </roles>
@@ -56,14 +55,14 @@
             <subscribe>postgis-users-subscribe@lists.osgeo.org</subscribe>
             <unsubscribe>postgis-users-unsubscribe@lists.osgeo.org</unsubscribe>
             <post>postgis-users@lists.osgeo.org</post>
-            <archive>http://lists.osgeo.org/pipermail/postgis-users/</archive>
+            <archive>https://lists.osgeo.org/pipermail/postgis-users/</archive>
         </mailingList>
         <mailingList>
             <name>Developer List</name>
             <subscribe>postgis-devel-subscribe@lists.osgeo.org</subscribe>
             <unsubscribe>postgis-devel-unsubscribe@lists.osgeo.org</unsubscribe>
             <post>postgis-devel@lists.osgeo.org</post>
-            <archive>http://lists.osgeo.org/pipermail/postgis-devel/</archive>
+            <archive>https://lists.osgeo.org/pipermail/postgis-devel/</archive>
         </mailingList>
     </mailingLists>
 
@@ -88,7 +87,7 @@
     <distributionManagement>
         <site>
             <id>local-staging-site</id>
-            <url>http://local-staging/</url>
+            <url>https://local-staging/</url>
         </site>
     </distributionManagement>
 
