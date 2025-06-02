@@ -25,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       MAVEN_PROPS: -Djavadoc.path=`which javadoc`
-      PROFILES: gpg,release-sign-artifacts,sonatype-deployment,sonatype-snapshots,sonatype-staging,sonatype-releases
+      PROFILES: "gpg,release-sign-artifacts,sonatype-central-portal-deployment,sonatype-central-snapshots"
       SETTINGS: .github/settings.xml
 
     steps:
@@ -82,8 +82,8 @@ jobs:
     - name: Maven deploy
       if: ${{ matrix.maven_deploy && (github.ref == 'refs/heads/main') && (github.event_name != 'pull_request')  }}
       env:
-        OSSRHU: ${{ secrets.OSSRHU }}
-        OSSRHT: ${{ secrets.OSSRHT }}
+        SONATYPE_CENTRAL_PORTAL_REPO_USERNAME: ${{ secrets.SONATYPE_CENTRAL_PORTAL_REPO_USERNAME }}
+        SONATYPE_CENTRAL_PORTAL_REPO_PASSWORD: ${{ secrets.SONATYPE_CENTRAL_PORTAL_REPO_PASSWORD }}
       run: ./mvnw -U -V -s ${{ env.SETTINGS }} -P${{ env.PROFILES }} ${{ env.MAVEN_PROPS }} deploy
 
     - name: Docker maven build

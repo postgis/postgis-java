@@ -461,7 +461,7 @@
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <localCheckout>true</localCheckout>
                         <pushChanges>false</pushChanges>
-                        <releaseProfiles>release-sign-artifacts,sonatype-deployment</releaseProfiles>
+                        <releaseProfiles>release-sign-artifacts,sonatype-central-portal-deployment</releaseProfiles>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -859,10 +859,10 @@
             </build>
         </profile>
         <!--
-        The release-sign-artifacts and sonatype deployment profiles only need activated when pushing snapshots or
-        releases to maven central.  When enabled, additional artifacts will be generated for javadoc and source as well
-        as GPG signatures for each artifact.  This profiles assume that the properties for the gpg plugin
-        (such as gpg.keyname and gpg.passphrase are either defined in a settings.xml file or similar facility.
+        The release-sign-artifacts and sonatype-central-portal-deployment profiles only need activated when pushing
+        snapshots or releases to maven central.  When enabled, additional artifacts will be generated for javadoc and
+        source as well as GPG signatures for each artifact.  These profiles assume that the properties for the gpg
+        plugin (such as gpg.keyname and gpg.passphrase) are either defined in a settings.xml file or similar facility.
         -->
         <profile>
             <id>release-sign-artifacts</id>
@@ -909,17 +909,32 @@
             </build>
         </profile>
         <profile>
-            <id>sonatype-deployment</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>ossrh</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
+            <id>sonatype-central-portal-deployment</id>
+            <properties>
+                <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
+            </properties>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.sonatype.central</groupId>
+                            <artifactId>central-publishing-maven-plugin</artifactId>
+                            <version>${central-publishing-maven-plugin.version}</version>
+                            <extensions>true</extensions>
+                            <configuration>
+                                <!-- publishing server id refers to <id> element in <server> section of settings.xml -->
+                                <publishingServerId>sonatype-central-portal</publishingServerId>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <profile>
