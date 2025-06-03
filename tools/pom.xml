@@ -5,11 +5,11 @@
     <parent>
         <artifactId>postgis-java-aggregator</artifactId>
         <groupId>net.postgis</groupId>
-        <version>2025.1.0</version>
+        <version>2025.1.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>tools</artifactId>
-    <version>2025.1.0</version>
+    <version>2025.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Tools</name>
