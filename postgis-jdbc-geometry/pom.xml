@@ -5,11 +5,11 @@
     <parent>
         <groupId>net.postgis</groupId>
         <artifactId>postgis-java-aggregator</artifactId>
-        <version>2025.1.1-SNAPSHOT</version>
+        <version>2025.1.1</version>
     </parent>
 
     <artifactId>postgis-geometry</artifactId>
-    <version>2025.1.1-SNAPSHOT</version>
+    <version>2025.1.1</version>
     <packaging>jar</packaging>
 
     <name>PostGIS Geometry</name>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>net.postgis.tools</groupId>
             <artifactId>test-utils</artifactId>
-            <version>2025.1.1-SNAPSHOT</version>
+            <version>2025.1.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
