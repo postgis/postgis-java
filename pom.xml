@@ -113,7 +113,7 @@
         <test.db.name>postgis1</test.db.name>
         <test.db.port>5432</test.db.port>
         <!-- Plugin versioning -->
-        <build-helper-maven-plugin.version>3.6.0</build-helper-maven-plugin.version>
+        <build-helper-maven-plugin.version>3.6.1</build-helper-maven-plugin.version>
         <directory-maven-plugin.version>1.0</directory-maven-plugin.version>
         <download-maven-plugin.version>1.13.0</download-maven-plugin.version>
         <exec-maven-plugin.version>3.5.1</exec-maven-plugin.version>
